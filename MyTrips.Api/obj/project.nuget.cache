@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WQ319MtQN+4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\geron\\OneDrive\\Documentos\\Proyectos\\MyTrips\\MyTrips.Api\\MyTrips.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\geron\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.2\\microsoft.aspnetcore.openapi.10.0.2.nupkg.sha512",
+    "C:\\Users\\geron\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
