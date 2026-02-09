@@ -19,9 +19,11 @@ namespace MyTrips.Api.Controllers
         {
             var trip = new Trip(
                 request.Name,
+                request.Destination,
                 request.StartDate,
                 request.EndDate,
-                request.Budget
+                request.Budget,
+                request.Currency
             );
 
             _trips.Add(trip);
@@ -30,9 +32,11 @@ namespace MyTrips.Api.Controllers
             {
                 Id = trip.Id,
                 Name = trip.Name,
+                Destination = trip.Destination,
                 StartDate = trip.StartDate,
                 EndDate = trip.EndDate,
-                Budget = trip.Budget
+                Budget = trip.Budget,
+                Currency = trip.Currency
             };
 
             return CreatedAtAction(nameof(GetTripById), new { id = trip.Id }, response);
@@ -44,9 +48,11 @@ namespace MyTrips.Api.Controllers
             {
                 Id = trip.Id,
                 Name = trip.Name,
+                Destination = trip.Destination,
                 StartDate = trip.StartDate,
                 EndDate = trip.EndDate,
-                Budget = trip.Budget
+                Budget = trip.Budget,
+                Currency = trip.Currency
             }).ToList();
 
             return Ok(response);
@@ -64,11 +70,46 @@ namespace MyTrips.Api.Controllers
             {
                 Id = trip.Id,
                 Name = trip.Name,
+                Destination = trip.Destination,
                 StartDate = trip.StartDate,
                 EndDate = trip.EndDate,
-                Budget = trip.Budget
+                Budget = trip.Budget,
+                Currency = trip.Currency
             };
         }
+
+        [HttpPut("{id:guid}")]
+        public ActionResult<TripResponse> UpdateTrip(Guid id, CreateTripRequest request)
+        {
+            var trip = _trips.FirstOrDefault(t => t.Id == id);
+
+            if (trip is null)
+                return NotFound();
+
+            trip.Update(
+                name: request.Name,
+                destination: request.Destination,
+                startDate: request.StartDate,
+                endDate: request.EndDate,
+                budget: request.Budget,
+                currency: request.Currency
+            );
+
+            var response = new TripResponse
+            {
+                Id = trip.Id,
+                Name = trip.Name,
+                Destination = trip.Destination,
+                StartDate = trip.StartDate,
+                EndDate = trip.EndDate,
+                Budget = trip.Budget,
+                Currency = trip.Currency
+            };
+
+            return Ok(response);
+        }
+
+
         [HttpDelete("{id:guid}")]
         public ActionResult DeleteTrip(Guid id)
         {
