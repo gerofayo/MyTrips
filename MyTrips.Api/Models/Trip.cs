@@ -1,4 +1,4 @@
-using System;
+using MyTrips.Api.DTOs.Trips;
 
 namespace MyTrips.Api.Models;
 
@@ -41,19 +41,14 @@ public class Trip
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(
-        string? name = null,
-        string? destination = null,
-        DateOnly? startDate = null,
-        DateOnly? endDate = null,
-        decimal? budget = null,
-        string? currency = null)
+    public void Update(UpdateTripRequest request)
     {
-        var newName = name ?? Name;
-        var newDestination = destination ?? Destination;
-        var newStartDate = startDate ?? StartDate;
-        var newEndDate = endDate ?? EndDate;
-        var newBudget = budget ?? Budget;
+        var newName = request.Name ?? Name;
+        var newDestination = request.Destination ?? Destination;
+        var newStartDate = request.StartDate ?? StartDate;
+        var newEndDate = request.EndDate ?? EndDate;
+        var newBudget = request.Budget ?? Budget;
+        var newCurrency = request.Currency ?? Currency;
 
         Validate(newName, newDestination, newStartDate, newEndDate, newBudget);
 
@@ -62,9 +57,7 @@ public class Trip
         StartDate = newStartDate;
         EndDate = newEndDate;
         Budget = newBudget;
-        if (!string.IsNullOrWhiteSpace(currency))
-            Currency = currency;
-        
+        Currency = newCurrency;
     }
 
     private static void Validate(

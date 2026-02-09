@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyTrips.Api.DTOs;
 using MyTrips.Api.DTOs.Trips;
+using MyTrips.Api.Mappers;
 using MyTrips.Api.Models;
 
 namespace MyTrips.Api.Controllers
@@ -17,43 +18,15 @@ namespace MyTrips.Api.Controllers
         [HttpPost]
         public ActionResult<TripResponse> CreateTrip(CreateTripRequest request)
         {
-            var trip = new Trip(
-                request.Name,
-                request.Destination,
-                request.StartDate,
-                request.EndDate,
-                request.Budget,
-                request.Currency
-            );
-
+            var trip = TripMapper.ToModel(request);
             _trips.Add(trip);
-
-            var response = new TripResponse
-            {
-                Id = trip.Id,
-                Name = trip.Name,
-                Destination = trip.Destination,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
-                Budget = trip.Budget,
-                Currency = trip.Currency
-            };
-
+            var response = TripMapper.ToResponse(trip);
             return CreatedAtAction(nameof(GetTripById), new { id = trip.Id }, response);
         }
         [HttpGet]
         public ActionResult<IEnumerable<TripResponse>> GetAllTrips()
         {
-            var response = _trips.Select(trip => new TripResponse
-            {
-                Id = trip.Id,
-                Name = trip.Name,
-                Destination = trip.Destination,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
-                Budget = trip.Budget,
-                Currency = trip.Currency
-            }).ToList();
+            var response = _trips.Select(TripMapper.ToResponse).ToList();
 
             return Ok(response);
         }
@@ -66,45 +39,20 @@ namespace MyTrips.Api.Controllers
             if (trip is null)
                 return NotFound();
 
-            return new TripResponse
-            {
-                Id = trip.Id,
-                Name = trip.Name,
-                Destination = trip.Destination,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
-                Budget = trip.Budget,
-                Currency = trip.Currency
-            };
+            return TripMapper.ToResponse(trip);
         }
 
         [HttpPut("{id:guid}")]
-        public ActionResult<TripResponse> UpdateTrip(Guid id, CreateTripRequest request)
+        public ActionResult<TripResponse> UpdateTrip(Guid id, UpdateTripRequest request)
         {
             var trip = _trips.FirstOrDefault(t => t.Id == id);
 
             if (trip is null)
                 return NotFound();
 
-            trip.Update(
-                name: request.Name,
-                destination: request.Destination,
-                startDate: request.StartDate,
-                endDate: request.EndDate,
-                budget: request.Budget,
-                currency: request.Currency
-            );
+            trip.Update(request);
 
-            var response = new TripResponse
-            {
-                Id = trip.Id,
-                Name = trip.Name,
-                Destination = trip.Destination,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
-                Budget = trip.Budget,
-                Currency = trip.Currency
-            };
+            var response = TripMapper.ToResponse(trip);
 
             return Ok(response);
         }
@@ -121,6 +69,6 @@ namespace MyTrips.Api.Controllers
             _trips.Remove(trip);
             return NoContent();
 
-         }
+        }
     }
 }
