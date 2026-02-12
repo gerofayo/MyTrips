@@ -13,7 +13,17 @@ namespace MyTrips.Api.Controllers
     {
 
         //TODO: Implement persistence with a database (e.g., Entity Framework Core)
-        private static readonly List<Trip> _trips = new(); // TEMPORAL IN-MEMORY STORAGE
+        private static readonly Trip trip1 = new Trip(
+            name: "Vacation in Hawaii",
+            destination: "Hawaii",
+            startDate: new DateOnly(2024, 12, 20),
+            endDate: new DateOnly(2024, 12, 30),
+            budget: 3000m,
+            currency: "USD"
+        );
+        private static readonly List<Trip> _trips = [
+            trip1
+        ];
 
         [HttpPost]
         public ActionResult<TripResponse> CreateTrip(CreateTripRequest request)
