@@ -1,0 +1,158 @@
+/* --- Variables para configuración fácil --- */
+:root {
+  --primary: #6366f1; /* Indigo moderno */
+  --primary-hover: #4f46e5;
+  --accent: #8b5cf6; /* Violeta para el gradiente */
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --bg-color: #f3f4f6;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Fuente limpia para lectura */
+  background-color: var(--bg-color);
+  background-image: radial-gradient(circle at top right, #e0e7ff, transparent 40%),
+                    radial-gradient(circle at bottom left, #f3e8ff, transparent 40%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Evita que se centre verticalmente si hay mucho contenido */
+}
+
+.app-container {
+  width: 100%;
+  max-width: 550px;
+  margin: 60px 20px;
+  padding: 32px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  /* Borde sutil para definición */
+  border: 1px solid rgba(255, 255, 255, 0.5); 
+  backdrop-filter: blur(10px); /* Efecto vidrio si el fondo tuviera transparencia */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 32px;
+  font-family: 'Poppins', sans-serif; /* Fuente con más carácter para títulos */
+  font-weight: 700;
+  font-size: 2rem;
+  /* Texto con gradiente */
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+form {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 32px;
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: calc(var(--radius) - 4px);
+  border: 1px solid #e5e7eb;
+}
+
+input {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 2px solid transparent; /* Truco para que no salte al enfocar */
+  background-color: white;
+  font-size: 15px;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  width: 100%; /* Asegura que ocupe el espacio */
+  box-sizing: border-box; /* Previene desbordes */
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); /* Anillo de enfoque suave */
+}
+
+button {
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  transform: translateY(-2px); /* Efecto de elevación */
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.delete-button {
+  margin-left: 12px;
+  background: transparent; /* Fondo transparente por defecto */
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: none;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.delete-button:hover {
+  background-color: var(--danger);
+  color: white;
+  border-color: var(--danger);
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+
+.trip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: white;
+  margin-bottom: 12px;
+  border: 1px solid #f3f4f6;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Efecto hover en los items de la lista */
+.trip-item:hover {
+  border-color: #e0e7ff;
+  transform: translateX(4px); /* Se mueve un poquito a la derecha */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.divider-line {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+  margin: 32px 0;
+}

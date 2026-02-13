@@ -1,36 +1,28 @@
-import { useEffect, useState } from "react";
+import "./App.css";
+import TripForm from "./components/TripForm";
 import TripList from "./components/TripList";
-import type { Trip } from "./types/Trip";
-import { getTrips } from "./services/tripServices";
+import { useTrips } from "./hooks/useTrips";
 
 function App() {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadTrips() {
-      try {
-        const data = await getTrips();
-        setTrips(data);
-      } catch (error) {
-        console.error(error);
-      } finally { 
-        setLoading(false);
-      }
-    }
-    loadTrips();
-  }, []);
+  const {
+    trips,
+    loading,
+    error,
+    createTrip,
+    removeTrip,
+  } = useTrips();
 
   return (
-    <div>
-      <h1>Trip Planner</h1>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <TripList trips={trips} />
-      )}
+    <div className="app-container">
+      <h1>Trips</h1>
+      <TripList trips={trips} onDelete={removeTrip} />
+      {loading && <p>Loading trips...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <hr className="divider-line" />
+      <TripForm onSubmit={createTrip} />
+
     </div>
   );
 }
 
-export default App
+export default App;

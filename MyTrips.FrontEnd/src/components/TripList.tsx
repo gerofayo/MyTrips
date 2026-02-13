@@ -1,15 +1,23 @@
-import type { Trip } from "../types/Trip";
+import "../App.css";
+import type { TripResponse } from "../types/TripResponse";
 
-interface Props {
-  trips: Trip[];
-}
+type Props = {
+  trips: TripResponse[];
+  onDelete: (id: string) => void;
+};
 
-function TripList({ trips }: Props) {
+function TripList({ trips, onDelete }: Props) {
   return (
-    <ul>
+    <ul className="trip-list">
       {trips.map((trip) => (
-        <li key={trip.id}>
+        <li key={trip.id} className="trip-item">
           {trip.name} - {trip.destination}
+          <button
+            className="delete-button"
+            onClick={() => onDelete(trip.id)}
+          >
+            Delete
+          </button>
         </li>
       ))}
     </ul>
