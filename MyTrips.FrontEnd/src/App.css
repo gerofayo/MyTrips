@@ -1,8 +1,9 @@
-/* --- Variables para configuración fácil --- */
 :root {
-  --primary: #6366f1; /* Indigo moderno */
+  --primary: #6366f1;
+  /* Indigo moderno */
   --primary-hover: #4f46e5;
-  --accent: #8b5cf6; /* Violeta para el gradiente */
+  --accent: #8b5cf6;
+  /* Violeta para el gradiente */
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --bg-color: #f3f4f6;
@@ -15,35 +16,102 @@
 }
 
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
-  font-family: 'Inter', sans-serif; /* Fuente limpia para lectura */
+  padding: 0;
+  font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
   background-image: radial-gradient(circle at top right, #e0e7ff, transparent 40%),
-                    radial-gradient(circle at bottom left, #f3e8ff, transparent 40%);
+    radial-gradient(circle at bottom left, #f3e8ff, transparent 40%);
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Evita que se centre verticalmente si hay mucho contenido */
+  align-items: flex-start;
 }
 
 .app-container {
   width: 100%;
-  max-width: 550px;
   margin: 60px 20px;
   padding: 32px;
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   /* Borde sutil para definición */
-  border: 1px solid rgba(255, 255, 255, 0.5); 
-  backdrop-filter: blur(10px); /* Efecto vidrio si el fondo tuviera transparencia */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  /* Efecto vidrio si el fondo tuviera transparencia */
+}
+
+.navbar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--text-main);
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+/* Animated underline */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 32px;
-  font-family: 'Poppins', sans-serif; /* Fuente con más carácter para títulos */
+  font-family: 'Poppins', sans-serif;
+  /* Fuente con más carácter para títulos */
   font-weight: 700;
   font-size: 2rem;
   /* Texto con gradiente */
@@ -67,20 +135,24 @@ form {
 input {
   padding: 14px 16px;
   border-radius: 10px;
-  border: 2px solid transparent; /* Truco para que no salte al enfocar */
+  border: 2px solid transparent;
+  /* Truco para que no salte al enfocar */
   background-color: white;
   font-size: 15px;
   color: var(--text-main);
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
-  width: 100%; /* Asegura que ocupe el espacio */
-  box-sizing: border-box; /* Previene desbordes */
+  width: 100%;
+  /* Asegura que ocupe el espacio */
+  box-sizing: border-box;
+  /* Previene desbordes */
 }
 
 input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); /* Anillo de enfoque suave */
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  /* Anillo de enfoque suave */
 }
 
 button {
@@ -98,7 +170,8 @@ button {
 }
 
 button:hover {
-  transform: translateY(-2px); /* Efecto de elevación */
+  transform: translateY(-2px);
+  /* Efecto de elevación */
   box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
   filter: brightness(1.1);
 }
@@ -108,11 +181,15 @@ button:active {
 }
 
 .delete-button {
-  margin-left: 12px;
-  background: transparent; /* Fondo transparente por defecto */
+  margin-top: 40px;
+  padding: 12px 20px;
+  background: transparent;
   color: var(--danger);
   border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
   box-shadow: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
   padding: 8px 12px;
   font-size: 13px;
 }
@@ -124,31 +201,163 @@ button:active {
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 
-.trip-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+
+/* =========================
+   TRIP CARD
+========================= */
+
+.trip-card {
+  display: flex;
+  height: 140px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid #f3f4f6;
 }
 
-.trip-item {
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: #e0e7ff;
+}
+
+.trip-card-image {
+  width: 40%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.trip-card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.1));
+}
+
+.trip-card-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.trip-card-content h3 {
+  margin: 0 0 6px 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+}
+
+.trip-destination {
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.trip-dates {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* =========================
+   TRIP DETAIL PAGE
+========================= */
+
+.trip-detail {
+  width: 100%;
+}
+
+/* HERO */
+
+.trip-hero {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+}
+
+.trip-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.2));
+}
+
+.trip-hero-overlay {
+  position: relative;
+  color: white;
+  z-index: 1;
+}
+
+.trip-hero-overlay h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+/* CONTENT */
+
+.trip-detail-content {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.trip-info-card {
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #f3f4f6;
+}
+
+
+.trip-info-card .trip-dates {
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.trip-description {
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.trip-info-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-radius: 12px;
-  background: white;
-  margin-bottom: 12px;
-  border: 1px solid #f3f4f6;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
+  padding: 14px 0;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-/* Efecto hover en los items de la lista */
-.trip-item:hover {
-  border-color: #e0e7ff;
-  transform: translateX(4px); /* Se mueve un poquito a la derecha */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.trip-info-row:last-child {
+  border-bottom: none;
 }
+
+.trip-info-row span:first-child {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.trip-info-row span:last-child {
+  font-weight: 500;
+}
+
+
+/* =========================
+        DIVIDER LINE
+========================= */
 
 .divider-line {
   border: none;

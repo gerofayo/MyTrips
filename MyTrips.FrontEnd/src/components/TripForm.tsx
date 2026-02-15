@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TripResponse } from "../types/TripResponse";
+import type { TripResponse } from "../types/Trip";
 
 type Props = {
   onSubmit: (trip: Omit<TripResponse, "id">) => void;

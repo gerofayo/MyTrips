@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTrips, postTrip, deleteTrip } from "../services/tripService";
-import type { TripResponse } from "../types/TripResponse";
+import type { TripResponse } from "../types/Trip";
 
 export function useTrips() {
   const [trips, setTrips] = useState<TripResponse[]>([]);

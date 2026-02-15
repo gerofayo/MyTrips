@@ -1,4 +1,4 @@
-import type { TripResponse , CreateTripDto} from "../types/TripResponse";
+import type { TripResponse , CreateTripDto} from "../types/Trip";
 
 const API_URL = "http://localhost:5234/api/trips";
 
