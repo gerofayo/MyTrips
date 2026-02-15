@@ -1,74 +1,99 @@
-using MyTrips.Api.DTOs.Trips;
-
 namespace MyTrips.Api.Models;
+
+using MyTrips.Api.Enums;
+
 
 public class Trip
 {
-    private const string DefaultCurrency = "USD";
+    private const Currency DefaultCurrency = Currency.USD;
 
     public Guid Id { get; private set; }
 
-    public string Name { get; private set; } = null!;
+    public string Title { get; private set; } = null!;
     public string Destination { get; private set; } = null!;
 
     public DateOnly StartDate { get; private set; }
     public DateOnly EndDate { get; private set; }
 
+    public decimal InitialBudget { get; private set; }
+    public Currency Currency { get; private set; } = DefaultCurrency;
+
     public DateTime CreatedAt { get; private set; }
 
-    public decimal Budget { get; private set; }
-    public string Currency { get; private set; } = DefaultCurrency;
-
-    private Trip() { }
+    public ICollection<BudgetItem> BudgetItems { get; private set; } = new List<BudgetItem>();
 
     public Trip(
-        string name,
+        string title,
+        string destination,
+        DateOnly startDate,
+        DateOnly endDate,
+        decimal initialBudget,
+        Currency currency = DefaultCurrency)
+    {
+        Validate(title, destination, startDate, endDate, initialBudget, currency);
+
+        Id = Guid.NewGuid();
+        Title = title.Trim();
+        Destination = destination.Trim();
+        StartDate = startDate;
+        EndDate = endDate;
+        InitialBudget = initialBudget;
+        Currency = currency;
+        CreatedAt = DateTime.UtcNow;
+    }
+
+    public void Update(
+        string? title,
+        string? destination,
+        DateOnly? startDate,
+        DateOnly? endDate,
+        decimal? initialBudget,
+        Currency? currency
+        )
+    {
+        var newTitle = title?.Trim() ?? Title;
+        var newDestination = destination?.Trim() ?? Destination;
+        var newStartDate = startDate ?? StartDate;
+        var newEndDate = endDate ?? EndDate;
+        var newBudget = initialBudget ?? InitialBudget;
+        var newCurrency = currency ?? Currency;
+
+        Validate(newTitle, newDestination, newStartDate, newEndDate, newBudget, newCurrency);
+
+        Title = newTitle;
+        Destination = newDestination;
+        StartDate = newStartDate;
+        EndDate = newEndDate;
+        InitialBudget = newBudget;
+        Currency = newCurrency;
+    }
+
+    public decimal GetTotalSpent()
+        => BudgetItems
+            .Where(x => !x.IsEstimated)
+            .Sum(x => x.Amount);
+
+    public decimal GetTotalEstimated()
+        => BudgetItems
+            .Where(x => x.IsEstimated)
+            .Sum(x => x.Amount);
+
+    public decimal GetProjectedTotal()
+        => GetTotalSpent() + GetTotalEstimated();
+
+    public decimal GetRemainingBudget()
+        => InitialBudget - GetProjectedTotal();
+
+    private void Validate(
+        string title,
         string destination,
         DateOnly startDate,
         DateOnly endDate,
         decimal budget,
-        string currency = DefaultCurrency)
+        Currency currency)
     {
-        Validate(name, destination, startDate, endDate, budget);
-
-        Id = Guid.NewGuid();
-        Name = name.Trim();
-        Destination = destination.Trim();
-        StartDate = startDate;
-        EndDate = endDate;
-        Budget = budget;
-        Currency = string.IsNullOrWhiteSpace(currency)? DefaultCurrency: currency;
-        CreatedAt = DateTime.UtcNow;
-    }
-
-    public void Update(UpdateTripRequest request)
-    {
-        var newName = request.Name ?? Name;
-        var newDestination = request.Destination ?? Destination;
-        var newStartDate = request.StartDate ?? StartDate;
-        var newEndDate = request.EndDate ?? EndDate;
-        var newBudget = request.Budget ?? Budget;
-        var newCurrency = request.Currency ?? Currency;
-
-        Validate(newName, newDestination, newStartDate, newEndDate, newBudget);
-
-        Name = newName.Trim();
-        Destination = newDestination.Trim();
-        StartDate = newStartDate;
-        EndDate = newEndDate;
-        Budget = newBudget;
-        Currency = newCurrency;
-    }
-
-    private static void Validate(
-        string name,
-        string destination,
-        DateOnly startDate,
-        DateOnly endDate,
-        decimal budget)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Trip name is required");
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Trip title is required");
 
         if (string.IsNullOrWhiteSpace(destination))
             throw new ArgumentException("Destination is required");
@@ -78,6 +103,8 @@ public class Trip
 
         if (budget <= 0)
             throw new ArgumentException("Budget must be greater than zero");
+
+        if (!Enum.IsDefined(typeof(Currency), currency))
+            throw new ArgumentException("Invalid currency");
     }
 }
-

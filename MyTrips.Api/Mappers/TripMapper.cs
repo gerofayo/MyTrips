@@ -7,28 +7,28 @@ namespace MyTrips.Api.Mappers;
 
 public static class TripMapper
 {
-    public static TripResponse ToResponse(Trip trip)
+    public static TripResponse ModelToResponse(Trip trip)
     {
         return new TripResponse
         {
             Id = trip.Id,
-            Name = trip.Name,
+            Title = trip.Title,
             Destination = trip.Destination,
             StartDate = trip.StartDate,
             EndDate = trip.EndDate,
-            Budget = trip.Budget,
+            Budget = trip.InitialBudget,
             Currency = trip.Currency
         };
     }
 
-    public static Trip ToModel(CreateTripRequest request)
+    public static Trip ResponseToModel(CreateTripRequest request)
     {
         return new Trip(
-            name: request.Name,
+            title: request.Title,
             destination: request.Destination,
             startDate: request.StartDate,
             endDate: request.EndDate,
-            budget: request.Budget,
+            initialBudget: request.Budget,
             currency: request.Currency
         );
     }

@@ -1,3 +1,6 @@
+using MyTrips.Api.Repositories;
+using MyTrips.Api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
@@ -6,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
+builder.Services.AddScoped<TripService>();
 
 // OpenAPI (nuevo enfoque .NET 8)
 builder.Services.AddOpenApi();
