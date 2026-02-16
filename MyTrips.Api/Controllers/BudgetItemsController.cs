@@ -4,7 +4,7 @@ using MyTrips.Api.Services;
 
 namespace MyTrips.Api.Controllers
 {
-    [Route("api/trips/{tripId:guid}/[controller]")]
+    [Route("api/trips/{tripId:guid}/budget-items")]
     [ApiController]
     public class BudgetItemsController : ControllerBase
     {

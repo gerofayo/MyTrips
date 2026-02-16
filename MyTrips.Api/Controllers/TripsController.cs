@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyTrips.Api.DTOs;
 using MyTrips.Api.DTOs.Trips;
+using MyTrips.Api.Enums;
 using MyTrips.Api.Services;
 
 namespace MyTrips.Api.Controllers
@@ -18,7 +19,7 @@ namespace MyTrips.Api.Controllers
             var createdTrip = _tripService.CreateTrip(request);
             return CreatedAtAction(nameof(GetTripById), new { id = createdTrip.Id }, createdTrip);
         }
-        
+
         [HttpGet]
         public ActionResult<IEnumerable<TripResponse>> GetAllTrips()
         {
@@ -59,6 +60,13 @@ namespace MyTrips.Api.Controllers
             else
                 return NoContent();
 
+        }
+
+        [HttpGet("currencies")]
+        public IActionResult GetCurrencies()
+        {
+            var currencies = Enum.GetNames(typeof(Currency));
+            return Ok(currencies);
         }
     }
 }

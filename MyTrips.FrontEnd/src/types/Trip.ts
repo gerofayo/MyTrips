@@ -1,5 +1,5 @@
-export type BaseTrip = {
-  name: string;
+export type CreateTripRequest = {
+  title: string;
   destination: string;
   startDate: string;
   endDate: string;
@@ -7,9 +7,13 @@ export type BaseTrip = {
   currency: string;
 };
 
-export type TripResponse = BaseTrip & {
+export type TripResponse = {
   id: string;
+  title: string;
+  destination: string;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  currency: string;
   createdAt: string;
 };
-
-export type CreateTripDto = BaseTrip;

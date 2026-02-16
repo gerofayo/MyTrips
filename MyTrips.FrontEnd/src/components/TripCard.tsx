@@ -11,7 +11,9 @@ export default function TripCard({ trip }: Props) {
   return (
     <div
       className="trip-card"
-      onClick={() => navigate(`/trips/${trip.id}`)}
+      onClick={() => {
+        navigate(`/trips/${trip.id}`);
+      }}
     >
       <div
         className="trip-card-image"
@@ -19,7 +21,7 @@ export default function TripCard({ trip }: Props) {
       />
 
       <div className="trip-card-content">
-        <h3>{trip.name}</h3>
+        <h3>{trip.title}</h3>
         <p className="trip-destination">{trip.destination}</p>
         <p className="trip-dates">
           {trip.startDate} → {trip.endDate}

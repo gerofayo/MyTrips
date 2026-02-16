@@ -1,14 +1,15 @@
 import TripForm from "../components/TripForm";
 import { useTrips } from "../hooks/useTrips";
 import { useNavigate } from "react-router-dom";
+import type { CreateTripRequest } from "../types/Trip";
 
 export default function TripFormPage() {
   const { createTrip } = useTrips();
   const navigate = useNavigate();
 
-  const handleCreate = async (data: any) => {
+  const handleCreate = async (data: CreateTripRequest) => {
     await createTrip(data);
-    navigate("/");
+    navigate("/trips");
   };
 
   return (

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MyTrips.Api.Repositories;
 using MyTrips.Api.Services;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
 builder.Services.AddScoped<TripService>();
+builder.Services.AddScoped<BudgetItemService>();
+
 
 // OpenAPI (nuevo enfoque .NET 8)
 builder.Services.AddOpenApi();
@@ -27,6 +30,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters
+        .Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 

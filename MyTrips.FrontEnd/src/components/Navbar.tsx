@@ -7,17 +7,11 @@ export default function Navbar() {
         <h2 className="navbar-logo">Trip Planner</h2>
 
         <div className="navbar-links">
-          <NavLink to="/" className="nav-link">
-            Home
-          </NavLink>
           <NavLink to="/trips" className="nav-link">
-            Trips
+            Home
           </NavLink>
           <NavLink to="/create" className="nav-link">
             Create
-          </NavLink>
-          <NavLink to="/about" className="nav-link">
-            About
           </NavLink>
         </div>
       </div>

@@ -46,6 +46,7 @@ body {
 
 .navbar {
   width: 100%;
+  padding: 16px 20px;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #e5e7eb;
@@ -55,9 +56,8 @@ body {
 }
 
 .navbar-container {
-  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
-  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -199,6 +199,54 @@ button:active {
   color: white;
   border-color: var(--danger);
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+
+/* =========================
+   SELECT & OPTIONS
+========================= */
+
+select {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-color: white;
+  font-size: 15px;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  /* Personalización de la flecha */
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 18px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+/* Estilo para las opciones (limitado por el navegador) */
+select option {
+  padding: 12px;
+  background-color: white;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Estado deshabilitado o placeholder */
+select option[value=""][disabled] {
+  color: var(--text-muted);
+}
+
+/* Hover en dispositivos que lo soporten */
+select:hover {
+  border-color: #e5e7eb;
 }
 
 

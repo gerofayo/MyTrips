@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { getTrips, postTrip, deleteTrip } from "../services/tripService";
-import type { TripResponse } from "../types/Trip";
+import {
+  getTrips,
+  postTrip,
+  deleteTrip,
+  getTripById
+} from "../services/tripService";
+import type { CreateTripRequest, TripResponse } from "../types/Trip";
 
 export function useTrips() {
   const [trips, setTrips] = useState<TripResponse[]>([]);
@@ -14,23 +19,35 @@ export function useTrips() {
   async function loadTrips() {
     try {
       setLoading(true);
+      setError(null);
       const data = await getTrips();
       setTrips(data);
-    } catch (err) {
+    } catch (e) {
       setError("Error loading trips");
     } finally {
       setLoading(false);
     }
   }
 
-  async function createTrip(trip: Omit<TripResponse, "id">) {
+  async function createTrip(trip: CreateTripRequest): Promise<TripResponse> {
     const newTrip = await postTrip(trip);
-    setTrips((prev) => [...prev, newTrip]);
+    setTrips(prev => [...prev, newTrip]);
+    return newTrip;
   }
 
   async function removeTrip(id: string) {
-    await deleteTrip(id);
-    setTrips((prev) => prev.filter((t) => t.id !== id));
+    try {
+      await deleteTrip(id);
+      setTrips(prev => prev.filter(t => t.id !== id));
+    } catch (e) {
+      setError("Failed to delete trip");
+      throw e;
+    }
+  }
+
+  async function fetchTripById(id: string): Promise<TripResponse> {
+    var response: TripResponse = await getTripById(id);
+    return response;
   }
 
   return {
@@ -39,6 +56,7 @@ export function useTrips() {
     error,
     createTrip,
     removeTrip,
+    fetchTripById,
     reload: loadTrips,
   };
 }

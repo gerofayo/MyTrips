@@ -1,31 +1,37 @@
-import { useState } from "react";
-import type { TripResponse } from "../types/Trip";
+import { useState, useEffect } from "react";
+import type { CreateTripRequest } from "../types/Trip";
+import { getCurrencies } from "../services/tripService";
 
 type Props = {
-  onSubmit: (trip: Omit<TripResponse, "id">) => void;
+  onSubmit: (trip: CreateTripRequest) => void;
 };
 
 function TripForm({ onSubmit }: Props) {
-  const [formData, setFormData] = useState<Omit<TripResponse, "id">>({
-    destination: "Hawaii",
-    name: "Vacation to Hawaii",
+  const [currencies, setCurrencies] = useState<string[]>([]);
+  const [formData, setFormData] = useState<CreateTripRequest>({
+    destination: "",
+    title: "",
     startDate: "",
     endDate: "",
-    createdAt: "",
     budget: 0,
-    currency: "USD",
+    currency: "",
   });
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const { id, value } = e.target;
+  useEffect(() => {
+    getCurrencies()
+      .then(setCurrencies)
+      .catch((err) => console.error("Error loading currencies:", err));
+  }, []);
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [id]: id === "budget" ? Number(value) : value,
+      [name || e.target.id]: name === "budget" ? Number(value) : value,
     }));
-  }
+  };
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,64 +40,83 @@ function TripForm({ onSubmit }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
-        <div>
-            <label htmlFor="destination">Destination</label>
-            <input
-                id="destination"
-                value={formData.destination}
-                onChange={handleChange} 
-                required
-            />
-        </div>
+      <div>
+        <label htmlFor="destination">Destination</label>
+        <input
+          id="destination"
+          name="destination"
+          value={formData.destination}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-        <div>
-            <label htmlFor="name">Travel Name</label>
-            <input id="name" value={formData.name} onChange={handleChange} required />
-        </div>
+      <div>
+        <label htmlFor="title">Travel Name</label>
+        <input
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-        <div>
-            <label htmlFor="startDate">Start Date</label>
-            <input
-                id="startDate"
-                type="date"
-                value={formData.startDate}
-                onChange={handleChange}
-                required
-            />
-        </div>
+      <div>
+        <label htmlFor="startDate">Start Date</label>
+        <input
+          id="startDate"
+          name="startDate"
+          type="date"
+          value={formData.startDate}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-        <div>
-            <label htmlFor="endDate">End Date</label>
-            <input
-                id="endDate"
-                type="date"
-                value={formData.endDate}
-                onChange={handleChange}
-                required
-            />
-        </div>
+      <div>
+        <label htmlFor="endDate">End Date</label>
+        <input
+          id="endDate"
+          name="endDate"
+          type="date"
+          value={formData.endDate}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-        <div>
-            <label htmlFor="budget">Budget</label>
-            <input
-                id="budget"
-                type="number"
-                value={formData.budget}
-                onChange={handleChange}
-                min={0}
-            />
-        </div>
+      <div>
+        <label htmlFor="budget">Budget</label>
+        <input
+          id="budget"
+          name="budget"
+          type="number"
+          value={formData.budget}
+          onChange={handleChange}
+          min={0}
+        />
+      </div>
 
-        <div>
-            <label htmlFor="currency">Currency</label>
-            <input
-                id="currency"
-                value={formData.currency}
-                onChange={handleChange}
-            />
-        </div>
+      <div>
+        <label htmlFor="currency">Currency</label>
+        <select
+          id="currency"
+          name="currency"
+          value={formData.currency}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select a currency</option>
+          {currencies.map((curr) => (
+            <option key={curr} value={curr}>
+              {curr}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <button type="submit">Add Trip</button>
+      <button type="submit">Add Trip</button>
     </form>
   );
 }

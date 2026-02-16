@@ -1,20 +1,34 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTrips } from "../hooks/useTrips";
-import type { TripResponse } from "../types/Trip";
+import { useBudgetItems } from "../hooks/useBudgetItems";
+import { useTrip } from "../hooks/useTrip";
+
 
 export default function TripDetailPage() {
   const { id } = useParams();
-  const { trips , removeTrip} = useTrips();
+  const navigate = useNavigate();
 
-  const trip = trips.find((t: TripResponse) => t.id === id);
+  const { trip, loading: tripLoading } = useTrip(id);
+  const { items, deleteItem, loading: itemsLoading, isSubmitting : isBudgetItemSubmitting } = useBudgetItems(id!);
+  const { removeTrip } = useTrips();
 
+  if (tripLoading) return <p>Cargando detalles del viaje...</p>;
+  if (!trip) return <p>Viaje no encontrado</p>;
+
+  const handleDelete = async () => {
+    await removeTrip(trip.id);
+    navigate("/trips");
+  };
+
+  if (tripLoading && !trip) return <p>Loading trip details...</p>;
   if (!trip) return <p>Trip not found</p>;
+
 
   return (
     <div className="trip-detail">
       <div className="trip-hero">
         <div className="trip-hero-overlay">
-          <h1>{trip.name}</h1>
+          <h1>{trip.title}</h1>
           <p className="trip-hero-destination">{trip.destination}</p>
         </div>
       </div>
@@ -41,11 +55,29 @@ export default function TripDetailPage() {
               {new Date(trip.createdAt).toLocaleDateString()}
             </span>
           </div>
+
+          <div>
+            <h2>Budget</h2>
+
+            {itemsLoading && <p>Loading budget items...</p>}
+
+            <ul>
+              {items.map(item => (
+                <li key={item.id}>
+                  {item.title} - {item.amount} {trip.currency}
+                  <button onClick={() => deleteItem(item.id)}>
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <button
-            className="delete-button"
-            onClick={() => removeTrip(trip.id)}
+            disabled={isBudgetItemSubmitting}
+            onClick={() => handleDelete()}
           >
-            Delete Trip
+            {isBudgetItemSubmitting ? "Borrando..." : "Eliminar"}
           </button>
         </div>
       </div>

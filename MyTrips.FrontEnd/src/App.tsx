@@ -10,7 +10,7 @@ function App() {
       <Navbar />
       <div className="app-container">
         <Routes>
-          <Route path="/" element={<TripListPage />} />
+          <Route path="/trips" element={<TripListPage />} />
           <Route path="/trips/:id" element={<TripDetailPage />} />
           <Route path="/create" element={<TripFormPage />} />
         </Routes>
