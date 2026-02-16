@@ -16,7 +16,7 @@ public class BudgetItem
 
     public bool IsEstimated { get; private set; }
 
-    public DateOnly? Date { get; private set; }
+    public DateTime? Date { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -26,7 +26,7 @@ public class BudgetItem
         ExpenseCategory category,
         decimal amount,
         bool isEstimated,
-        DateOnly? date = null)
+        DateTime? date = null)
     {
 
         Validate(title, category, amount);
@@ -47,18 +47,22 @@ public class BudgetItem
     }
 
     public void Update(
-        string title,
-        ExpenseCategory category,
-        decimal amount,
-        bool isEstimated,
-        DateOnly? date = null)
+        string? title,
+        ExpenseCategory? category,
+        decimal? amount,
+        bool? isEstimated,
+        DateTime? date = null)
     {
-        Validate(title, category, amount);
+        var newTitle = title ?? Title;
+        var newCategory = category ?? Category;
+        var newAmount = amount ?? Amount;
 
-        Title = title.Trim();
-        Category = category;
-        Amount = amount;
-        IsEstimated = isEstimated;
+        Validate(newTitle, newCategory, newAmount);
+
+        Title = newTitle.Trim();
+        Category = newCategory;
+        Amount = newAmount;
+        IsEstimated = isEstimated ?? IsEstimated;
         Date = date;
     }
 

@@ -28,7 +28,8 @@ public class Trip
         DateOnly startDate,
         DateOnly endDate,
         decimal initialBudget,
-        Currency currency = DefaultCurrency)
+        Currency currency = DefaultCurrency
+        )
     {
         Validate(title, destination, startDate, endDate, initialBudget, currency);
 
@@ -66,6 +67,56 @@ public class Trip
         EndDate = newEndDate;
         InitialBudget = newBudget;
         Currency = newCurrency;
+    }
+
+    public BudgetItem AddBudgetItem(
+        string title,
+        decimal amount,
+        ExpenseCategory category = ExpenseCategory.Other,
+        bool isEstimated = true,
+        DateTime? date = null)
+    {
+        var item = new BudgetItem(
+            tripId: Id,
+            title: title,
+            category: category,
+            amount: amount,
+            isEstimated: isEstimated,
+            date: date
+            );
+
+        BudgetItems.Add(item);
+
+        return item;
+    }
+
+    public BudgetItem? GetBudgetItemById(Guid budgetItemId)
+        => BudgetItems.FirstOrDefault(x => x.Id == budgetItemId);
+
+    public BudgetItem? UpdateBudgetItem(
+    Guid budgetItemId,
+    string? title = null,
+    ExpenseCategory? category = null,
+    decimal? amount = null,
+    bool? isEstimated = null,
+    DateTime? date = null)
+    {
+        var item = GetBudgetItemById(budgetItemId);
+        if (item is null)
+            return null;
+
+        item.Update(title, category, amount, isEstimated, date);
+
+        return item;
+    }
+
+    public bool DeleteBudgetItem(Guid budgetItemId)
+    {
+        var item = BudgetItems.FirstOrDefault(x => x.Id == budgetItemId);
+        if (item is null)
+            return false;
+
+        return BudgetItems.Remove(item);
     }
 
     public decimal GetTotalSpent()
