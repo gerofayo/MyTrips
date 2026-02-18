@@ -24,26 +24,11 @@ export function useBudgetItems(tripId: string) {
     setIsSubmitting(true);
     setError(null);
     try {
+      console.log("Creating item with data:", data);
       const newItem = await budgetItemService.create(tripId, data);
+      console.log("Created item:", newItem);
       setItems(prev => [...prev, newItem]);
-      return newItem; 
-    } catch (err: any) {
-      setError(err.message);
-      throw err; 
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const updateItem = async (id: string, data: UpdateBudgetItemRequest) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    setError(null);
-    try {
-      await budgetItemService.update(tripId, id, data);
-      setItems(prev => prev.map(item =>
-        item.id === id ? { ...item, ...data } : item
-      ));
+      return newItem;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -52,11 +37,15 @@ export function useBudgetItems(tripId: string) {
     }
   };
 
+  const updateItem = async (id: string, data: UpdateBudgetItemRequest) => {
+    throw new Error("Update functionality not implemented yet");
+  };
+
   const deleteItem = async (id: string) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      await budgetItemService.delete(tripId, id);
+      await budgetItemService.deleteItem(tripId, id);
       setItems(prev => prev.filter(item => item.id !== id));
     } catch (err: any) {
       alert(err.message);

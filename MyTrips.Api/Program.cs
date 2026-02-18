@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using MyTrips.Api.Repositories;
 using MyTrips.Api.Services;
 
@@ -30,12 +29,14 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers()
-.AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters
-        .Add(new JsonStringEnumConverter());
-});
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter()
+        );
+    });
 
 var app = builder.Build();
 

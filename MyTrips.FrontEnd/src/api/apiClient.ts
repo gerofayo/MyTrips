@@ -1,12 +1,12 @@
-const BASE_URL = "http://localhost:5234/api";
+  const BASE_URL = import.meta.env.VITE_API_URL
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    // Intentamos extraer el mensaje de error del backend
+    
     const errorText = await response.text().catch(() => "Unknown Error");
     throw new Error(errorText || `Error: ${response.status} ${response.statusText}`);
   }
-  // Para respuestas 204 (No Content), no intentamos parsear JSON
+  
   if (response.status === 204) return {} as T;
   return response.json();
 }

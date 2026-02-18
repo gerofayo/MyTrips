@@ -24,7 +24,7 @@ public class BudgetItemService
         var trip = GetTrip(tripId);
         if (trip is null)
             return null;
-
+        
         var budgetItem = trip.AddBudgetItem(
             title: request.Title,
             amount: request.Amount,
@@ -34,6 +34,7 @@ public class BudgetItemService
         );
 
         _tripRepository.Update(trip);
+
 
         return BudgetItemMapper.ModelToResponse(budgetItem);
     }

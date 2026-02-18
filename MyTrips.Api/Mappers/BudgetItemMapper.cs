@@ -13,6 +13,9 @@ public static class BudgetItemMapper
             Id = model.Id,
             Title = model.Title,
             Amount = model.Amount,
+            Category = model.Category,
+            IsEstimated = model.IsEstimated,
+            Date = model.Date
         };
     }
 

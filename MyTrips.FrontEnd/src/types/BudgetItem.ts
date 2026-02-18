@@ -1,34 +1,24 @@
-export const ExpenseCategory = {
-  Accommodation: 0,
-  Transport: 1,
-  Food: 2,
-  Activities: 3,
-  Other: 4
-} as const;
-
-export type ExpenseCategory = typeof ExpenseCategory[keyof typeof ExpenseCategory];
-
 export interface BudgetItem {
   id: string
   title: string
   amount: number
-  category: ExpenseCategory
+  category: string
   isEstimated: boolean
-  date: string
+  date?: string | null
 }
 
 export interface CreateBudgetItemRequest {
   title: string
+  category: string
   amount: number
-  category: ExpenseCategory
+  date: string | null
   isEstimated: boolean
-  date: string
 }
 
 export interface UpdateBudgetItemRequest {
-  title?: string
-  amount?: number
-  category?: ExpenseCategory
-  isEstimated?: boolean
-  date?: string
+  title: string | null
+  category: string | null
+  amount: number | null
+  date: string | null
+  isEstimated: boolean | null
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MyTrips.Api.DTOs.BudgetItems;
+using MyTrips.Api.Enums;
 using MyTrips.Api.Services;
 
 namespace MyTrips.Api.Controllers
@@ -78,5 +79,13 @@ namespace MyTrips.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("~/api/budget-items/categories")]
+        public IActionResult GetCategories()
+        {
+            var categories = Enum.GetNames(typeof(ExpenseCategory));
+            return Ok(categories);
+        }
+
     }
 }

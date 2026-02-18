@@ -74,7 +74,7 @@ public class Trip
         decimal amount,
         ExpenseCategory category = ExpenseCategory.Other,
         bool isEstimated = true,
-        DateTime? date = null)
+        DateTimeOffset? date = null)
     {
         var item = new BudgetItem(
             tripId: Id,
@@ -99,7 +99,7 @@ public class Trip
     ExpenseCategory? category = null,
     decimal? amount = null,
     bool? isEstimated = null,
-    DateTime? date = null)
+    DateTimeOffset? date = null)
     {
         var item = GetBudgetItemById(budgetItemId);
         if (item is null)

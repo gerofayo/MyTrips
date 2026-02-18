@@ -16,7 +16,7 @@ public class BudgetItem
 
     public bool IsEstimated { get; private set; }
 
-    public DateTime? Date { get; private set; }
+    public DateTimeOffset? Date { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -26,7 +26,7 @@ public class BudgetItem
         ExpenseCategory category,
         decimal amount,
         bool isEstimated,
-        DateTime? date = null)
+        DateTimeOffset? date = null)
     {
 
         Validate(title, category, amount);
@@ -51,7 +51,7 @@ public class BudgetItem
         ExpenseCategory? category,
         decimal? amount,
         bool? isEstimated,
-        DateTime? date = null)
+        DateTimeOffset? date = null)
     {
         var newTitle = title ?? Title;
         var newCategory = category ?? Category;
