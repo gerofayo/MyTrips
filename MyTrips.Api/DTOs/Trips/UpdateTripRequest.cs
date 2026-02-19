@@ -11,6 +11,6 @@ public record class UpdateTripRequest
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public decimal? Budget { get; set; }
-    public Currency? Currency { get; set; }
+    public string? Currency { get; set; }
     public ICollection<UpdateBudgetItemRequest>? BudgetItems { get; set; }
 }

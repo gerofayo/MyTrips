@@ -5,21 +5,18 @@ using MyTrips.Api.Enums;
 
 public class Trip
 {
-    private const Currency DefaultCurrency = Currency.USD;
-    private const string DefaultTimeZone = "UTC";
-
     public Guid Id { get; private set; }
 
-    public string Title { get; private set; } = null!;
-    public string Destination { get; private set; } = null!;
+    public string Title { get; private set; }
+    public string Destination { get; private set; }
 
-    public string DestinationTimeZone { get; private set; } = DefaultTimeZone;
+    public string DestinationTimeZone { get; private set; }
 
     public DateOnly StartDate { get; private set; }
     public DateOnly EndDate { get; private set; }
 
     public decimal InitialBudget { get; private set; }
-    public Currency Currency { get; private set; } = DefaultCurrency;
+    public string Currency { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -32,7 +29,7 @@ public class Trip
         DateOnly startDate,
         DateOnly endDate,
         decimal initialBudget,
-        Currency currency = DefaultCurrency
+        string currency
         )
     {
         Validate(title, destination, destinationTimeZone, startDate, endDate, initialBudget, currency);
@@ -40,7 +37,7 @@ public class Trip
         Id = Guid.NewGuid();
         Title = title.Trim();
         Destination = destination.Trim();
-        DestinationTimeZone = string.IsNullOrWhiteSpace(destinationTimeZone) ? DefaultTimeZone : destinationTimeZone.Trim();
+        DestinationTimeZone = destinationTimeZone.Trim();
         StartDate = startDate;
         EndDate = endDate;
         InitialBudget = initialBudget;
@@ -55,7 +52,7 @@ public class Trip
         DateOnly? startDate,
         DateOnly? endDate,
         decimal? initialBudget,
-        Currency? currency
+        string? currency
         )
     {
         var newTitle = title?.Trim() ?? Title;
@@ -150,7 +147,7 @@ public class Trip
         DateOnly startDate,
         DateOnly endDate,
         decimal budget,
-        Currency currency)
+        string currency)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Trip title is required");
@@ -167,7 +164,7 @@ public class Trip
         if (budget <= 0)
             throw new ArgumentException("Budget must be greater than zero");
 
-        if (!Enum.IsDefined(typeof(Currency), currency))
-            throw new ArgumentException("Invalid currency");
+        if (string.IsNullOrWhiteSpace(currency))
+            throw new ArgumentException("Currency is required");
     }
 }

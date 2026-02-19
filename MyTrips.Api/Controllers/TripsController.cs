@@ -61,12 +61,5 @@ namespace MyTrips.Api.Controllers
                 return NoContent();
 
         }
-
-        [HttpGet("currencies")]
-        public IActionResult GetCurrencies()
-        {
-            var currencies = Enum.GetNames(typeof(Currency));
-            return Ok(currencies);
-        }
     }
 }

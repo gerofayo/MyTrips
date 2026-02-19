@@ -22,12 +22,9 @@ export async function deleteTrip(id: string): Promise<void> {
   apiClient.delete(`/trips/${id}`);
 }
 
-export const getCurrencies = () => apiClient.get<string[]>("/trips/currencies");
-
 export const tripService = {
   getAll: getTrips,
   getById: getTripById,
   create: postTrip,
   delete: deleteTrip,
-  getCurrencies,
 };

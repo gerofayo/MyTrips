@@ -9,15 +9,15 @@ public record class CreateTripRequest
 {
     [Required]
     [MaxLength(100)]
-    public string Title { get; set; } = string.Empty;
+    public required string Title { get; set; }
     
     [Required]
     [MaxLength(100)]
-    public string Destination { get; set; } = string.Empty;
+    public required string Destination { get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string DestinationTimeZone { get; set; } = "UTC";
+    public required string DestinationTimeZone { get; set; }
 
     [Required]
     public DateOnly StartDate { get; set; }
@@ -30,7 +30,7 @@ public record class CreateTripRequest
     public decimal Budget { get; set; }
 
     [Required]
-    public Currency Currency { get; set; } 
+    public required string Currency { get; set; }
 
     
     public ICollection<CreateBudgetItemRequest> BudgetItems { get; set; } = new List<CreateBudgetItemRequest>();
