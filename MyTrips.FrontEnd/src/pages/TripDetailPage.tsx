@@ -12,68 +12,85 @@ import type { CreateBudgetItemRequest } from "../types/BudgetItem";
 export default function TripDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { trip, loading: tripLoading } = useTrip(id);
-  const { items, createItem, deleteItem, isSubmitting } = useBudgetItems(id!);
+  const { items, createItem, deleteItem, isSubmitting, loading: loadingItems } = useBudgetItems(id!);
+  
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
 
   const displayedItems = useMemo(() => {
     if (!selectedDate) return items;
-    return items.filter(item => item.date === selectedDate);
+    return items.filter(item => item.date?.split('T')[0] === selectedDate);
   }, [items, selectedDate]);
 
-  const handleCreateItem = async (item: CreateBudgetItemRequest) => {
+  const handleCreateItem = async (item: Omit<CreateBudgetItemRequest, "id">) => {
     await createItem(item);
     setShowForm(false);
-  }
+  };
 
-  const handleDateSelect = (date: string | null) => {
-    setSelectedDate(date);
-  }
+  const handleDeleteItem = async (itemId: string) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      await deleteItem(itemId);
+    }
+  };
 
-  const handleDeleteItem = async (id: string) => {
-    await deleteItem(id);
-  }
+  if (tripLoading) return (
+    <div className="app-container" style={{ textAlign: 'center', padding: '100px' }}>
+      <p className="section-label">Loading trip details...</p>
+    </div>
+  );
 
-
-  if (tripLoading || !trip) return <p>Loading...</p>;
+  if (!trip) return <p>Trip not found.</p>;
 
   return (
-
     <div className="trip-detail">
       <TripHero trip={trip} />
 
-      <div className="trip-detail-content">
+      <div className="app-container" style={{ position: 'relative', marginTop: '-60px' }}>
+        
         <TripInfoCard trip={trip} items={items} />
 
-        <h3 className="section-label">Itirenary</h3>
+        <div className="divider-line" />
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 className="section-label">Itinerary</h3>
+          <button 
+            className={`delete-button ${showForm ? '' : 'primary'}`} 
+            onClick={() => setShowForm(prev => !prev)}
+            style={{ 
+              padding: '8px 16px', 
+              fontSize: '0.8rem',
+              background: showForm ? 'transparent' : 'linear-gradient(135deg, var(--primary), var(--accent))',
+              color: showForm ? 'var(--danger)' : 'white'
+            }}
+          >
+            {showForm ? "Cancel" : "+ Add Expense"}
+          </button>
+        </div>
+
         <TripCalendar
           startDate={trip.startDate}
           endDate={trip.endDate}
           selectedDate={selectedDate}
-          onDateSelect={handleDateSelect}
+          destinationTimezone={trip.destinationTimezone}
+          onDateSelect={setSelectedDate}
         />
-        <button className="add-item-btn" onClick={() => setShowForm(prev => !prev)}>
-          {showForm ? "Close Form" : "Add Budget Item"}
-        </button>
-        {showForm &&
-          <div className={`form-wrapper ${showForm ? "expanded" : "collapsed"}`}>
-            <BudgetItemForm
-              onSubmit={handleCreateItem}
-              isSubmitting={isSubmitting}
-              selectedDate={selectedDate}
-            />
-          </div>
-        }
+
+        <div className={`form-wrapper ${showForm ? "expanded" : "collapsed"}`}>
+          <BudgetItemForm
+            onSubmit={handleCreateItem}
+            isSubmitting={isSubmitting}
+            selectedDate={selectedDate}
+          />
+        </div>
 
         <BudgetItemList
           items={displayedItems}
           onDelete={handleDeleteItem}
-          isSubmitting={isSubmitting}
+          isSubmitting={loadingItems}
+          destinationTimezone={trip.destinationTimezone}
+          selectedDate={selectedDate}
         />
-
-
       </div>
     </div>
-
   );
 }

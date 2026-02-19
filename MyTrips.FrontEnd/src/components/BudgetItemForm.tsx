@@ -39,24 +39,18 @@ export const BudgetItemForm = ({
       ...prev,
       [name]:
         type === "number"
-          ? value === ""
-            ? 0
-            : Number(value)
+          ? value === "" ? 0 : Number(value)
           : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     onSubmit({
       ...formData,
-      date: hasDate && formData.date
-        ? new Date(formData.date).toISOString()
-        : null,
+      date: hasDate && formData.date ? new Date(formData.date).toISOString() : null,
     });
 
-    // reset
     setFormData({
       title: "",
       amount: 0,
@@ -64,45 +58,46 @@ export const BudgetItemForm = ({
       isEstimated: false,
       date: null,
     });
-
     setHasDate(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="mini-form-card">
-
-      <div className="input-group">
-        <label>Title</label>
-        <input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
+      
+      <div className="inputgroup">
+        <div style={{ flex: 2 }}>
+          <label className="section-label" style={{ fontSize: '0.75rem', marginBottom: '8px' }}>Title</label>
+          <input
+            name="title"
+            placeholder="e.g. Cinema Tickets"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div style={{ flex: 1 }}>
+          <label className="section-label" style={{ fontSize: '0.75rem', marginBottom: '8px' }}>Ammount</label>
+          <input
+            name="amount"
+            type="number"
+            value={formData.amount === 0 ? "" : formData.amount}
+            placeholder="$ 0.00"
+            min={0}
+            onChange={handleChange}
+            required
+          />
+        </div>
       </div>
 
-      <div className="input-group">
-        <label>Amount</label>
-        <input
-          name="amount"
-          type="number"
-          value={formData.amount === 0 ? "" : formData.amount}
-          placeholder="0"
-          min={0}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div className="input-group">
-        <label>Category</label>
+      <div>
+        <label className="section-label" style={{ fontSize: '0.75rem', marginBottom: '8px' }}>Category</label>
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
           required
         >
-          <option value="">Select category...</option>
+          <option value="">Select Category...</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -110,41 +105,41 @@ export const BudgetItemForm = ({
           ))}
         </select>
       </div>
-
-      {/* Checkbox */}
-      <div className="input-group">
-        <label>
-          {" "}Has specific date
-          <input
-            type="checkbox"
-            checked={hasDate}
-            onChange={(e) => {
-              setHasDate(e.target.checked);
-              if (!e.target.checked) {
-                setFormData(prev => ({ ...prev, date: null }));
-              }
-            }}
-          />
+      <div className="checkbox-group">
+        <input
+          id="hasDate"
+          type="checkbox"
+          checked={hasDate}
+          onChange={(e) => {
+            setHasDate(e.target.checked);
+            if (!e.target.checked) {
+              setFormData(prev => ({ ...prev, date: null }));
+            }
+          }}
+          style={{ width: 'auto' }} /* Evita que el checkbox ocupe el 100% */
+        />
+        <label htmlFor="hasDate" style={{ cursor: 'pointer', fontWeight: 500 }}>
+          Asign specific date
         </label>
       </div>
 
-      {/* Condicional */}
+      {/* Campo de fecha condicional con animación (si usas form-wrapper) */}
       {hasDate && (
-        <div className="input-group">
-          <label>Date & Time</label>
+        <div className="form-wrapper expanded">
+          <label className="section-label" style={{ fontSize: '0.75rem', marginBottom: '8px' }}>Date</label>
           <input
             name="date"
             type="datetime-local"
             value={formData.date ?? ""}
             onChange={handleChange}
+            required={hasDate}
           />
         </div>
       )}
 
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Adding..." : "Add Item"}
+      <button type="submit" disabled={isSubmitting} style={{ marginTop: '8px' }}>
+        {isSubmitting ? "Saving..." : "Add to budget"}
       </button>
-
     </form>
   );
 };

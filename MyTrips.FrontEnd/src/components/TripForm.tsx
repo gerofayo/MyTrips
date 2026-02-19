@@ -101,43 +101,49 @@ function TripForm({ onSubmit, initialData }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="trip-form">
+    <form onSubmit={handleSubmit}>
+      <h2 className="section-title" style={{ marginTop: 0 }}>
+        {initialData ? "Edit Trip Details" : "Plan a New Adventure"}
+      </h2>
+
       <div>
-        <label>Travel Name</label>
+        <label className="section-label">Travel Name</label>
         <input
           name="title"
+          placeholder="e.g., Summer in Tokyo"
           value={formData.title}
           onChange={handleChange}
           required
         />
       </div>
 
-      <div>
-        <label>Destination Country</label>
-        <select
-          value={selectedCountryCode}
-          onChange={handleCountryChange}
-          required
-        >
-          <option value="">Select country</option>
-          {countries.map((c) => (
-            <option key={c.code} value={c.code}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="inputgroup">
+        <div style={{ flex: 1 }}>
+          <label className="section-label">Destination Country</label>
+          <select
+            value={selectedCountryCode}
+            onChange={handleCountryChange}
+            required
+          >
+            <option value="">Select country</option>
+            {countries.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {availableTimezones.length > 0 && (
-        <div>
-          <label>Timezone</label>
+        <div style={{ flex: 1 }}>
+          <label className="section-label">Timezone</label>
           <select
             name="destinationTimezone"
             value={formData.destinationTimezone}
             onChange={handleChange}
             required
+            disabled={availableTimezones.length === 0}
           >
-            <option value="">Select timezone</option>
+            <option value="">{availableTimezones.length === 0 ? "Select country first" : "Select timezone"}</option>
             {availableTimezones.map((tz) => (
               <option key={tz} value={tz}>
                 {tz}
@@ -145,60 +151,65 @@ function TripForm({ onSubmit, initialData }: Props) {
             ))}
           </select>
         </div>
-      )}
-
-      <div>
-        <label>Start Date</label>
-        <input
-          name="startDate"
-          type="date"
-          value={formData.startDate}
-          onChange={handleChange}
-          required
-        />
       </div>
 
-      <div>
-        <label>End Date</label>
-        <input
-          name="endDate"
-          type="date"
-          value={formData.endDate}
-          onChange={handleChange}
-          required
-        />
+      <div className="inputgroup">
+        <div style={{ flex: 1 }}>
+          <label className="section-label">Start Date</label>
+          <input
+            name="startDate"
+            type="date"
+            value={formData.startDate}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <label className="section-label">End Date</label>
+          <input
+            name="endDate"
+            type="date"
+            value={formData.endDate}
+            onChange={handleChange}
+            required
+          />
+        </div>
       </div>
 
-      <div>
-        <label>Budget</label>
-        <input
-          name="budget"
-          type="number"
-          value={formData.budget || ""}
-          onChange={handleChange}
-          required
-        />
+      <div className="inputgroup">
+        <div style={{ flex: 2 }}>
+          <label className="section-label">Total Budget</label>
+          <input
+            name="budget"
+            type="number"
+            placeholder="0.00"
+            value={formData.budget || ""}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <label className="section-label">Currency</label>
+          <select
+            name="currency"
+            value={formData.currency}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select...</option>
+            {currencies.map((curr) => (
+              <option key={curr} value={curr}>
+                {curr}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div>
-        <label>Currency</label>
-        <select
-          name="currency"
-          value={formData.currency}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select currency</option>
-          {currencies.map((curr) => (
-            <option key={curr} value={curr}>
-              {curr} — {safeCurrencyName(curr)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <button type="submit">
-        {initialData ? "Update Trip" : "Add Trip"}
+      <button type="submit" style={{ marginTop: '16px' }}>
+        {initialData ? "Save Changes" : "Create Trip"}
       </button>
     </form>
   );
