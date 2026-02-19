@@ -16,7 +16,7 @@ export function useTrip(id: string | undefined) {
         const data = await getTripById(id);
         setTrip(data);
       } catch (err) {
-        setError("No se pudo cargar el viaje");
+        setError("Failed to load trip details.");
       } finally {
         setLoading(false);
       }

@@ -6,11 +6,14 @@ using MyTrips.Api.Enums;
 public class Trip
 {
     private const Currency DefaultCurrency = Currency.USD;
+    private const string DefaultTimeZone = "UTC";
 
     public Guid Id { get; private set; }
 
     public string Title { get; private set; } = null!;
     public string Destination { get; private set; } = null!;
+
+    public string DestinationTimeZone { get; private set; } = DefaultTimeZone;
 
     public DateOnly StartDate { get; private set; }
     public DateOnly EndDate { get; private set; }
@@ -25,17 +28,19 @@ public class Trip
     public Trip(
         string title,
         string destination,
+        string destinationTimeZone,
         DateOnly startDate,
         DateOnly endDate,
         decimal initialBudget,
         Currency currency = DefaultCurrency
         )
     {
-        Validate(title, destination, startDate, endDate, initialBudget, currency);
+        Validate(title, destination, destinationTimeZone, startDate, endDate, initialBudget, currency);
 
         Id = Guid.NewGuid();
         Title = title.Trim();
         Destination = destination.Trim();
+        DestinationTimeZone = string.IsNullOrWhiteSpace(destinationTimeZone) ? DefaultTimeZone : destinationTimeZone.Trim();
         StartDate = startDate;
         EndDate = endDate;
         InitialBudget = initialBudget;
@@ -46,6 +51,7 @@ public class Trip
     public void Update(
         string? title,
         string? destination,
+        string? destinationTimeZone,
         DateOnly? startDate,
         DateOnly? endDate,
         decimal? initialBudget,
@@ -54,15 +60,17 @@ public class Trip
     {
         var newTitle = title?.Trim() ?? Title;
         var newDestination = destination?.Trim() ?? Destination;
+        var newDestinationTimeZone = destinationTimeZone?.Trim() ?? DestinationTimeZone;
         var newStartDate = startDate ?? StartDate;
         var newEndDate = endDate ?? EndDate;
         var newBudget = initialBudget ?? InitialBudget;
         var newCurrency = currency ?? Currency;
 
-        Validate(newTitle, newDestination, newStartDate, newEndDate, newBudget, newCurrency);
+        Validate(newTitle, newDestination, newDestinationTimeZone, newStartDate, newEndDate, newBudget, newCurrency);
 
         Title = newTitle;
         Destination = newDestination;
+        DestinationTimeZone = newDestinationTimeZone;
         StartDate = newStartDate;
         EndDate = newEndDate;
         InitialBudget = newBudget;
@@ -138,6 +146,7 @@ public class Trip
     private void Validate(
         string title,
         string destination,
+        string destinationTimeZone,
         DateOnly startDate,
         DateOnly endDate,
         decimal budget,
@@ -148,6 +157,9 @@ public class Trip
 
         if (string.IsNullOrWhiteSpace(destination))
             throw new ArgumentException("Destination is required");
+
+        if (string.IsNullOrWhiteSpace(destinationTimeZone))
+            throw new ArgumentException("Destination time zone is required");
 
         if (endDate < startDate)
             throw new ArgumentException("End date must be after start date");

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useTrip } from "../hooks/useTrip";
 import { useBudgetItems } from "../hooks/useBudgetItems";
 import { TripHero } from "../components/TripHero";
@@ -7,6 +7,7 @@ import { TripInfoCard } from "../components/TripInfoCard";
 import { TripCalendar } from "../components/TripCalendar";
 import { BudgetItemList } from "../components/BudgetItemList";
 import { BudgetItemForm } from "../components/BudgetItemForm";
+import type { CreateBudgetItemRequest } from "../types/BudgetItem";
 
 export default function TripDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -15,17 +16,26 @@ export default function TripDetailPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  const handleCreateItem = async (item: any) => {
+  const displayedItems = useMemo(() => {
+    if (!selectedDate) return items;
+    return items.filter(item => item.date === selectedDate);
+  }, [items, selectedDate]);
+
+  const handleCreateItem = async (item: CreateBudgetItemRequest) => {
     await createItem(item);
     setShowForm(false);
   }
 
+  const handleDateSelect = (date: string | null) => {
+    setSelectedDate(date);
+  }
+
+  const handleDeleteItem = async (id: string) => {
+    await deleteItem(id);
+  }
+
 
   if (tripLoading || !trip) return <p>Loading...</p>;
-
-  const displayedItems = selectedDate
-    ? items.filter(item => item.date === selectedDate)
-    : items;
 
   return (
 
@@ -40,7 +50,7 @@ export default function TripDetailPage() {
           startDate={trip.startDate}
           endDate={trip.endDate}
           selectedDate={selectedDate}
-          onDateSelect={setSelectedDate}
+          onDateSelect={handleDateSelect}
         />
         <button className="add-item-btn" onClick={() => setShowForm(prev => !prev)}>
           {showForm ? "Close Form" : "Add Budget Item"}
@@ -57,7 +67,7 @@ export default function TripDetailPage() {
 
         <BudgetItemList
           items={displayedItems}
-          onDelete={deleteItem}
+          onDelete={handleDeleteItem}
           isSubmitting={isSubmitting}
         />
 

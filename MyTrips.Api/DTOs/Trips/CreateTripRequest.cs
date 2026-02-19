@@ -16,6 +16,10 @@ public record class CreateTripRequest
     public string Destination { get; set; } = string.Empty;
 
     [Required]
+    [MaxLength(100)]
+    public string DestinationTimeZone { get; set; } = "UTC";
+
+    [Required]
     public DateOnly StartDate { get; set; }
 
     [Required]

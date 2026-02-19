@@ -1,6 +1,7 @@
 export type CreateTripRequest = {
   title: string;
   destination: string;
+  destinationTimezone: string;
   startDate: string;
   endDate: string;
   budget: number;
@@ -11,6 +12,7 @@ export type TripResponse = {
   id: string;
   title: string;
   destination: string;
+  destinationTimezone: string;
   startDate: string;
   endDate: string;
   budget: number;

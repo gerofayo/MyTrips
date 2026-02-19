@@ -5,7 +5,7 @@ import { getBudgetItemCategories } from "../services/budgetItemService";
 type Props = {
   onSubmit: (item: Omit<CreateBudgetItemRequest, "id">) => Promise<void>;
   isSubmitting: boolean;
-  selectedDate?: string | null;
+  selectedDate: string | null;
 };
 
 export const BudgetItemForm = ({

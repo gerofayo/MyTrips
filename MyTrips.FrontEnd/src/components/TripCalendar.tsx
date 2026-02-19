@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { generateDateRange, getDayName, getDayNumber } from "../utils/date";
 
 interface TripCalendarProps {
   startDate: string;     // Formato "YYYY-MM-DD"
@@ -21,24 +22,7 @@ export const TripCalendar = ({ startDate, endDate, selectedDate, onDateSelect }:
     });
   }, [selectedDate]);
 
-  const generateDays = () => {
-    const days = [];
-    const start = new Date(startDate + 'T00:00:00');
-    const end = new Date(endDate + 'T00:00:00');
-
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      days.push(new Date(d).toISOString().split('T')[0]);
-    }
-    return days;
-  };
-
-  const days = generateDays();
-
-  const getDayName = (dateStr: string) =>
-    new Date(dateStr + 'T00:00:00').toLocaleDateString('us-US', { weekday: 'short' });
-
-  const getDayNumber = (dateStr: string) =>
-    new Date(dateStr + 'T00:00:00').getDate();
+  const days = generateDateRange(startDate, endDate);
 
   return (
     <div className="calendar-container">
