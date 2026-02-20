@@ -1,5 +1,5 @@
 import { apiClient } from "../api/apiClient";
-import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
+import type { BudgetItem, CreateBudgetItemRequest, UpdateBudgetItemRequest } from "../types/BudgetItem";
 
 
 export function getAllBudgetItems(tripId: string) {
@@ -10,8 +10,8 @@ export function createBudgetItem(tripId: string, data: CreateBudgetItemRequest) 
   return apiClient.post<BudgetItem>(`/trips/${tripId}/budget-items`, data);
 }
 
-export function updateBudgetItem(tripId: string, id: string, data: Partial<CreateBudgetItemRequest>) {
-  return apiClient.put(`/trips/${tripId}/budget-items/${id}`, data);
+export function updateBudgetItem(tripId: string, id: string, data: Partial<UpdateBudgetItemRequest>) {
+  return apiClient.put<BudgetItem>(`/trips/${tripId}/budget-items/${id}`, data);
 }
 
 export function deleteBudgetItem(tripId: string, id: string) {

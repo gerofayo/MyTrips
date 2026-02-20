@@ -19,15 +19,6 @@ export const TripInfoCard = ({ trip, items }: Props) => {
     return acc;
   }, {} as Record<string, number>);
 
-  const colors: Record<string, string> = {
-    food: '#f97316',
-    transport: '#3b82f6',
-    lodging: '#8b5cf6',
-    flight: '#06b6d4',
-    activity: '#10b981',
-    other: '#6b7280'
-  };
-
   return (
     <div className="trip-info-card">
       <div className="budget-summary">
@@ -59,11 +50,10 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         
         <div className="category-distribution-bar">
           {Object.entries(categories).map(([cat, amount]) => (
-            <div 
+            <div className={`cat-${cat.toLowerCase()}`}
               key={cat}
               style={{ 
                 width: `${(amount / totalSpent) * 100}%`, 
-                backgroundColor: colors[cat.toLowerCase()] || colors.other,
                 height: '100%',
                 transition: 'width 0.3s ease'
               }}
@@ -73,8 +63,8 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         </div>
         <div className="category-legend">
           {Object.entries(categories).map(([cat, amount]) => (
-            <div key={cat} className="legend-item">
-              <span className="dot" style={{ backgroundColor: colors[cat.toLowerCase()] || colors.other }}></span>
+            <div key={cat} className={`legend-item cat-${cat.toLowerCase()}`}>
+              <span className={`dot cat-${cat.toLowerCase()}`}></span>
               <span className="cat-name" style={{ textTransform: 'capitalize' }}>{cat}</span>
               <span className="cat-amount">{((amount / totalSpent) * 100).toFixed(0)}%</span>
             </div>

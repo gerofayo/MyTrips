@@ -37,8 +37,20 @@ export function useBudgetItems(tripId: string) {
     }
   };
 
-  const updateItem = async (id: string, data: UpdateBudgetItemRequest) => {
-    throw new Error("Update functionality not implemented yet");
+  const updateItem = async (itemId: string, data: Omit<BudgetItem, "id">) => {
+    setLoading(true);
+    try {
+      // tripId viene del scope del hook (useParams)
+      const response: BudgetItem = await budgetItemService.update(tripId, itemId, data);
+
+      // Actualizamos el estado local reemplazando el item viejo por el nuevo
+      setItems(prev => prev.map(item => item.id === itemId ? response : item));
+
+    } catch (error) {
+      console.error("Error updating budget item:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteItem = async (id: string) => {

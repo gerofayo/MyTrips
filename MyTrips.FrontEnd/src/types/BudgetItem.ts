@@ -14,11 +14,3 @@ export interface CreateBudgetItemRequest {
   date: string | null
   isEstimated: boolean
 }
-
-export interface UpdateBudgetItemRequest {
-  title: string | null
-  category: string | null
-  amount: number | null
-  date: string | null
-  isEstimated: boolean | null
-}
