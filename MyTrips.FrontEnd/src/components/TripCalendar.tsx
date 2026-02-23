@@ -22,8 +22,16 @@ export const TripCalendar = ({
 
   useEffect(() => {
     if (!selectedDate || !containerRef.current) return;
+    
+    // Buscamos el elemento activo para centrarlo automáticamente al seleccionarlo
     const activeElement = containerRef.current.querySelector(".day-card.active");
-    activeElement?.scrollIntoView({ behavior: "smooth", inline: "center" });
+    if (activeElement) {
+      activeElement.scrollIntoView({ 
+        behavior: "smooth", 
+        inline: "center", 
+        block: "nearest" 
+      });
+    }
   }, [selectedDate]);
 
   if (!startDate || !endDate) return null;
@@ -39,28 +47,31 @@ export const TripCalendar = ({
           type="button"
           className={`day-card ${selectedDate === null ? 'active' : ''}`}
           onClick={() => onDateSelect(null)}
-          style={{ border: 'none' }}
         >
           <span className="day-name">VIEW</span>
           <span className="day-number">All</span>
         </button>
 
-        {days.map((day) => (
-          <button
-            type="button"
-            key={day}
-            className={`day-card ${selectedDate === day ? 'active' : ''}`}
-            onClick={() => onDateSelect(day)}
-            style={{ border: 'none' }}
-          >
-            <span className="day-name">
-              {getDayName(day, destinationTimezone).toUpperCase()}
-            </span>
-            <span className="day-number">
-              {getDayNumber(day, destinationTimezone)}
-            </span>
-          </button>
-        ))}
+        {days.map((day) => {
+          const dayName = getDayName(day, destinationTimezone);
+          const dayNumber = getDayNumber(day, destinationTimezone);
+
+          return (
+            <button
+              type="button"
+              key={day}
+              className={`day-card ${selectedDate === day ? 'active' : ''}`}
+              onClick={() => onDateSelect(day)}
+            >
+              <span className="day-name">
+                {dayName.toUpperCase()}
+              </span>
+              <span className="day-number">
+                {dayNumber}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

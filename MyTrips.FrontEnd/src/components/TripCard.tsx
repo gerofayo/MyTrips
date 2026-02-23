@@ -11,14 +11,13 @@ export default function TripCard({ trip }: Props) {
   const formatDate = (dateString: string, timezone: string) => {
     const date = new Date(`${dateString}T00:00:00`);
 
-    return new Intl.DateTimeFormat('us-US', { 
+    return new Intl.DateTimeFormat('en-US', { 
       month: 'short',
       day: 'numeric',
       timeZone: timezone,
     }).format(date);
   };
 
-  
   const cardImage = `https://loremflickr.com/400/300/${encodeURIComponent(trip.destination)},travel/all`;
 
   return (
@@ -31,20 +30,22 @@ export default function TripCard({ trip }: Props) {
         style={{ backgroundImage: `url(${cardImage})` }}
       />
 
-      
       <div className="trip-budget-badge">
         ${trip.budget.toLocaleString()} {trip.currency}
       </div>
 
-      
       <div className="trip-card-content">
         <div>
-          <p className="trip-destination">{trip.destination}</p>
-          <h3>{trip.title}</h3>
+          <span className="section-label" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>
+            {trip.destination}
+          </span>
+          <h3 style={{ margin: '4px 0', fontSize: '1.2rem' }}>{trip.title}</h3>
         </div>
 
-        <div className="trip-dates">
-          <span>🗓️ {formatDate(trip.startDate, trip.destinationTimezone)} — {formatDate(trip.endDate, trip.destinationTimezone)}</span>
+        <div className="item-meta" style={{ marginTop: 'auto' }}>
+          <span style={{ fontSize: '0.85rem' }}>
+            🗓️ {formatDate(trip.startDate, trip.destinationTimezone)} — {formatDate(trip.endDate, trip.destinationTimezone)}
+          </span>
         </div>
       </div>
     </div>

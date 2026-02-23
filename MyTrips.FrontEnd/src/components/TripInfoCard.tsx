@@ -49,8 +49,9 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         <span className="section-label">Category Breakdown</span>
         
         <div className="category-distribution-bar">
-          {Object.entries(categories).map(([cat, amount]) => (
-            <div className={`cat-${cat.toLowerCase()}`}
+          {totalSpent > 0 ? Object.entries(categories).map(([cat, amount]) => (
+            <div 
+              className={`cat-${cat.toLowerCase()}`}
               key={cat}
               style={{ 
                 width: `${(amount / totalSpent) * 100}%`, 
@@ -59,17 +60,23 @@ export const TripInfoCard = ({ trip, items }: Props) => {
               }}
               title={`${cat}: ${amount}`}
             />
-          ))}
+          )) : <div style={{ width: '100%', background: '#e5e7eb' }} />}
         </div>
+
         <div className="category-legend">
-          {Object.entries(categories).map(([cat, amount]) => (
-            <div key={cat} className={`legend-item cat-${cat.toLowerCase()}`}>
+          {items.length > 0 ? Object.entries(categories).map(([cat, amount]) => (
+            <div key={cat} className="legend-item">
               <span className={`dot cat-${cat.toLowerCase()}`}></span>
               <span className="cat-name" style={{ textTransform: 'capitalize' }}>{cat}</span>
-              <span className="cat-amount">{((amount / totalSpent) * 100).toFixed(0)}%</span>
+              <span className="cat-amount">
+                {totalSpent > 0 ? ((amount / totalSpent) * 100).toFixed(0) : 0}%
+              </span>
             </div>
-          ))}
-          {items.length === 0 && <p className="cat-name">No expenses recorded yet.</p>}
+          )) : (
+            <p className="cat-name" style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6 }}>
+              No expenses recorded yet.
+            </p>
+          )}
         </div>
       </div>
     </div>

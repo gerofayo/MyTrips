@@ -12,7 +12,8 @@ function App() {
         <Routes>
           <Route path="/trips" element={<TripListPage />} />
           <Route path="/trips/:id" element={<TripDetailPage />} />
-          <Route path="/create" element={<TripFormPage />} />
+          <Route path="/trips/new" element={<TripFormPage />} />
+          <Route path="/trips/edit/:id" element={<TripFormPage />} />
         </Routes>
       </div>
     </>

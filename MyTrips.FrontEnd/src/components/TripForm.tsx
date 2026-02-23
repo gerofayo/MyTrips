@@ -7,7 +7,7 @@ import {
 
 type Props = {
   onSubmit: (trip: CreateTripRequest) => void;
-  initialData?: CreateTripRequest;
+  initialData?: CreateTripRequest | null;
 };
 
 function TripForm({ onSubmit, initialData }: Props) {
@@ -15,13 +15,13 @@ function TripForm({ onSubmit, initialData }: Props) {
   const [availableTimezones, setAvailableTimezones] = useState<string[]>([]);
 
   const [formData, setFormData] = useState<CreateTripRequest>({
-    title: initialData?.title ?? "",
-    destination: initialData?.destination ?? "",
-    destinationTimezone: initialData?.destinationTimezone ?? "",
-    startDate: initialData?.startDate ?? "",
-    endDate: initialData?.endDate ?? "",
-    budget: initialData?.budget ?? 0,
-    currency: initialData?.currency ?? "",
+    title: "",
+    destination: "",
+    destinationTimezone: "",
+    startDate: "",
+    endDate: "",
+    budget: 0,
+    currency: "",
   });
 
   const countries = useMemo(() => {
@@ -31,7 +31,7 @@ function TripForm({ onSubmit, initialData }: Props) {
       code,
       name: country.countryName,
       currencyCode: country.currencyCode,
-      timezones: country.timeZone || [], 
+      timezones: country.timeZone || [],
     }));
   }, []);
 
@@ -47,7 +47,16 @@ function TripForm({ onSubmit, initialData }: Props) {
   );
 
   useEffect(() => {
-    if (initialData?.destination && countries.length > 0) {
+    if (initialData) {
+      const formattedStart = initialData.startDate?.split("T")[0] || "";
+      const formattedEnd = initialData.endDate?.split("T")[0] || "";
+
+      setFormData({
+        ...initialData,
+        startDate: formattedStart,
+        endDate: formattedEnd,
+      });
+
       const countryEntry = countries.find((c) => c.name === initialData.destination);
       if (countryEntry) {
         setSelectedCountryCode(countryEntry.code);
@@ -89,24 +98,22 @@ function TripForm({ onSubmit, initialData }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (new Date(formData.startDate) > new Date(formData.endDate)) {
+      alert("End date cannot be before start date!");
+      return;
+    }
+
     onSubmit(formData);
   };
 
-  const safeCurrencyName = (code: string) => {
-    try {
-      return currencyDisplay.of(code) || code;
-    } catch {
-      return code;
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mini-form-card" style={{ background: 'white' }}>
       <h2 className="section-title" style={{ marginTop: 0 }}>
         {initialData ? "Edit Trip Details" : "Plan a New Adventure"}
       </h2>
 
-      <div>
+      <div className="form-field">
         <label className="section-label">Travel Name</label>
         <input
           name="title"
@@ -117,24 +124,19 @@ function TripForm({ onSubmit, initialData }: Props) {
         />
       </div>
 
+      {/* Quitamos los style={{flex: 1}} manuales */}
       <div className="inputgroup">
-        <div style={{ flex: 1 }}>
+        <div className="field-container">
           <label className="section-label">Destination Country</label>
-          <select
-            value={selectedCountryCode}
-            onChange={handleCountryChange}
-            required
-          >
+          <select value={selectedCountryCode} onChange={handleCountryChange} required>
             <option value="">Select country</option>
             {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
+              <option key={c.code} value={c.code}>{c.name}</option>
             ))}
           </select>
         </div>
 
-        <div style={{ flex: 1 }}>
+        <div className="field-container">
           <label className="section-label">Timezone</label>
           <select
             name="destinationTimezone"
@@ -143,18 +145,18 @@ function TripForm({ onSubmit, initialData }: Props) {
             required
             disabled={availableTimezones.length === 0}
           >
-            <option value="">{availableTimezones.length === 0 ? "Select country first" : "Select timezone"}</option>
+            <option value="">
+              {availableTimezones.length === 0 ? "Select country first" : "Select timezone"}
+            </option>
             {availableTimezones.map((tz) => (
-              <option key={tz} value={tz}>
-                {tz}
-              </option>
+              <option key={tz} value={tz}>{tz}</option>
             ))}
           </select>
         </div>
       </div>
 
       <div className="inputgroup">
-        <div style={{ flex: 1 }}>
+        <div className="field-container">
           <label className="section-label">Start Date</label>
           <input
             name="startDate"
@@ -165,7 +167,7 @@ function TripForm({ onSubmit, initialData }: Props) {
           />
         </div>
 
-        <div style={{ flex: 1 }}>
+        <div className="field-container">
           <label className="section-label">End Date</label>
           <input
             name="endDate"
@@ -178,7 +180,7 @@ function TripForm({ onSubmit, initialData }: Props) {
       </div>
 
       <div className="inputgroup">
-        <div style={{ flex: 2 }}>
+        <div className="field-container" style={{ flex: 2 }}>
           <label className="section-label">Total Budget</label>
           <input
             name="budget"
@@ -190,25 +192,18 @@ function TripForm({ onSubmit, initialData }: Props) {
           />
         </div>
 
-        <div style={{ flex: 1 }}>
+        <div className="field-container" style={{ flex: 1 }}>
           <label className="section-label">Currency</label>
-          <select
-            name="currency"
-            value={formData.currency}
-            onChange={handleChange}
-            required
-          >
+          <select name="currency" value={formData.currency} onChange={handleChange} required>
             <option value="">Select...</option>
             {currencies.map((curr) => (
-              <option key={curr} value={curr}>
-                {curr}
-              </option>
+              <option key={curr} value={curr}>{curr}</option>
             ))}
           </select>
         </div>
       </div>
 
-      <button type="submit" style={{ marginTop: '16px' }}>
+      <button type="submit" className="primary" style={{ width: '100%', marginTop: '16px' }}>
         {initialData ? "Save Changes" : "Create Trip"}
       </button>
     </form>

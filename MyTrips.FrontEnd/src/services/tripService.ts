@@ -12,19 +12,24 @@ export async function getTripById(id: string): Promise<TripResponse> {
 export async function postTrip(
   createTripRequest: CreateTripRequest
 ): Promise<TripResponse> {
-  console.log("Posting trip with data:", createTripRequest);
-  const response = apiClient.post<TripResponse>("/trips", createTripRequest);
-  console.log("Received response:", response);
-  return response;
+  return apiClient.post<TripResponse>("/trips", createTripRequest);
+}
+
+export async function updateTrip(
+  id: string, 
+  data: Partial<CreateTripRequest>
+): Promise<TripResponse> {
+  return apiClient.put<TripResponse>(`/trips/${id}`, data);
 }
 
 export async function deleteTrip(id: string): Promise<void> {
-  apiClient.delete(`/trips/${id}`);
+  return apiClient.delete(`/trips/${id}`);
 }
 
 export const tripService = {
   getAll: getTrips,
   getById: getTripById,
   create: postTrip,
+  update: updateTrip,
   delete: deleteTrip,
 };

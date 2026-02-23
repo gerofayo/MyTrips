@@ -1,9 +1,14 @@
 import { useTrips } from "../hooks/useTrips";
 import TripCard from "../components/TripCard";
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function TripListPage() {
-  const { trips, loading } = useTrips();
+  const { trips, loading, reload } = useTrips();
+
+  useEffect(() => {
+    reload();
+  }, []);
 
   if (loading) {
     return (
@@ -15,11 +20,11 @@ export default function TripListPage() {
 
   return (
     <div className="app-container">
-      <header style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: '40px' 
+      <header style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '40px'
       }}>
         <div>
           <h1 className="section-title" style={{ margin: 0 }}>My Journeys</h1>
@@ -29,20 +34,20 @@ export default function TripListPage() {
         </div>
 
         {trips.length > 0 && (
-          <NavLink to="/create" className="button" style={{ textDecoration: 'none' }}>
+          <NavLink to="/trips/new" className="button" style={{ textDecoration: 'none' }}>
             + Create New Trip
           </NavLink>
         )}
       </header>
 
       {trips.length === 0 ? (
-        <div className="mini-form-card" style={{ 
-          textAlign: 'center', 
-          padding: '60px 20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
+        <div className="mini-form-card" style={{
+          textAlign: 'center',
+          padding: '60px 20px',
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          gap: '20px' 
+          gap: '20px'
         }}>
           <div style={{ fontSize: '3rem' }}>🌎</div>
           <h2 style={{ margin: 0 }}>No trips found</h2>

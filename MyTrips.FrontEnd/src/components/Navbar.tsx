@@ -16,15 +16,16 @@ export default function Navbar() {
           <NavLink 
             to="/trips" 
             className={getLinkClass}
+            end
           >
             My Trips
           </NavLink>
           
           <NavLink 
-            to="/create" 
+            to="/trips/new" 
             className={getLinkClass}
           >
-            Create Trip
+            Plan New Trip
           </NavLink>
         </div>
       </div>

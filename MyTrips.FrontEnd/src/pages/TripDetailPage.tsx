@@ -26,11 +26,13 @@ export default function TripDetailPage() {
   }, [items, selectedDate]);
 
   const handleDeleteTrip = async () => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
+    try {
       await deleteTrip(tripId!);
+      navigate("/trips", { replace: true });
+    } catch (error) {
+      console.error(error);
     }
-    navigate("/trips")
-  }
+  };
 
   const handleEditClick = (item: BudgetItem) => {
     setEditingItem(item);
@@ -68,10 +70,30 @@ export default function TripDetailPage() {
 
   return (
     <div className="trip-detail">
-      <TripHero trip={trip} />
+      <div style={{ position: 'relative' }}>
+        <TripHero trip={trip} />
+        <button
+          onClick={() => navigate(`/trips/edit/${tripId}`)}
+          style={{
+            position: 'absolute',
+            top: '40px',
+            right: '40px',
+            zIndex: 10,
+            background: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            borderRadius: '12px',
+            padding: '10px 20px',
+            color: 'white',
+            cursor: 'pointer',
+            fontWeight: 600
+          }}
+        >
+          Edit Trip Details
+        </button>
+      </div>
 
       <div className="app-container" style={{ position: 'relative', marginTop: '-60px' }}>
-
         <TripInfoCard trip={trip} items={items} />
 
         <div className="divider-line" />
@@ -117,20 +139,22 @@ export default function TripDetailPage() {
           destinationTimezone={trip.destinationTimezone}
           selectedDate={selectedDate}
         />
-      </div>
-      <div className="divider-line" />
-      <div style={{ padding: '20px 0', display: 'flex', justifyContent: 'center' }}>
-        <button
-          className="delete-button"
-          onClick={() => {
-            if (window.confirm("Are you sure you want to delete this entire trip? This action cannot be undone.")) {
-              handleDeleteTrip();
-            }
-          }}
-          style={{ padding: '10px 40px' }}
-        >
-          Delete Trip
-        </button>
+
+        <div className="danger-zone" style={{ marginTop: '80px', textAlign: 'center' }}>
+          <h4 className="danger-zone-title">Danger Zone</h4>
+          <p className="danger-zone-text">Once you delete a trip, there is no going back. Please be certain.</p>
+          <button
+            className="delete-button"
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this entire trip? This action cannot be undone.")) {
+                handleDeleteTrip();
+              }
+            }}
+            style={{ width: 'auto', margin: '20px auto' }}
+          >
+            Delete Entire Trip
+          </button>
+        </div>
       </div>
     </div>
   );
