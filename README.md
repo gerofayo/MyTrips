@@ -8,6 +8,9 @@ Proyecto en desarrollo para la gestión dinámica de itinerarios y presupuestos 
 * **Frontend:** React + TypeScript + Vite.
 * **Estilos:** CSS Nativo.
 * **Backend:** .NET 10 + C#
+
+  ## Showcase (WIP)
+  ![Showcase Demo](./assets/showcase.gif)
    
 ---
 *Este proyecto es un Work In Progress.*
