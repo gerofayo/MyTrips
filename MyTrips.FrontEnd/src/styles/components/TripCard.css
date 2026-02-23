@@ -1,0 +1,76 @@
+/* src/styles/components/TripCard.css */
+.trip-card {
+  cursor: pointer;
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--border-color, #eee);
+}
+
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.trip-card-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+}
+
+.trip-card-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.trip-card-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.trip-card-budget {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.trip-card-destination {
+  font-size: 0.7rem;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.trip-card-title {
+  margin: 4px 0;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+}
+
+.trip-card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.trip-card-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

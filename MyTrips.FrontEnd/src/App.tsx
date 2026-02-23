@@ -1,23 +1,17 @@
-import { Route, Routes } from "react-router-dom";
-import TripDetailPage from "./pages/TripDetailPage";
-import TripListPage from "./pages/TripListPage";
+import { AppRouter } from "./routes/AppRouter";
 import Navbar from "./components/Navbar";
-import TripFormPage from "./pages/TripFormPage";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 function App() {
   return (
-    <>
+    <div className="app-layout">
       <Navbar />
-      <div className="app-container">
-        <Routes>
-          <Route path="/trips" element={<TripListPage />} />
-          <Route path="/trips/:id" element={<TripDetailPage />} />
-          <Route path="/trips/new" element={<TripFormPage />} />
-          <Route path="/trips/edit/:id" element={<TripFormPage />} />
-        </Routes>
-      </div>
-    </>
+      <ErrorBoundary>
+        <main className="main-content">
+          <AppRouter />
+        </main>
+      </ErrorBoundary>
+    </div>
   );
 }
-
 export default App;

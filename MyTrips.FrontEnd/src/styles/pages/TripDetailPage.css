@@ -1,0 +1,90 @@
+/* src/styles/pages/TripDetailPage.css */
+
+.trip-detail-wrapper {
+  position: relative;
+}
+
+/* Botón flotante sobre el Hero */
+.btn-edit-floating {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-edit-floating:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
+
+.itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1rem;
+}
+
+/* Animación del formulario de gastos */
+.form-wrapper {
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-wrapper.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+}
+
+.form-wrapper.expanded {
+  max-height: 1000px;
+  opacity: 1;
+  margin-bottom: 2rem;
+}
+
+/* Danger Zone */
+.danger-zone {
+  margin-top: 80px;
+  text-align: center;
+  padding: 2rem;
+  border: 1px solid #fee2e2;
+  background-color: #fef2f2;
+  border-radius: var(--radius-lg);
+}
+
+.danger-zone-title {
+  color: var(--danger);
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.danger-zone-text {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-delete-trip {
+  background-color: var(--danger);
+  color: white;
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-delete-trip:hover {
+  opacity: 0.9;
+}

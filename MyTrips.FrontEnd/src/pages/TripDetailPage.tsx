@@ -3,18 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTrip } from "../hooks/useTrip";
 import { useBudgetItems } from "../hooks/useBudgetItems";
 import { TripHero } from "../components/TripHero";
-import { TripInfoCard } from "../components/TripInfoCard";
-import { TripCalendar } from "../components/TripCalendar";
-import { BudgetItemList } from "../components/BudgetItemList";
-import { BudgetItemForm } from "../components/BudgetItemForm";
+import {TripInfoCard} from "../components/TripInfoCard";
+import {TripCalendar} from "../components/TripCalendar";
+import {BudgetItemList} from "../components/BudgetItemList";
+import {BudgetItemForm} from "../components/BudgetItemForm";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { deleteTrip } from "../services/tripService";
+import { PATHS } from "../routes/paths";
+import { logger } from "../utils/logger";
+import "../styles/pages/TripDetailPage.css";
 
 export default function TripDetailPage() {
   const { id: tripId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  
   const { trip, loading: tripLoading } = useTrip(tripId);
   const { items, createItem, updateItem, deleteItem, isSubmitting, loading: loadingItems } = useBudgetItems(tripId!);
-  const navigate = useNavigate();
 
   const [editingItem, setEditingItem] = useState<BudgetItem | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -26,89 +30,68 @@ export default function TripDetailPage() {
   }, [items, selectedDate]);
 
   const handleDeleteTrip = async () => {
+    if (!window.confirm("Are you sure you want to delete this entire trip? This action cannot be undone.")) return;
+    
     try {
       await deleteTrip(tripId!);
-      navigate("/trips", { replace: true });
+      logger.info(`Trip deleted: ${tripId}`);
+      navigate(PATHS.TRIPS_LIST, { replace: true });
     } catch (error) {
-      console.error(error);
+      logger.error("Error deleting trip", error);
     }
   };
 
   const handleEditClick = (item: BudgetItem) => {
     setEditingItem(item);
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFormSubmit = async (formData: CreateBudgetItemRequest) => {
-    if (editingItem) {
-      await updateItem(editingItem.id, formData);
-    } else {
-      await createItem(formData);
-    }
-    setEditingItem(null);
-    setShowForm(false);
-  };
-
-  const handleCancelForm = () => {
-    setEditingItem(null);
-    setShowForm(false);
-  };
-
-  const handleDeleteItem = async (itemId: string) => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      await deleteItem(itemId);
+    try {
+      if (editingItem) {
+        await updateItem(editingItem.id, formData);
+      } else {
+        await createItem(formData);
+      }
+      setEditingItem(null);
+      setShowForm(false);
+    } catch (error) {
+      logger.error("Error submitting budget item", error);
     }
   };
 
   if (tripLoading) return (
-    <div className="app-container" style={{ textAlign: 'center', padding: '100px' }}>
+    <div className="loading-container">
       <p className="section-label">Loading trip details...</p>
     </div>
   );
 
-  if (!trip) return <p>Trip not found.</p>;
+  if (!trip) return <div className="app-container"><p>Trip not found.</p></div>;
 
   return (
     <div className="trip-detail">
-      <div style={{ position: 'relative' }}>
-        <TripHero trip={trip} />
-        <button
-          onClick={() => navigate(`/trips/edit/${tripId}`)}
-          style={{
-            position: 'absolute',
-            top: '40px',
-            right: '40px',
-            zIndex: 10,
-            background: 'rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '12px',
-            padding: '10px 20px',
-            color: 'white',
-            cursor: 'pointer',
-            fontWeight: 600
-          }}
-        >
-          Edit Trip Details
-        </button>
-      </div>
+      <div className="app-container trip-detail-wrapper">
+        
+        <div className="relative-container">
+          <TripHero trip={trip} />
+          <button
+            className="btn-edit-floating"
+            onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
+          >
+            Edit Trip Details
+          </button>
+        </div>
 
-      <div className="app-container" style={{ position: 'relative', marginTop: '-60px' }}>
         <TripInfoCard trip={trip} items={items} />
 
         <div className="divider-line" />
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="itinerary-header">
           <h3 className="section-label">Itinerary</h3>
           <button
-            className={`delete-button ${showForm ? '' : 'primary'}`}
-            onClick={showForm ? handleCancelForm : () => setShowForm(true)}
-            style={{
-              padding: '8px 16px',
-              fontSize: '0.8rem',
-              background: showForm ? 'transparent' : 'linear-gradient(135deg, var(--primary), var(--accent))',
-              color: showForm ? 'var(--danger)' : 'white'
-            }}
+            className={showForm ? "button-outline danger" : "button button-sm"}
+            onClick={showForm ? () => { setShowForm(false); setEditingItem(null); } : () => setShowForm(true)}
           >
             {showForm ? "Cancel" : "+ Add Expense"}
           </button>
@@ -133,28 +116,21 @@ export default function TripDetailPage() {
 
         <BudgetItemList
           items={displayedItems}
-          onDelete={handleDeleteItem}
+          onDelete={(id) => window.confirm("Delete item?") && deleteItem(id)}
           onEdit={handleEditClick}
           isSubmitting={loadingItems}
           destinationTimezone={trip.destinationTimezone}
           selectedDate={selectedDate}
         />
 
-        <div className="danger-zone" style={{ marginTop: '80px', textAlign: 'center' }}>
+        <section className="danger-zone">
           <h4 className="danger-zone-title">Danger Zone</h4>
           <p className="danger-zone-text">Once you delete a trip, there is no going back. Please be certain.</p>
-          <button
-            className="delete-button"
-            onClick={() => {
-              if (window.confirm("Are you sure you want to delete this entire trip? This action cannot be undone.")) {
-                handleDeleteTrip();
-              }
-            }}
-            style={{ width: 'auto', margin: '20px auto' }}
-          >
+          <button className="btn-delete-trip" onClick={handleDeleteTrip}>
             Delete Entire Trip
           </button>
-        </div>
+        </section>
+
       </div>
     </div>
   );

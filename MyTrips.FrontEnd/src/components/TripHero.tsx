@@ -1,4 +1,5 @@
 import type { TripResponse } from "../types/Trip";
+import "../styles/components/TripHero.css";
 
 interface Props {
   trip: TripResponse;
@@ -13,22 +14,16 @@ export const TripHero = ({ trip }: Props) => {
       style={{ backgroundImage: `url(${heroImage})` }}
     >
       <div className="trip-hero-overlay">
-        <p className="trip-destination" style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '8px' }}>
+        <p className="trip-hero-destination">
           {trip.destination}
         </p>
         
-        <h1 style={{ 
-          margin: 0, 
-          fontSize: '2.5rem', 
-          fontWeight: 800, 
-          letterSpacing: '-0.02em',
-          lineHeight: 1.1 
-        }}>
+        <h1 className="trip-hero-title">
           {trip.title}
         </h1>
 
-        <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
-          <span className="trip-budget-badge" style={{ position: 'static', background: 'var(--primary)', color: 'white' }}>
+        <div className="trip-hero-meta">
+          <span className="hero-budget-badge">
             Budget: ${trip.budget.toLocaleString()} {trip.currency}
           </span>
         </div>

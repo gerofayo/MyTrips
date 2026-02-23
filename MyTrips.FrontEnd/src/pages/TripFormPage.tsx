@@ -1,66 +1,58 @@
+import { useNavigate, useParams } from "react-router-dom";
 import TripForm from "../components/TripForm";
 import { useTrips } from "../hooks/useTrips";
-import { useTrip } from "../hooks/useTrip"; // Necesitas el hook de un solo viaje
-import { useNavigate, useParams } from "react-router-dom";
+import { useTrip } from "../hooks/useTrip";
 import type { CreateTripRequest } from "../types/Trip";
+import { PATHS } from "../routes/paths";
+import { logger } from "../utils/logger";
+import "../styles/pages/TripFormPage.css";
 
 export default function TripFormPage() {
-  const { id } = useParams<{ id: string }>(); // Extraemos el ID de la URL
+  const { id } = useParams<{ id: string }>();
   const isEditMode = Boolean(id);
   
-  const { createTrip , } = useTrips();
+  const { createTrip } = useTrips();
   const { trip, loading, editTrip } = useTrip(id);
   const navigate = useNavigate();
 
   const handleSubmit = async (data: CreateTripRequest) => {
     try {
       if (isEditMode && id) {
-        await editTrip(data); 
+        await editTrip(data);
+        logger.info(`Trip updated successfully: ${id}`);
       } else {
-        await createTrip(data); 
+        await createTrip(data);
+        logger.info("New trip created successfully");
       }
-      navigate("/trips");
+      navigate(PATHS.TRIPS_LIST);
     } catch (error) {
-      console.error(`Failed to ${isEditMode ? 'update' : 'create'} trip:`, error);
+      logger.error(`Failed to ${isEditMode ? 'update' : 'create'} trip`, error);
     }
   };
 
+  const handleBack = () => {
+    const destination = isEditMode && id ? PATHS.TRIP_DETAILS(id) : PATHS.TRIPS_LIST;
+    navigate(destination);
+  };
+
   if (isEditMode && loading) {
-    return <div className="app-container">Loading trip data...</div>;
+    return (
+      <div className="app-container form-loading">
+        <p>Loading trip data...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="app-container" style={{ marginTop: '60px' }}>
+    <div className="app-container trip-form-page">
       
-      <div style={{ marginBottom: '32px' }}>
-        <button 
-          onClick={() => navigate(isEditMode ? `/trips/${id}` : "/trips")} 
-          className="nav-link" 
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            padding: 0, 
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '0.9rem',
-            color: 'var(--text-muted)'
-          }}
-        >
-          ← {isEditMode ? "Back to Trip Details" : "Back to Your Trips"}
-        </button>
-      </div>
+      <button onClick={handleBack} className="back-button">
+        ← {isEditMode ? "Back to Trip Details" : "Back to Your Trips"}
+      </button>
 
-      <header style={{ marginBottom: '32px' }}>
-        <h1 style={{ 
-          margin: '0 0 8px 0', 
-          fontFamily: 'Poppins', 
-          fontWeight: 700 
-        }}>
-          {isEditMode ? "Edit Adventure" : "New Adventure"}
-        </h1>
-        <p style={{ color: 'var(--text-muted)', margin: 0 }}>
+      <header className="form-header">
+        <h1>{isEditMode ? "Edit Adventure" : "New Adventure"}</h1>
+        <p>
           {isEditMode 
             ? "Update the details of your journey." 
             : "Fill in the details below to start planning your next getaway."}

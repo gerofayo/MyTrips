@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom";
+import { PATHS } from "../routes/paths";
+import "../styles/components/Navbar.css";
 
 export default function Navbar() {
   const getLinkClass = ({ isActive }: { isActive: boolean }) => 
@@ -8,22 +10,22 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         
-        <NavLink to="/trips" style={{ textDecoration: 'none' }}>
-          <h2 className="navbar-logo">Trip Planner</h2>
+        <NavLink to={PATHS.HOME} style={{ textDecoration: 'none' }}>
+          <h2 className="navbar-logo">MyTrips</h2>
         </NavLink>
 
         <div className="navbar-links">
           <NavLink 
-            to="/trips" 
+            to={PATHS.TRIPS_LIST} 
             className={getLinkClass}
             end
           >
-            My Trips
+            Trips
           </NavLink>
           
           <NavLink 
-            to="/trips/new" 
-            className={getLinkClass}
+            to={PATHS.CREATE_TRIP} 
+            className={`${getLinkClass({ isActive: false })} nav-link-button`}
           >
             Plan New Trip
           </NavLink>

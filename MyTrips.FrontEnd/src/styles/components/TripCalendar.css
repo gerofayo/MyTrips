@@ -1,0 +1,111 @@
+/* src/styles/components/TripCalendar.css */
+
+.calendar-container {
+  margin: 2.5rem 0;
+}
+
+.calendar-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 5px 25px 5px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: var(--primary) transparent;
+  
+  /* mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  ); */
+}
+
+.calendar-container .calendar-strip::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, var(--primary), var(--accent)) !important;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+  -webkit-appearance: none;
+}
+
+.calendar-container .calendar-strip::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+/* --- Scrollbar Custom --- */
+
+.calendar-strip::-webkit-scrollbar {
+  height: 6px;
+}
+
+.calendar-strip::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+  margin: 0 20px;
+}
+
+.calendar-strip::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+.calendar-strip::-webkit-scrollbar-thumb:hover {
+  border: 0px solid transparent;
+  filter: brightness(1.1);
+}
+
+/* --- Day Cards --- */
+
+.day-card {
+  flex: 0 0 75px;
+  height: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 12px 8px;
+}
+
+.day-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.day-card.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+}
+
+/* --- Typography dentro de las cards --- */
+
+.day-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+.day-number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+}
+
+.day-card.active .day-name,
+.day-card.active .day-number {
+  color: white;
+}

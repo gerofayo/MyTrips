@@ -1,9 +1,8 @@
 import { useMemo, useState, useEffect } from "react";
 import type { CreateTripRequest } from "../types/Trip";
-import {
-  getAllCountries,
-  getAllCurrencies,
-} from "country-tz-currency";
+import { getAllCountries, getAllCurrencies } from "country-tz-currency";
+import { logger } from "../utils/logger";
+import "../styles/forms.css";
 
 type Props = {
   onSubmit: (trip: CreateTripRequest) => void;
@@ -13,6 +12,7 @@ type Props = {
 function TripForm({ onSubmit, initialData }: Props) {
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
   const [availableTimezones, setAvailableTimezones] = useState<string[]>([]);
+  const [dateError, setDateError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<CreateTripRequest>({
     title: "",
@@ -37,14 +37,8 @@ function TripForm({ onSubmit, initialData }: Props) {
 
   const currencies = useMemo(() => {
     const raw = getAllCurrencies();
-    if (!raw) return [];
-    return Object.keys(raw).sort();
+    return raw ? Object.keys(raw).sort() : [];
   }, []);
-
-  const currencyDisplay = useMemo(
-    () => new Intl.DisplayNames(["en"], { type: "currency" }),
-    []
-  );
 
   useEffect(() => {
     if (initialData) {
@@ -65,10 +59,9 @@ function TripForm({ onSubmit, initialData }: Props) {
     }
   }, [initialData, countries]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    if (dateError) setDateError(null);
     setFormData((prev) => ({
       ...prev,
       [name]: type === "number" ? (value === "" ? 0 : Number(value)) : value,
@@ -78,8 +71,8 @@ function TripForm({ onSubmit, initialData }: Props) {
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value;
     setSelectedCountryCode(code);
-
     const country = countries.find((c) => c.code === code);
+    
     if (!country) {
       setAvailableTimezones([]);
       return;
@@ -87,7 +80,6 @@ function TripForm({ onSubmit, initialData }: Props) {
 
     const zones = country.timezones;
     setAvailableTimezones(zones);
-
     setFormData((prev) => ({
       ...prev,
       destination: country.name,
@@ -98,9 +90,10 @@ function TripForm({ onSubmit, initialData }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (new Date(formData.startDate) > new Date(formData.endDate)) {
-      alert("End date cannot be before start date!");
+      setDateError("End date cannot be before start date");
+      logger.warn("Validation failed: End date before start date");
       return;
     }
 
@@ -108,14 +101,15 @@ function TripForm({ onSubmit, initialData }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mini-form-card" style={{ background: 'white' }}>
-      <h2 className="section-title" style={{ marginTop: 0 }}>
+    <form onSubmit={handleSubmit} className="trip-form-container">
+      <h2 className="form-title">
         {initialData ? "Edit Trip Details" : "Plan a New Adventure"}
       </h2>
 
-      <div className="form-field">
+      <div className="form-group">
         <label className="section-label">Travel Name</label>
         <input
+          className="form-input"
           name="title"
           placeholder="e.g., Summer in Tokyo"
           value={formData.title}
@@ -124,11 +118,10 @@ function TripForm({ onSubmit, initialData }: Props) {
         />
       </div>
 
-      {/* Quitamos los style={{flex: 1}} manuales */}
-      <div className="inputgroup">
-        <div className="field-container">
+      <div className="form-grid">
+        <div className="form-group">
           <label className="section-label">Destination Country</label>
-          <select value={selectedCountryCode} onChange={handleCountryChange} required>
+          <select className="form-select" value={selectedCountryCode} onChange={handleCountryChange} required>
             <option value="">Select country</option>
             {countries.map((c) => (
               <option key={c.code} value={c.code}>{c.name}</option>
@@ -136,9 +129,10 @@ function TripForm({ onSubmit, initialData }: Props) {
           </select>
         </div>
 
-        <div className="field-container">
+        <div className="form-group">
           <label className="section-label">Timezone</label>
           <select
+            className="form-select"
             name="destinationTimezone"
             value={formData.destinationTimezone}
             onChange={handleChange}
@@ -155,10 +149,11 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
       </div>
 
-      <div className="inputgroup">
-        <div className="field-container">
+      <div className="form-grid">
+        <div className="form-group">
           <label className="section-label">Start Date</label>
           <input
+            className={`form-input ${dateError ? 'input-error' : ''}`}
             name="startDate"
             type="date"
             value={formData.startDate}
@@ -167,9 +162,10 @@ function TripForm({ onSubmit, initialData }: Props) {
           />
         </div>
 
-        <div className="field-container">
+        <div className="form-group">
           <label className="section-label">End Date</label>
           <input
+            className={`form-input ${dateError ? 'input-error' : ''}`}
             name="endDate"
             type="date"
             value={formData.endDate}
@@ -178,11 +174,14 @@ function TripForm({ onSubmit, initialData }: Props) {
           />
         </div>
       </div>
+      
+      {dateError && <p className="form-error" style={{ color: 'var(--danger)', marginTop: '-10px', marginBottom: '10px', fontSize: '0.8rem' }}>{dateError}</p>}
 
-      <div className="inputgroup">
-        <div className="field-container" style={{ flex: 2 }}>
+      <div className="form-grid form-grid-budget">
+        <div className="form-group">
           <label className="section-label">Total Budget</label>
           <input
+            className="form-input"
             name="budget"
             type="number"
             placeholder="0.00"
@@ -192,9 +191,9 @@ function TripForm({ onSubmit, initialData }: Props) {
           />
         </div>
 
-        <div className="field-container" style={{ flex: 1 }}>
+        <div className="form-group">
           <label className="section-label">Currency</label>
-          <select name="currency" value={formData.currency} onChange={handleChange} required>
+          <select className="form-select" name="currency" value={formData.currency} onChange={handleChange} required>
             <option value="">Select...</option>
             {currencies.map((curr) => (
               <option key={curr} value={curr}>{curr}</option>
@@ -203,7 +202,7 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
       </div>
 
-      <button type="submit" className="primary" style={{ width: '100%', marginTop: '16px' }}>
+      <button type="submit" className="button form-submit-btn">
         {initialData ? "Save Changes" : "Create Trip"}
       </button>
     </form>

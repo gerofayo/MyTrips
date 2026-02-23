@@ -1,18 +1,22 @@
+import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import { useTrips } from "../hooks/useTrips";
 import TripCard from "../components/TripCard";
-import { NavLink } from "react-router-dom";
-import { useEffect } from "react";
+import { PATHS } from "../routes/paths";
+import { logger } from "../utils/logger";
+import "../styles/pages/TripListPage.css";
 
 export default function TripListPage() {
   const { trips, loading, reload } = useTrips();
 
   useEffect(() => {
+    logger.info("Cargando lista de viajes");
     reload();
   }, []);
 
   if (loading) {
     return (
-      <div className="app-container" style={{ textAlign: 'center', padding: '100px' }}>
+      <div className="loading-container">
         <p className="section-label">Searching for your adventures...</p>
       </div>
     );
@@ -20,41 +24,29 @@ export default function TripListPage() {
 
   return (
     <div className="app-container">
-      <header style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '40px'
-      }}>
+      <header className="trips-page-header">
         <div>
-          <h1 className="section-title" style={{ margin: 0 }}>My Journeys</h1>
-          <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>
+          <h1 className="trips-page-title">My Journeys</h1>
+          <p className="trips-page-subtitle">
             Manage and track your travel budgets
           </p>
         </div>
 
         {trips.length > 0 && (
-          <NavLink to="/trips/new" className="button" style={{ textDecoration: 'none' }}>
+          <NavLink to={PATHS.CREATE_TRIP} className="button no-underline">
             + Create New Trip
           </NavLink>
         )}
       </header>
 
       {trips.length === 0 ? (
-        <div className="mini-form-card" style={{
-          textAlign: 'center',
-          padding: '60px 20px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '20px'
-        }}>
-          <div style={{ fontSize: '3rem' }}>🌎</div>
-          <h2 style={{ margin: 0 }}>No trips found</h2>
-          <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto' }}>
+        <div className="empty-state-container">
+          <div className="empty-state-icon">🌎</div>
+          <h2>No trips found</h2>
+          <p className="empty-state-text">
             You haven't planned any trips yet. Start organizing your next getaway and keep your expenses under control.
           </p>
-          <NavLink to="/create" className="button" style={{ textDecoration: 'none', marginTop: '10px' }}>
+          <NavLink to={PATHS.CREATE_TRIP} className="button no-underline">
             Start Planning Now
           </NavLink>
         </div>

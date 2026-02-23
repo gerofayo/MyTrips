@@ -1,13 +1,12 @@
 import { useEffect, useRef } from "react";
 import { generateDateRange, getDayName, getDayNumber } from "../utils/date";
-import type { BudgetItem } from "../types/BudgetItem";
+import "../styles/components/TripCalendar.css";
 
 interface TripCalendarProps {
   startDate: string;
   endDate: string;
   selectedDate: string | null;
   destinationTimezone: string;
-  items?: BudgetItem[];
   onDateSelect: (date: string | null) => void;
 }
 
@@ -23,7 +22,6 @@ export const TripCalendar = ({
   useEffect(() => {
     if (!selectedDate || !containerRef.current) return;
     
-    // Buscamos el elemento activo para centrarlo automáticamente al seleccionarlo
     const activeElement = containerRef.current.querySelector(".day-card.active");
     if (activeElement) {
       activeElement.scrollIntoView({ 
