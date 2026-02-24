@@ -3,14 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTrip } from "../hooks/useTrip";
 import { useBudgetItems } from "../hooks/useBudgetItems";
 import { TripHero } from "../components/TripHero";
-import {TripInfoCard} from "../components/TripInfoCard";
-import {TripCalendar} from "../components/TripCalendar";
-import {BudgetItemList} from "../components/BudgetItemList";
-import {BudgetItemForm} from "../components/BudgetItemForm";
+import { TripInfoCard } from "../components/TripInfoCard";
+import { TripCalendar } from "../components/TripCalendar";
+import { BudgetItemList } from "../components/BudgetItemList";
+import { BudgetItemForm } from "../components/BudgetItemForm";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { deleteTrip } from "../services/tripService";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
+import { TEXTS } from "../config/texts";
 import "../styles/pages/TripDetailPage.css";
 
 export default function TripDetailPage() {
@@ -30,7 +31,7 @@ export default function TripDetailPage() {
   }, [items, selectedDate]);
 
   const handleDeleteTrip = async () => {
-    if (!window.confirm("Are you sure you want to delete this entire trip? This action cannot be undone.")) return;
+    if (!window.confirm(TEXTS.tripDetail.deleteTripConfirm)) return;
     
     try {
       await deleteTrip(tripId!);
@@ -63,11 +64,17 @@ export default function TripDetailPage() {
 
   if (tripLoading) return (
     <div className="loading-container">
-      <p className="section-label">Loading trip details...</p>
+      <p className="section-label">{TEXTS.tripDetail.loading}</p>
     </div>
   );
 
-  if (!trip) return <div className="app-container"><p>Trip not found.</p></div>;
+  if (!trip) {
+    return (
+      <div className="app-container">
+        <p>{TEXTS.tripDetail.notFound}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="trip-detail">
@@ -79,7 +86,7 @@ export default function TripDetailPage() {
             className="btn-edit-floating"
             onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
           >
-            Edit Trip Details
+            {TEXTS.tripDetail.editButton}
           </button>
         </div>
 
@@ -88,12 +95,12 @@ export default function TripDetailPage() {
         <div className="divider-line" />
 
         <div className="itinerary-header">
-          <h3 className="section-label">Itinerary</h3>
+          <h3 className="section-label">{TEXTS.tripDetail.itineraryTitle}</h3>
           <button
             className={showForm ? "button-outline danger" : "button button-sm"}
             onClick={showForm ? () => { setShowForm(false); setEditingItem(null); } : () => setShowForm(true)}
           >
-            {showForm ? "Cancel" : "+ Add Expense"}
+            {showForm ? TEXTS.tripDetail.addExpenseCancel : TEXTS.tripDetail.addExpense}
           </button>
         </div>
 
@@ -116,7 +123,9 @@ export default function TripDetailPage() {
 
         <BudgetItemList
           items={displayedItems}
-          onDelete={(id) => window.confirm("Delete item?") && deleteItem(id)}
+          onDelete={(id) =>
+            window.confirm(TEXTS.tripDetail.deleteItemConfirm) && deleteItem(id)
+          }
           onEdit={handleEditClick}
           isSubmitting={loadingItems}
           destinationTimezone={trip.destinationTimezone}
@@ -124,10 +133,10 @@ export default function TripDetailPage() {
         />
 
         <section className="danger-zone">
-          <h4 className="danger-zone-title">Danger Zone</h4>
-          <p className="danger-zone-text">Once you delete a trip, there is no going back. Please be certain.</p>
+          <h4 className="danger-zone-title">{TEXTS.tripDetail.deleteTripDangerTitle}</h4>
+          <p className="danger-zone-text">{TEXTS.tripDetail.deleteTripDangerText}</p>
           <button className="btn-delete-trip" onClick={handleDeleteTrip}>
-            Delete Entire Trip
+            {TEXTS.tripDetail.deleteTripButton}
           </button>
         </section>
 

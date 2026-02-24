@@ -133,9 +133,3 @@
   background-color: var(--border-color);
   flex-shrink: 0;
 }
-
-.cat-food { background-color: #f87171; }
-.cat-transport { background-color: #60a5fa; }
-.cat-accommodation { background-color: #34d399; }
-.cat-entertainment { background-color: #fbbf24; }
-.cat-other { background-color: #94a3b8; }

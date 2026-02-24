@@ -1,6 +1,8 @@
 import type { BudgetItem } from "../types/BudgetItem";
 import { useMemo } from "react";
 import "../styles/components/BudgetItemList.css";
+import "../styles/components/ExpenseCategoryColors.css";
+import { TEXTS } from "../config/texts";
 
 interface Props {
   items: BudgetItem[];
@@ -37,7 +39,7 @@ export const BudgetItemList = ({
       : items;
 
     filteredItems.forEach((item) => {
-      let dateKey = "Unscheduled";
+      let dateKey = TEXTS.budgetItemList.unscheduledKey;
       if (item.date) {
         dateKey = new Intl.DateTimeFormat("en-CA", {
           timeZone: destinationTimezone,
@@ -52,8 +54,8 @@ export const BudgetItemList = ({
     });
 
     const sortedDates = Object.keys(grouped).sort((a, b) => {
-      if (a === "Unscheduled") return 1;
-      if (b === "Unscheduled") return -1;
+      if (a === TEXTS.budgetItemList.unscheduledKey) return 1;
+      if (b === TEXTS.budgetItemList.unscheduledKey) return -1;
       return a.localeCompare(b);
     });
 
@@ -69,7 +71,9 @@ export const BudgetItemList = ({
   }, [items, destinationTimezone, selectedDate]);
 
   const formatLongDate = (dateStr: string) => {
-    if (dateStr === "Unscheduled") return "Unscheduled Expenses";
+    if (dateStr === TEXTS.budgetItemList.unscheduledKey) {
+      return TEXTS.budgetItemList.unscheduledTitle;
+    }
     const date = new Date(`${dateStr}T00:00:00`);
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
@@ -95,7 +99,9 @@ export const BudgetItemList = ({
           <div key={date} className="day-group">
             <div className="day-header">
               <span className="day-badge">
-                {date === "Unscheduled" ? "MISC" : "DATE"}
+                {date === TEXTS.budgetItemList.unscheduledKey
+                  ? TEXTS.budgetItemList.badgeMisc
+                  : TEXTS.budgetItemList.badgeDate}
               </span>
               <h4 className="day-title-text">
                 {formatLongDate(date)}
@@ -155,7 +161,9 @@ export const BudgetItemList = ({
         ))
       ) : (
         <div className="form-container" style={{ textAlign: 'center', padding: '40px' }}>
-          <p className="section-label">No activities logged for this selection.</p>
+          <p className="section-label">
+            {TEXTS.budgetItemList.emptySelection}
+          </p>
         </div>
       )}
     </div>

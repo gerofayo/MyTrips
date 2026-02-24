@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import type { CreateTripRequest } from "../types/Trip";
 import { getAllCountries, getAllCurrencies } from "country-tz-currency";
 import { logger } from "../utils/logger";
+import { TEXTS } from "../config/texts";
 import "../styles/forms.css";
 
 type Props = {
@@ -92,7 +93,7 @@ function TripForm({ onSubmit, initialData }: Props) {
     e.preventDefault();
     
     if (new Date(formData.startDate) > new Date(formData.endDate)) {
-      setDateError("End date cannot be before start date");
+      setDateError(TEXTS.tripForm.dateError);
       logger.warn("Validation failed: End date before start date");
       return;
     }
@@ -103,15 +104,15 @@ function TripForm({ onSubmit, initialData }: Props) {
   return (
     <form onSubmit={handleSubmit} className="trip-form-container">
       <h2 className="form-title">
-        {initialData ? "Edit Trip Details" : "Plan a New Adventure"}
+        {initialData ? TEXTS.tripForm.mainTitleEdit : TEXTS.tripForm.mainTitleCreate}
       </h2>
 
       <div className="form-group">
-        <label className="section-label">Travel Name</label>
+        <label className="section-label">{TEXTS.tripForm.travelNameLabel}</label>
         <input
           className="form-input"
           name="title"
-          placeholder="e.g., Summer in Tokyo"
+          placeholder={TEXTS.tripForm.travelNamePlaceholder}
           value={formData.title}
           onChange={handleChange}
           required
@@ -120,9 +121,9 @@ function TripForm({ onSubmit, initialData }: Props) {
 
       <div className="form-grid">
         <div className="form-group">
-          <label className="section-label">Destination Country</label>
+          <label className="section-label">{TEXTS.tripForm.destinationCountryLabel}</label>
           <select className="form-select" value={selectedCountryCode} onChange={handleCountryChange} required>
-            <option value="">Select country</option>
+            <option value="">{TEXTS.tripForm.selectCountryPlaceholder}</option>
             {countries.map((c) => (
               <option key={c.code} value={c.code}>{c.name}</option>
             ))}
@@ -130,7 +131,7 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
 
         <div className="form-group">
-          <label className="section-label">Timezone</label>
+          <label className="section-label">{TEXTS.tripForm.timezoneLabel}</label>
           <select
             className="form-select"
             name="destinationTimezone"
@@ -140,7 +141,9 @@ function TripForm({ onSubmit, initialData }: Props) {
             disabled={availableTimezones.length === 0}
           >
             <option value="">
-              {availableTimezones.length === 0 ? "Select country first" : "Select timezone"}
+              {availableTimezones.length === 0
+                ? TEXTS.tripForm.timezonePlaceholderNoCountry
+                : TEXTS.tripForm.timezonePlaceholder}
             </option>
             {availableTimezones.map((tz) => (
               <option key={tz} value={tz}>{tz}</option>
@@ -151,7 +154,7 @@ function TripForm({ onSubmit, initialData }: Props) {
 
       <div className="form-grid">
         <div className="form-group">
-          <label className="section-label">Start Date</label>
+          <label className="section-label">{TEXTS.tripForm.startDateLabel}</label>
           <input
             className={`form-input ${dateError ? 'input-error' : ''}`}
             name="startDate"
@@ -163,7 +166,7 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
 
         <div className="form-group">
-          <label className="section-label">End Date</label>
+          <label className="section-label">{TEXTS.tripForm.endDateLabel}</label>
           <input
             className={`form-input ${dateError ? 'input-error' : ''}`}
             name="endDate"
@@ -179,12 +182,12 @@ function TripForm({ onSubmit, initialData }: Props) {
 
       <div className="form-grid form-grid-budget">
         <div className="form-group">
-          <label className="section-label">Total Budget</label>
+          <label className="section-label">{TEXTS.tripForm.totalBudgetLabel}</label>
           <input
             className="form-input"
             name="budget"
             type="number"
-            placeholder="0.00"
+            placeholder={TEXTS.tripForm.totalBudgetPlaceholder}
             value={formData.budget || ""}
             onChange={handleChange}
             required
@@ -192,9 +195,9 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
 
         <div className="form-group">
-          <label className="section-label">Currency</label>
+          <label className="section-label">{TEXTS.tripForm.currencyLabel}</label>
           <select className="form-select" name="currency" value={formData.currency} onChange={handleChange} required>
-            <option value="">Select...</option>
+            <option value="">{TEXTS.tripForm.currencyPlaceholder}</option>
             {currencies.map((curr) => (
               <option key={curr} value={curr}>{curr}</option>
             ))}
@@ -203,7 +206,7 @@ function TripForm({ onSubmit, initialData }: Props) {
       </div>
 
       <button type="submit" className="button form-submit-btn">
-        {initialData ? "Save Changes" : "Create Trip"}
+        {initialData ? TEXTS.tripForm.submitEdit : TEXTS.tripForm.submitCreate}
       </button>
     </form>
   );

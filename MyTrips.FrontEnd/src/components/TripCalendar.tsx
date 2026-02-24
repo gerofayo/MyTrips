@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { generateDateRange, getDayName, getDayNumber } from "../utils/date";
+import { TEXTS } from "../config/texts";
 import "../styles/components/TripCalendar.css";
 
 interface TripCalendarProps {
@@ -38,7 +39,7 @@ export const TripCalendar = ({
 
   return (
     <div className="calendar-container">
-      <span className="section-label">Trip Schedule</span>
+      <span className="section-label">{TEXTS.tripCalendar.sectionLabel}</span>
       <div className="calendar-strip" ref={containerRef}>
         
         <button
@@ -46,8 +47,8 @@ export const TripCalendar = ({
           className={`day-card ${selectedDate === null ? 'active' : ''}`}
           onClick={() => onDateSelect(null)}
         >
-          <span className="day-name">VIEW</span>
-          <span className="day-number">All</span>
+          <span className="day-name">{TEXTS.tripCalendar.viewAllLabel}</span>
+          <span className="day-number">{TEXTS.tripCalendar.viewAllNumber}</span>
         </button>
 
         {days.map((day) => {

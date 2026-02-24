@@ -4,6 +4,7 @@ import { useTrips } from "../hooks/useTrips";
 import TripCard from "../components/TripCard";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
+import { TEXTS } from "../config/texts";
 import "../styles/pages/TripListPage.css";
 
 export default function TripListPage() {
@@ -17,7 +18,7 @@ export default function TripListPage() {
   if (loading) {
     return (
       <div className="loading-container">
-        <p className="section-label">Searching for your adventures...</p>
+        <p className="section-label">{TEXTS.tripsList.loading}</p>
       </div>
     );
   }
@@ -26,15 +27,15 @@ export default function TripListPage() {
     <div className="app-container">
       <header className="trips-page-header">
         <div>
-          <h1 className="trips-page-title">My Journeys</h1>
+          <h1 className="trips-page-title">{TEXTS.tripsList.title}</h1>
           <p className="trips-page-subtitle">
-            Manage and track your travel budgets
+            {TEXTS.tripsList.subtitle}
           </p>
         </div>
 
         {trips.length > 0 && (
           <NavLink to={PATHS.CREATE_TRIP} className="button no-underline">
-            + Create New Trip
+            {TEXTS.tripsList.createTripButton}
           </NavLink>
         )}
       </header>
@@ -42,12 +43,12 @@ export default function TripListPage() {
       {trips.length === 0 ? (
         <div className="empty-state-container">
           <div className="empty-state-icon">🌎</div>
-          <h2>No trips found</h2>
+          <h2>{TEXTS.tripsList.emptyTitle}</h2>
           <p className="empty-state-text">
-            You haven't planned any trips yet. Start organizing your next getaway and keep your expenses under control.
+            {TEXTS.tripsList.emptyBody}
           </p>
           <NavLink to={PATHS.CREATE_TRIP} className="button no-underline">
-            Start Planning Now
+            {TEXTS.tripsList.emptyCta}
           </NavLink>
         </div>
       ) : (

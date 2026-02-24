@@ -1,5 +1,7 @@
 import type { TripResponse } from "../types/Trip";
 import "../styles/components/TripInfoCard.css";
+import "../styles/components/ExpenseCategoryColors.css";
+import { TEXTS } from "../config/texts";
 
 interface Props {
   trip: Pick<TripResponse, 'budget' | 'currency'>;
@@ -26,13 +28,13 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         
         <div className="budget-header">
           <div>
-            <span className="section-label">Remaining Budget</span>
+            <span className="section-label">{TEXTS.tripInfoCard.remainingBudgetLabel}</span>
             <h2 className={`budget-remaining-value ${isOverBudget ? 'over-budget' : ''}`}>
               ${remaining.toLocaleString()} {trip.currency}
             </h2>
           </div>
           <div>
-            <span className="section-label">Total Spent</span>
+            <span className="section-label">{TEXTS.tripInfoCard.totalSpentLabel}</span>
             <p className="total-spent-value">${totalSpent.toLocaleString()} {trip.currency}</p>
           </div>
         </div>
@@ -44,7 +46,7 @@ export const TripInfoCard = ({ trip, items }: Props) => {
           />
         </div>
 
-        <span className="section-label">Category Breakdown</span>
+        <span className="section-label">{TEXTS.tripInfoCard.categoryBreakdownLabel}</span>
         
         <div className="category-distribution-bar">
           {totalSpent > 0 ? Object.entries(categories).map(([cat, amount]) => (
@@ -68,7 +70,7 @@ export const TripInfoCard = ({ trip, items }: Props) => {
             </div>
           )) : (
             <p className="cat-name" style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6 }}>
-              No expenses recorded yet.
+              {TEXTS.tripInfoCard.noExpensesText}
             </p>
           )}
         </div>

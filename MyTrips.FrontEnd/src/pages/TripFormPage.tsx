@@ -5,6 +5,7 @@ import { useTrip } from "../hooks/useTrip";
 import type { CreateTripRequest } from "../types/Trip";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
+import { TEXTS } from "../config/texts";
 import "../styles/pages/TripFormPage.css";
 
 export default function TripFormPage() {
@@ -38,7 +39,7 @@ export default function TripFormPage() {
   if (isEditMode && loading) {
     return (
       <div className="app-container form-loading">
-        <p>Loading trip data...</p>
+        <p>{TEXTS.tripFormPage.loading}</p>
       </div>
     );
   }
@@ -47,15 +48,15 @@ export default function TripFormPage() {
     <div className="app-container trip-form-page">
       
       <button onClick={handleBack} className="back-button">
-        ← {isEditMode ? "Back to Trip Details" : "Back to Your Trips"}
+        ← {isEditMode ? TEXTS.tripFormPage.backToDetails : TEXTS.tripFormPage.backToTrips}
       </button>
 
       <header className="form-header">
-        <h1>{isEditMode ? "Edit Adventure" : "New Adventure"}</h1>
+        <h1>{isEditMode ? TEXTS.tripFormPage.editTitle : TEXTS.tripFormPage.newTitle}</h1>
         <p>
           {isEditMode 
-            ? "Update the details of your journey." 
-            : "Fill in the details below to start planning your next getaway."}
+            ? TEXTS.tripFormPage.editSubtitle 
+            : TEXTS.tripFormPage.newSubtitle}
         </p>
       </header>
 

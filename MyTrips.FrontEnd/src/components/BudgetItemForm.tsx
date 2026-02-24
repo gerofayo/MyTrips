@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { getBudgetItemCategories } from "../services/budgetItemService";
+import { TEXTS } from "../config/texts";
 import "../styles/components/BudgetItemForm.css";
 
 type Props = {
@@ -94,11 +95,11 @@ export const BudgetItemForm = ({
     <form onSubmit={handleSubmit} className="mini-form-card">
       <div className="form-row">
         <div className="form-group">
-          <label className="section-label">Title</label>
+          <label className="section-label">{TEXTS.budgetItemForm.titleLabel}</label>
           <input
             name="title"
             className="form-input"
-            placeholder="e.g. Daily Meals"
+            placeholder={TEXTS.budgetItemForm.titlePlaceholder}
             value={formData.title}
             onChange={handleChange}
             required
@@ -106,14 +107,14 @@ export const BudgetItemForm = ({
         </div>
         <div className="form-group">
           <label className="section-label">
-            {isPerDay ? "Price p/Day" : "Amount"}
+            {isPerDay ? TEXTS.budgetItemForm.amountPerDayLabel : TEXTS.budgetItemForm.amountLabel}
           </label>
           <input
             name="amount"
             className="form-input"
             type="number"
             value={formData.amount === 0 ? "" : formData.amount}
-            placeholder="$ 0.00"
+            placeholder={TEXTS.budgetItemForm.amountPlaceholder}
             min={0}
             onChange={handleChange}
             required
@@ -123,7 +124,7 @@ export const BudgetItemForm = ({
 
       <div className="form-row" style={{ gridTemplateColumns: '1fr 1fr' }}>
         <div className="form-group">
-          <label className="section-label">Category</label>
+          <label className="section-label">{TEXTS.budgetItemForm.categoryLabel}</label>
           <select 
             name="category" 
             className="form-input" 
@@ -131,14 +132,14 @@ export const BudgetItemForm = ({
             onChange={handleChange} 
             required
           >
-            <option value="">Select Category...</option>
+            <option value="">{TEXTS.budgetItemForm.categoryPlaceholder}</option>
             {categories.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
           </select>
         </div>
 
         {(selectedDate || initialData?.date) ? (
           <div className="form-group">
-            <label className="section-label">Time</label>
+            <label className="section-label">{TEXTS.budgetItemForm.timeLabel}</label>
             <input 
               type="time" 
               className="form-input" 
@@ -155,14 +156,16 @@ export const BudgetItemForm = ({
               checked={isPerDay} 
               onChange={(e) => setIsPerDay(e.target.checked)} 
             />
-            <label htmlFor="perDay" style={{ fontWeight: 600, cursor: 'pointer' }}>Multi-day expense?</label>
+            <label htmlFor="perDay" style={{ fontWeight: 600, cursor: 'pointer' }}>
+              {TEXTS.budgetItemForm.multiDayLabel}
+            </label>
           </div>
         )}
       </div>
 
       {isPerDay && (
         <div className="per-day-box">
-          <label className="section-label">Duration</label>
+          <label className="section-label">{TEXTS.budgetItemForm.durationLabel}</label>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <input 
               type="number" 
@@ -173,14 +176,19 @@ export const BudgetItemForm = ({
               style={{ width: '100px' }}
             />
             <span className="total-preview">
-              Total: ${(formData.amount * daysCount).toLocaleString()}
+              {TEXTS.budgetItemForm.durationTotalPrefix}
+              {(formData.amount * daysCount).toLocaleString()}
             </span>
           </div>
         </div>
       )}
 
       <button type="submit" className="button" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : initialData ? "Update Item" : "Add to budget"}
+        {isSubmitting
+          ? TEXTS.budgetItemForm.submitSaving
+          : initialData
+          ? TEXTS.budgetItemForm.submitUpdate
+          : TEXTS.budgetItemForm.submitCreate}
       </button>
     </form>
   );
