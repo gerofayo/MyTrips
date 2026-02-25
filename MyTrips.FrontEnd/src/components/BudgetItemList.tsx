@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import "../styles/components/BudgetItemList.css";
 import "../styles/components/ExpenseCategoryColors.css";
 import { TEXTS } from "../config/texts";
+import { getCategoryClass } from "../utils/category";
 
 interface Props {
   items: BudgetItem[];
@@ -10,7 +11,6 @@ interface Props {
   onEdit: (item: BudgetItem) => void;
   isSubmitting: boolean;
   destinationTimezone: string;
-  selectedDate: string | null;
 }
 
 export const BudgetItemList = ({
@@ -18,28 +18,14 @@ export const BudgetItemList = ({
   onDelete,
   onEdit,
   isSubmitting,
-  destinationTimezone,
-  selectedDate
+  destinationTimezone
 }: Props) => {
 
   const groupedData = useMemo(() => {
     const grouped: Record<string, BudgetItem[]> = {};
 
-    const filteredItems = selectedDate
-      ? items.filter((item) => {
-          if (!item.date) return false;
-          const itemDateKey = new Intl.DateTimeFormat("en-CA", {
-            timeZone: destinationTimezone,
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }).format(new Date(item.date));
-          return itemDateKey === selectedDate;
-        })
-      : items;
-
-    filteredItems.forEach((item) => {
-      let dateKey = TEXTS.budgetItemList.unscheduledKey;
+    items.forEach((item) => {
+      let dateKey: string = TEXTS.budgetItemList.unscheduledKey;
       if (item.date) {
         dateKey = new Intl.DateTimeFormat("en-CA", {
           timeZone: destinationTimezone,
@@ -68,7 +54,10 @@ export const BudgetItemList = ({
     });
 
     return { grouped, sortedDates };
-  }, [items, destinationTimezone, selectedDate]);
+  }, [items, destinationTimezone]);
+
+  const getDayTotal = (dayItems: BudgetItem[]) =>
+    dayItems.reduce((sum, i) => sum + i.amount, 0);
 
   const formatLongDate = (dateStr: string) => {
     if (dateStr === TEXTS.budgetItemList.unscheduledKey) {
@@ -98,21 +87,30 @@ export const BudgetItemList = ({
         groupedData.sortedDates.map((date) => (
           <div key={date} className="day-group">
             <div className="day-header">
-              <span className="day-badge">
-                {date === TEXTS.budgetItemList.unscheduledKey
-                  ? TEXTS.budgetItemList.badgeMisc
-                  : TEXTS.budgetItemList.badgeDate}
-              </span>
-              <h4 className="day-title-text">
-                {formatLongDate(date)}
-              </h4>
+              <div className="day-header-main">
+                <span className="day-badge">
+                  {date === TEXTS.budgetItemList.unscheduledKey
+                    ? TEXTS.budgetItemList.badgeMisc
+                    : TEXTS.budgetItemList.badgeDate}
+                </span>
+                <h4 className="day-title-text">
+                  {formatLongDate(date)}
+                </h4>
+              </div>
+
+              <div className="day-header-total">
+                <span>
+                  <strong>{TEXTS.budgetItemList.headerTotalLabel}:</strong>{" "}
+                  ${getDayTotal(groupedData.grouped[date]).toLocaleString()}
+                </span>
+              </div>
             </div>
 
             <div className="items-container">
               {groupedData.grouped[date].map((item) => (
                 <div key={item.id} className="budget-item-card">
                   <div className="item-main">
-                    <div className={`category-indicator cat-${item.category.toLowerCase().replace(/\s+/g, '-')}`} />
+                    <div className={`category-indicator ${getCategoryClass(item.category)}`} />
                     <div className="item-details">
                       <p className="item-name">{item.title}</p>
                       <div className="item-meta">
@@ -160,7 +158,7 @@ export const BudgetItemList = ({
           </div>
         ))
       ) : (
-        <div className="form-container" style={{ textAlign: 'center', padding: '40px' }}>
+        <div className="form-container itinerary-empty-state">
           <p className="section-label">
             {TEXTS.budgetItemList.emptySelection}
           </p>

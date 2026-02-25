@@ -16,6 +16,10 @@ export const TEXTS = {
     notFound: "Trip not found.",
     editButton: "Edit Trip Details",
     itineraryTitle: "Itinerary",
+    itineraryHintGeneric:
+      "You’re adding a generic expense not tied to a specific day.",
+    itineraryHintDated:
+      "You’re adding an expense scheduled for this day.",
     addExpense: "+ Add Expense",
     addExpenseCancel: "Cancel",
     deleteTripConfirm:
@@ -65,19 +69,26 @@ export const TEXTS = {
     categoryLabel: "Category",
     categoryPlaceholder: "Select Category...",
     timeLabel: "Time",
-    multiDayLabel: "Multi-day expense?",
+    multiDayLabel: "Calculate with daily rate",
+    multiDayHelper:
+      "This is a quick calculator: it multiplies your daily rate by number of days and saves a single total amount.",
     durationLabel: "Duration",
     durationTotalPrefix: "Total: ",
+    dateUsageHint:
+      "Tip: Use dated items for specific itinerary events, and items without a date for approximate or trip-wide costs.",
     submitSaving: "Saving...",
     submitUpdate: "Update Item",
     submitCreate: "Add to budget",
   },
   budgetItemList: {
-    unscheduledKey: "Unscheduled",
-    unscheduledTitle: "Unscheduled Expenses",
-    badgeMisc: "MISC",
+    unscheduledKey: "Generic",
+    unscheduledTitle: "Generic expenses",
+    badgeMisc: "GEN",
     badgeDate: "DATE",
     emptySelection: "No activities logged for this selection.",
+    headerSpentLabel: "Spent",
+    headerEstimatedLabel: "Estimated",
+    headerTotalLabel: "Total",
   },
   tripCalendar: {
     sectionLabel: "Trip Schedule",

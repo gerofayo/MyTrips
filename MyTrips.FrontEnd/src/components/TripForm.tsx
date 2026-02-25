@@ -178,7 +178,7 @@ function TripForm({ onSubmit, initialData }: Props) {
         </div>
       </div>
       
-      {dateError && <p className="form-error" style={{ color: 'var(--danger)', marginTop: '-10px', marginBottom: '10px', fontSize: '0.8rem' }}>{dateError}</p>}
+      {dateError && <p className="form-error">{dateError}</p>}
 
       <div className="form-grid form-grid-budget">
         <div className="form-group">

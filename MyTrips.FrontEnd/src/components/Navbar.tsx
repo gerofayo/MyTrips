@@ -10,7 +10,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         
-        <NavLink to={PATHS.HOME} style={{ textDecoration: 'none' }}>
+        <NavLink to={PATHS.HOME} className="no-underline">
           <h2 className="navbar-logo">MyTrips</h2>
         </NavLink>
 

@@ -45,6 +45,37 @@
   padding: 10px 0;
 }
 
+.budget-item-two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.budget-item-helper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.budget-item-helper-text {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.budget-item-per-day-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.budget-item-days-input {
+  width: 100px;
+}
+
+.budget-item-date-hint {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 8px;
+}
+
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }

@@ -2,23 +2,33 @@
    These class names are used by multiple components (TripInfoCard, BudgetItemList, etc.)
    and should stay in sync with the backend ExpenseCategory enum. */
 
-.cat-food {
+.category-indicator.cat-food,
+.legend-dot.cat-food,
+.category-distribution-bar .cat-food {
   background-color: #f87171;
 }
 
-.cat-transport {
+.category-indicator.cat-transport,
+.legend-dot.cat-transport,
+.category-distribution-bar .cat-transport {
   background-color: #60a5fa;
 }
 
-.cat-accommodation {
+.category-indicator.cat-lodging,
+.legend-dot.cat-lodging,
+.category-distribution-bar .cat-lodging {
   background-color: #34d399;
 }
 
-.cat-entertainment {
+.category-indicator.cat-entertainment,
+.legend-dot.cat-entertainment,
+.category-distribution-bar .cat-entertainment {
   background-color: #fbbf24;
 }
 
-.cat-other {
+.category-indicator.cat-other,
+.legend-dot.cat-other,
+.category-distribution-bar .cat-other {
   background-color: #94a3b8;
 }
 

@@ -17,7 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="app-container" style={{ textAlign: 'center', padding: '50px' }}>
+        <div className="app-container error-boundary-container">
           <h2 className="section-title">Opps! Something went wrong.</h2>
           <p className="danger-zone-text">Try refreshing the page.</p>
           <button onClick={() => window.location.reload()} className="primary">

@@ -122,7 +122,7 @@ export const BudgetItemForm = ({
         </div>
       </div>
 
-      <div className="form-row" style={{ gridTemplateColumns: '1fr 1fr' }}>
+      <div className="form-row budget-item-two-col">
         <div className="form-group">
           <label className="section-label">{TEXTS.budgetItemForm.categoryLabel}</label>
           <select 
@@ -156,9 +156,14 @@ export const BudgetItemForm = ({
               checked={isPerDay} 
               onChange={(e) => setIsPerDay(e.target.checked)} 
             />
-            <label htmlFor="perDay" style={{ fontWeight: 600, cursor: 'pointer' }}>
-              {TEXTS.budgetItemForm.multiDayLabel}
-            </label>
+            <div className="budget-item-helper">
+              <label htmlFor="perDay">
+                {TEXTS.budgetItemForm.multiDayLabel}
+              </label>
+              <span className="budget-item-helper-text">
+                {TEXTS.budgetItemForm.multiDayHelper}
+              </span>
+            </div>
           </div>
         )}
       </div>
@@ -166,14 +171,13 @@ export const BudgetItemForm = ({
       {isPerDay && (
         <div className="per-day-box">
           <label className="section-label">{TEXTS.budgetItemForm.durationLabel}</label>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="budget-item-per-day-row">
             <input 
               type="number" 
-              className="form-input"
+              className="form-input budget-item-days-input"
               min={1} 
               value={daysCount} 
               onChange={(e) => setDaysCount(Number(e.target.value))} 
-              style={{ width: '100px' }}
             />
             <span className="total-preview">
               {TEXTS.budgetItemForm.durationTotalPrefix}

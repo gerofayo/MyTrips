@@ -15,6 +15,18 @@
   margin-bottom: 16px;
 }
 
+.day-header-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.day-header-total {
+  display: flex;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
 .day-badge {
   background: var(--bg-main);
   padding: 4px 8px;
@@ -37,6 +49,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.itinerary-empty-state {
+  text-align: center;
+  padding: 40px;
 }
 
 /* Card de Gasto Individual */

@@ -95,7 +95,16 @@ export default function TripDetailPage() {
         <div className="divider-line" />
 
         <div className="itinerary-header">
-          <h3 className="section-label">{TEXTS.tripDetail.itineraryTitle}</h3>
+          <div>
+            <h3 className="section-label">{TEXTS.tripDetail.itineraryTitle}</h3>
+            {showForm && (
+              <p className="itinerary-hint">
+                {selectedDate
+                  ? TEXTS.tripDetail.itineraryHintDated
+                  : TEXTS.tripDetail.itineraryHintGeneric}
+              </p>
+            )}
+          </div>
           <button
             className={showForm ? "button-outline danger" : "button button-sm"}
             onClick={showForm ? () => { setShowForm(false); setEditingItem(null); } : () => setShowForm(true)}

@@ -2,6 +2,7 @@ import type { TripResponse } from "../types/Trip";
 import "../styles/components/TripInfoCard.css";
 import "../styles/components/ExpenseCategoryColors.css";
 import { TEXTS } from "../config/texts";
+import { getCategoryClass } from "../utils/category";
 
 interface Props {
   trip: Pick<TripResponse, 'budget' | 'currency'>;
@@ -49,30 +50,46 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         <span className="section-label">{TEXTS.tripInfoCard.categoryBreakdownLabel}</span>
         
         <div className="category-distribution-bar">
-          {totalSpent > 0 ? Object.entries(categories).map(([cat, amount]) => (
-            <div 
-              key={cat}
-              className={`cat-${cat.toLowerCase().replace(/\s+/g, '-')}`}
-              style={{ width: `${(amount / totalSpent) * 100}%` }}
-              title={`${cat}: ${amount}`}
-            />
-          )) : <div className="progress-bar-container" style={{ width: '100%', marginBottom: 0 }} />}
+          {totalSpent > 0
+            ? Object.entries(categories).map(([cat, amount]) => (
+                <div
+                  key={cat}
+                  className={getCategoryClass(cat)}
+                  style={{ width: `${(amount / totalSpent) * 100}%` }}
+                  title={`${cat}: ${amount}`}
+                />
+              ))
+            : (
+              <div
+                className="progress-bar-container"
+                style={{ width: "100%", marginBottom: 0 }}
+              />
+            )}
         </div>
 
         <div className="category-legend">
-          {items.length > 0 ? Object.entries(categories).map(([cat, amount]) => (
-            <div key={cat} className="legend-item">
-              <span className={`legend-dot cat-${cat.toLowerCase().replace(/\s+/g, '-')}`}></span>
-              <span className="cat-name">{cat}</span>
-              <span className="cat-amount">
-                {((amount / totalSpent) * 100).toFixed(0)}%
-              </span>
-            </div>
-          )) : (
-            <p className="cat-name" style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6 }}>
-              {TEXTS.tripInfoCard.noExpensesText}
-            </p>
-          )}
+          {items.length > 0
+            ? Object.entries(categories).map(([cat, amount]) => (
+                <div key={cat} className="legend-item">
+                  <span className={`legend-dot ${getCategoryClass(cat)}`} />
+                  <span className="cat-name">{cat}</span>
+                  <span className="cat-amount">
+                    {((amount / totalSpent) * 100).toFixed(0)}%
+                  </span>
+                </div>
+              ))
+            : (
+              <p
+                className="cat-name"
+                style={{
+                  gridColumn: "1/-1",
+                  textAlign: "center",
+                  opacity: 0.6,
+                }}
+              >
+                {TEXTS.tripInfoCard.noExpensesText}
+              </p>
+            )}
         </div>
       </div>
     </div>

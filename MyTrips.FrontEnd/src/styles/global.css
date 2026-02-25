@@ -167,3 +167,8 @@ input[type="time"] {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
 }
+
+.error-boundary-container {
+  text-align: center;
+  padding: 50px 0;
+}
