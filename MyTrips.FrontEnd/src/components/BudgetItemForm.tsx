@@ -27,6 +27,7 @@ export const BudgetItemForm = ({
     amount: 0,
     category: "",
     isEstimated: false,
+    description: "",
   });
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export const BudgetItemForm = ({
         amount: initialData.amount,
         category: initialData.category,
         isEstimated: initialData.isEstimated,
+        description: initialData.description || "",
       });
       if (initialData.date) {
         const extractedTime = initialData.date.split("T")[1]?.substring(0, 5);
@@ -43,7 +45,7 @@ export const BudgetItemForm = ({
       }
       setIsPerDay(false); 
     } else {
-      setFormData({ title: "", amount: 0, category: "", isEstimated: false });
+      setFormData({ title: "", amount: 0, category: "", isEstimated: false, description: "" });
       setTime("");
       setIsPerDay(false);
       setDaysCount(1);
@@ -56,7 +58,7 @@ export const BudgetItemForm = ({
       .catch((err) => console.error(err));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -84,7 +86,7 @@ export const BudgetItemForm = ({
     });
 
     if (!initialData) {
-      setFormData({ title: "", amount: 0, category: "", isEstimated: false });
+      setFormData({ title: "", amount: 0, category: "", isEstimated: false, description: "" });
       setTime("");
       setIsPerDay(false);
       setDaysCount(1);
@@ -186,6 +188,18 @@ export const BudgetItemForm = ({
           </div>
         </div>
       )}
+
+      <div className="form-group">
+        <label className="section-label">{TEXTS.budgetItemForm.descriptionLabel}</label>
+        <textarea
+          name="description"
+          className="form-input"
+          placeholder={TEXTS.budgetItemForm.descriptionPlaceholder}
+          value={formData.description}
+          onChange={handleChange}
+          rows={3}
+        />
+      </div>
 
       <button type="submit" className="button" disabled={isSubmitting}>
         {isSubmitting

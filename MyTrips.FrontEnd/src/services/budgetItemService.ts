@@ -14,6 +14,10 @@ export function updateBudgetItem(tripId: string, id: string, data: Partial<Creat
   return apiClient.put<BudgetItem>(`/trips/${tripId}/budget-items/${id}`, data);
 }
 
+export function getBudgetItemById(tripId: string, id: string) {
+  return apiClient.get<BudgetItem>(`/trips/${tripId}/budget-items/${id}`);
+}
+
 export function deleteBudgetItem(tripId: string, id: string) {
   return apiClient.delete(`/trips/${tripId}/budget-items/${id}`);
 }

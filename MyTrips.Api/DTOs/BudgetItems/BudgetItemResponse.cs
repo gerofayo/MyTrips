@@ -10,5 +10,5 @@ public record class BudgetItemResponse
     public decimal Amount { get; set; }
     public DateTimeOffset? Date { get; set; }
     public bool IsEstimated { get; set; }
-    
+    public string? Description { get; set; }
 }

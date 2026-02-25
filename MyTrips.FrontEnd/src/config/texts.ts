@@ -74,6 +74,8 @@ export const TEXTS = {
       "This is a quick calculator: it multiplies your daily rate by number of days and saves a single total amount.",
     durationLabel: "Duration",
     durationTotalPrefix: "Total: ",
+    descriptionLabel: "Description",
+    descriptionPlaceholder: "Optional details about this expense...",
     dateUsageHint:
       "Tip: Use dated items for specific itinerary events, and items without a date for approximate or trip-wide costs.",
     submitSaving: "Saving...",

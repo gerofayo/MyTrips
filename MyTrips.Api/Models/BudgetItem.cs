@@ -20,13 +20,16 @@ public class BudgetItem
 
     public DateTime CreatedAt { get; private set; }
 
+    public string? Description { get; private set; }
+
     public BudgetItem(
         Guid tripId,
         string title,
         ExpenseCategory category,
         decimal amount,
         bool isEstimated,
-        DateTimeOffset? date = null)
+        DateTimeOffset? date = null,
+        string? description = null)
     {
 
         Validate(title, category, amount);
@@ -39,6 +42,7 @@ public class BudgetItem
         IsEstimated = isEstimated;
         Date = date;
         CreatedAt = DateTime.UtcNow;
+        Description = description?.Trim();
     }
 
     public void MarkAsReal()
@@ -51,7 +55,8 @@ public class BudgetItem
         ExpenseCategory? category,
         decimal? amount,
         bool? isEstimated,
-        DateTimeOffset? date = null)
+        DateTimeOffset? date = null,
+        string? description = null)
     {
         var newTitle = title ?? Title;
         var newCategory = category ?? Category;
@@ -64,6 +69,7 @@ public class BudgetItem
         Amount = newAmount;
         IsEstimated = isEstimated ?? IsEstimated;
         Date = date;
+        Description = description?.Trim();
     }
 
     private void Validate(

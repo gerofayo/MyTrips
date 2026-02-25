@@ -30,7 +30,8 @@ public class BudgetItemService
             amount: request.Amount,
             category: request.Category,
             isEstimated: request.IsEstimated,
-            date: request.Date
+            date: request.Date,
+            description: request.Description
         );
 
         _tripRepository.Update(trip);
@@ -74,7 +75,8 @@ public class BudgetItemService
             amount: request.Amount,
             category: request.Category,
             isEstimated: request.IsEstimated,
-            date: request.Date
+            date: request.Date,
+            description: request.Description
         );
 
         if (item is null)

@@ -17,5 +17,6 @@ public record class CreateBudgetItemRequest
     public DateTimeOffset? Date { get; set; }
     [Required]
     public bool IsEstimated { get; set; }
-
+    [MaxLength(500)]
+    public string? Description { get; set; }
 }

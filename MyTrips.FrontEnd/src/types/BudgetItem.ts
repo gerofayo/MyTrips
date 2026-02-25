@@ -5,6 +5,7 @@ export interface BudgetItem {
   category: string
   isEstimated: boolean
   date?: string | null
+  description?: string | null
 }
 
 export interface CreateBudgetItemRequest {
@@ -13,4 +14,5 @@ export interface CreateBudgetItemRequest {
   amount: number
   date: string | null
   isEstimated: boolean
+  description?: string | null
 }

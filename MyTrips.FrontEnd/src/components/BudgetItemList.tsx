@@ -1,5 +1,5 @@
 import type { BudgetItem } from "../types/BudgetItem";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import "../styles/components/BudgetItemList.css";
 import "../styles/components/ExpenseCategoryColors.css";
 import { TEXTS } from "../config/texts";
@@ -20,6 +20,19 @@ export const BudgetItemList = ({
   isSubmitting,
   destinationTimezone
 }: Props) => {
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  const toggleDescription = (itemId: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
 
   const groupedData = useMemo(() => {
     const grouped: Record<string, BudgetItem[]> = {};
@@ -108,11 +121,32 @@ export const BudgetItemList = ({
 
             <div className="items-container">
               {groupedData.grouped[date].map((item) => (
-                <div key={item.id} className="budget-item-card">
+                <div key={item.id} className={`budget-item-card ${expandedItems.has(item.id) ? 'expanded' : ''}`}>
                   <div className="item-main">
                     <div className={`category-indicator ${getCategoryClass(item.category)}`} />
                     <div className="item-details">
-                      <p className="item-name">{item.title}</p>
+                      <div 
+                        className={`item-name-container ${item.description ? 'clickable' : ''}`}
+                        onClick={() => item.description && toggleDescription(item.id)}
+                        title={item.description ? "Click to view details" : undefined}
+                      >
+                        <p className="item-name">{item.title}</p>
+                        {item.description && (
+                          <div className="description-indicator">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M6 9l6 6 6-6"></path>
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      {item.description && (
+                        <div className={`item-description ${expandedItems.has(item.id) ? 'expanded' : 'collapsed'}`}>
+                          <div className="description-content">
+                            <span className="description-label">Details:</span>
+                            <p>{item.description}</p>
+                          </div>
+                        </div>
+                      )}
                       <div className="item-meta">
                         <span className="item-tag">{item.category}</span>
                         {item.date && (
