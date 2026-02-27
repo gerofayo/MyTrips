@@ -12,21 +12,23 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const apiClient = {
-  get: <T>(endpoint: string) => 
-    fetch(`${BASE_URL}${endpoint}`).then(res => handleResponse<T>(res)),
+  get: <T>(endpoint: string, options?: RequestInit) => 
+    fetch(`${BASE_URL}${endpoint}`, options).then(res => handleResponse<T>(res)),
     
-  post: <T>(endpoint: string, data: any) => 
+  post: <T>(endpoint: string, data: any, options?: RequestInit) => 
     fetch(`${BASE_URL}${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
+      ...options
     }).then(res => handleResponse<T>(res)),
 
-  put: <T>(endpoint: string, data: any) => 
+  put: <T>(endpoint: string, data: any, options?: RequestInit) => 
     fetch(`${BASE_URL}${endpoint}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
+      ...options
     }).then(res => handleResponse<T>(res)),
 
   delete: (endpoint: string) => 

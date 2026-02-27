@@ -26,10 +26,35 @@ export async function deleteTrip(id: string): Promise<void> {
   return apiClient.delete(`/trips/${id}`);
 }
 
+export async function importTrips(file: File): Promise<{ message: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  return fetch(`${import.meta.env.VITE_API_URL}/trips/import`, {
+    method: 'POST',
+    body: formData
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+    return res.json();
+  });
+}
+
+export async function exportTrips(): Promise<Blob> {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/trips/export`);
+  if (!response.ok) {
+    throw new Error('Export failed');
+  }
+  return response.blob();
+}
+
 export const tripService = {
   getAll: getTrips,
   getById: getTripById,
   create: postTrip,
   update: updateTrip,
   delete: deleteTrip,
+  import: importTrips,
+  export: exportTrips
 };

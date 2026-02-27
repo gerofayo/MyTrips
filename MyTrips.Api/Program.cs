@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
+builder.Services.AddSingleton<ITripRepository>(provider => 
+    new JsonFileRepository("trips.json"));
 builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BudgetItemService>();
 
