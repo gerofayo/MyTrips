@@ -14,12 +14,13 @@ export const TEXTS = {
   tripDetail: {
     loading: "Loading trip details...",
     notFound: "Trip not found.",
+    backButton: "← Back to My Trips",
     editButton: "Edit Trip Details",
     itineraryTitle: "Itinerary",
     itineraryHintGeneric:
-      "You’re adding a generic expense not tied to a specific day.",
+      "You're adding a generic expense not tied to a specific day.",
     itineraryHintDated:
-      "You’re adding an expense scheduled for this day.",
+      "You're adding an expense scheduled for this day.",
     addExpense: "+ Add Expense",
     addExpenseCancel: "Cancel",
     deleteTripConfirm:
@@ -108,4 +109,3 @@ export const TEXTS = {
 } as const;
 
 export type AppTexts = typeof TEXTS;
-

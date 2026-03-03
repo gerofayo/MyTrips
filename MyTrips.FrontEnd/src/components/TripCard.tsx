@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import type { TripResponse } from "../types/Trip";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
@@ -65,7 +66,8 @@ export default function TripCard({ trip }: Props) {
 
         <div className="item-meta trip-card-footer">
           <span className="trip-card-date-text">
-            🗓️ {formatDate(trip.startDate, trip.destinationTimeZone)} — {formatDate(trip.endDate, trip.destinationTimeZone)}
+            <Icon icon="mdi:calendar" className="trip-card-date-icon" />
+            {formatDate(trip.startDate, trip.destinationTimeZone)} — {formatDate(trip.endDate, trip.destinationTimeZone)}
           </span>
         </div>
       </div>

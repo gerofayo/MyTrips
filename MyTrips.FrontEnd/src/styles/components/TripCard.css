@@ -55,7 +55,7 @@
   flex: 1;
   position: relative;
   z-index: 5;
-  background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,1));
+  background: var(--card-bg);
 }
 
 .trip-card-budget {
@@ -63,7 +63,7 @@
   top: 16px;
   right: 16px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--glass-bg);
   color: var(--primary);
   padding: 8px 12px;
   border-radius: 12px;
@@ -73,6 +73,14 @@
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: all 0.3s ease;
+}
+
+.trip-card:hover .trip-card-budget {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .trip-card-destination {
@@ -104,6 +112,25 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  line-height: 1;
+}
+
+.trip-card-date-icon {
+  font-size: 1rem;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.trip-card-date-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
 }
 
 /* Responsive adjustments */
@@ -125,6 +152,8 @@
     right: 12px;
     padding: 6px 10px;
     font-size: 0.85rem;
+    opacity: 1;
+    transform: translateY(0);
   }
   
   .trip-card-title {

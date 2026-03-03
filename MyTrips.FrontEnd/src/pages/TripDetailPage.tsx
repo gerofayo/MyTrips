@@ -47,7 +47,6 @@ export default function TripDetailPage() {
   const handleEditClick = (item: BudgetItem) => {
     setEditingItem(item);
     setShowForm(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFormSubmit = async (formData: CreateBudgetItemRequest) => {
@@ -72,24 +71,41 @@ export default function TripDetailPage() {
 
   if (!trip) {
     return (
-      <div className="app-container">
-        <p>{TEXTS.tripDetail.notFound}</p>
+      <div className="app-container not-found-container">
+        <div className="not-found-content">
+          <p className="not-found-text">{TEXTS.tripDetail.notFound}</p>
+          <button 
+            className="button" 
+            onClick={() => navigate(PATHS.TRIPS_LIST)}
+          >
+            ← Back to My Trips
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="trip-detail has-bottom-nav">
+    <div className="trip-detail">
       <div className="app-container trip-detail-wrapper">
         
+
         <div className="relative-container">
           <TripHero trip={trip} />
-          <button
-            className="btn-edit-floating"
-            onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
-          >
-            {TEXTS.tripDetail.editButton}
-          </button>
+          <div className="floating-buttons">
+            <button
+              className="btn-back-floating"
+              onClick={() => navigate(PATHS.TRIPS_LIST)}
+            >
+              {TEXTS.tripDetail.backButton}
+            </button>
+            <button
+              className="btn-edit-floating"
+              onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
+            >
+              {TEXTS.tripDetail.editButton}
+            </button>
+          </div>
         </div>
 
         <TripInfoCard trip={trip} items={items} />
@@ -159,8 +175,6 @@ export default function TripDetailPage() {
         </section>
 
       </div>
-      
-      <BottomNavBar />
     </div>
   );
 }
