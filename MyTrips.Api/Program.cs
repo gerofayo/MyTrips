@@ -59,6 +59,9 @@ if (!app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+// Health check endpoint
+app.MapGet("/health", () => new { status = "healthy", timestamp = DateTime.UtcNow });
+
 // Controllers
 app.MapControllers();
 
