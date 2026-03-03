@@ -3,13 +3,13 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 # Copy project file and restore dependencies
-COPY MyTrips.Api/MyTrips.Api.csproj ./MyTrips.Api/
-RUN dotnet restore MyTrips.Api/MyTrips.Api.csproj
+COPY MyTrips.Api.csproj .
+RUN dotnet restore MyTrips.Api.csproj
 
 # Copy remaining files and build
 COPY . .
-WORKDIR /src/MyTrips.Api
-RUN dotnet publish --no-restore -c Release -o /app/publish
+WORKDIR /src
+RUN dotnet publish MyTrips.Api/MyTrips.Api.csproj --no-restore -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
