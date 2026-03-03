@@ -5,11 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "cd ../MyTrips.Api && dotnet watch run",
+    "dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "tsc -b && vite build",
+    "build:prod": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && echo 'Frontend build complete. Ready for deployment.'"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.2",
+    "concurrently": "^9.2.1",
     "country-tz-currency": "^1.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

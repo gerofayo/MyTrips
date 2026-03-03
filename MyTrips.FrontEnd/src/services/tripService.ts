@@ -23,7 +23,12 @@ export async function updateTrip(
 }
 
 export async function deleteTrip(id: string): Promise<void> {
-  return apiClient.delete(`/trips/${id}`);
+  try {
+    await apiClient.delete(`/trips/${id}`);
+  } catch (error) {
+    console.error("Delete trip failed:", error);
+    throw error;
+  }
 }
 
 export async function importTrips(file: File): Promise<{ message: string }> {

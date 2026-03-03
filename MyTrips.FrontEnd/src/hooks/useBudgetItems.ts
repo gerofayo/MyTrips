@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { budgetItemService } from "../services/budgetItemService"
-import type { BudgetItem, CreateBudgetItemRequest, UpdateBudgetItemRequest } from "../types/BudgetItem"
+import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem"
 
 export function useBudgetItems(tripId: string) {
   const [items, setItems] = useState<BudgetItem[]>([]);

@@ -5,7 +5,7 @@ import { TEXTS } from "../config/texts";
 import { getCategoryClass } from "../utils/category";
 
 interface Props {
-  trip: Pick<TripResponse, 'budget' | 'currency'>;
+  trip: Pick<TripResponse, 'budget' | 'currency' | 'destinationTimeZone'>;
   items: Array<{
     amount: number;
     category: string;

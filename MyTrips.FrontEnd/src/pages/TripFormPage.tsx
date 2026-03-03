@@ -47,23 +47,27 @@ export default function TripFormPage() {
   return (
     <div className="app-container trip-form-page">
       
-      <button onClick={handleBack} className="back-button">
-        ← {isEditMode ? TEXTS.tripFormPage.backToDetails : TEXTS.tripFormPage.backToTrips}
-      </button>
+      <div className="form-top-section">
+        <button onClick={handleBack} className="back-button">
+          ← {isEditMode ? TEXTS.tripFormPage.backToDetails : TEXTS.tripFormPage.backToTrips}
+        </button>
 
-      <header className="form-header">
-        <h1>{isEditMode ? TEXTS.tripFormPage.editTitle : TEXTS.tripFormPage.newTitle}</h1>
-        <p>
-          {isEditMode 
-            ? TEXTS.tripFormPage.editSubtitle 
-            : TEXTS.tripFormPage.newSubtitle}
-        </p>
-      </header>
+        <header className="form-header">
+          <h1>{isEditMode ? TEXTS.tripFormPage.editTitle : TEXTS.tripFormPage.newTitle}</h1>
+          <p>
+            {isEditMode 
+              ? TEXTS.tripFormPage.editSubtitle 
+              : TEXTS.tripFormPage.newSubtitle}
+          </p>
+        </header>
+      </div>
 
-      <TripForm 
-        onSubmit={handleSubmit} 
-        initialData={isEditMode ? trip : undefined} 
-      />
+      <div className="form-container">
+        <TripForm 
+          onSubmit={handleSubmit} 
+          initialData={isEditMode ? trip : undefined} 
+        />
+      </div>
       
     </div>
   );

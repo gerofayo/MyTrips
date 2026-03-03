@@ -18,11 +18,12 @@ function TripForm({ onSubmit, initialData }: Props) {
   const [formData, setFormData] = useState<CreateTripRequest>({
     title: "",
     destination: "",
-    destinationTimezone: "",
+    destinationTimeZone: "",
     startDate: "",
     endDate: "",
     budget: 0,
-    currency: "",
+    currency: "USD",
+    imageUrl: "",
   });
 
   const countries = useMemo(() => {
@@ -84,7 +85,7 @@ function TripForm({ onSubmit, initialData }: Props) {
     setFormData((prev) => ({
       ...prev,
       destination: country.name,
-      destinationTimezone: zones.length === 1 ? zones[0] : "",
+      destinationTimeZone: zones.length === 1 ? zones[0] : "",
       currency: country.currencyCode || prev.currency,
     }));
   };
@@ -103,9 +104,11 @@ function TripForm({ onSubmit, initialData }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="trip-form-container">
-      <h2 className="form-title">
-        {initialData ? TEXTS.tripForm.mainTitleEdit : TEXTS.tripForm.mainTitleCreate}
-      </h2>
+      <div className="form-header">
+        <h2 className="form-title">
+          {initialData ? TEXTS.tripForm.mainTitleEdit : TEXTS.tripForm.mainTitleCreate}
+        </h2>
+      </div>
 
       <div className="form-group">
         <label className="section-label">{TEXTS.tripForm.travelNameLabel}</label>
@@ -134,8 +137,8 @@ function TripForm({ onSubmit, initialData }: Props) {
           <label className="section-label">{TEXTS.tripForm.timezoneLabel}</label>
           <select
             className="form-select"
-            name="destinationTimezone"
-            value={formData.destinationTimezone}
+            name="destinationTimeZone"
+            value={formData.destinationTimeZone}
             onChange={handleChange}
             required
             disabled={availableTimezones.length === 0}
@@ -203,6 +206,18 @@ function TripForm({ onSubmit, initialData }: Props) {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="form-group">
+        <label className="section-label">{TEXTS.tripForm.imageUrlLabel}</label>
+        <input
+          className="form-input"
+          name="imageUrl"
+          type="url"
+          placeholder={TEXTS.tripForm.imageUrlPlaceholder}
+          value={formData.imageUrl || ""}
+          onChange={handleChange}
+        />
       </div>
 
       <button type="submit" className="button form-submit-btn">

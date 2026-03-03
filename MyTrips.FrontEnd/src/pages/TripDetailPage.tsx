@@ -7,6 +7,7 @@ import { TripInfoCard } from "../components/TripInfoCard";
 import { TripCalendar } from "../components/TripCalendar";
 import { BudgetItemList } from "../components/BudgetItemList";
 import { BudgetItemForm } from "../components/BudgetItemForm";
+import BottomNavBar from "../components/BottomNavBar";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { deleteTrip } from "../services/tripService";
 import { PATHS } from "../routes/paths";
@@ -39,6 +40,7 @@ export default function TripDetailPage() {
       navigate(PATHS.TRIPS_LIST, { replace: true });
     } catch (error) {
       logger.error("Error deleting trip", error);
+      alert("Error deleting trip. Please try again.");
     }
   };
 
@@ -77,7 +79,7 @@ export default function TripDetailPage() {
   }
 
   return (
-    <div className="trip-detail">
+    <div className="trip-detail has-bottom-nav">
       <div className="app-container trip-detail-wrapper">
         
         <div className="relative-container">
@@ -113,13 +115,13 @@ export default function TripDetailPage() {
           </button>
         </div>
 
-        <TripCalendar
-          startDate={trip.startDate}
-          endDate={trip.endDate}
-          selectedDate={selectedDate}
-          destinationTimezone={trip.destinationTimezone}
-          onDateSelect={setSelectedDate}
-        />
+          <TripCalendar
+            startDate={trip.startDate}
+            endDate={trip.endDate}
+            selectedDate={selectedDate}
+            destinationTimeZone={trip.destinationTimeZone}
+            onDateSelect={setSelectedDate}
+          />
 
         <div className={`form-wrapper ${showForm ? "expanded" : "collapsed"}`}>
           <BudgetItemForm
@@ -132,12 +134,19 @@ export default function TripDetailPage() {
 
         <BudgetItemList
           items={displayedItems}
-          onDelete={(id) =>
-            window.confirm(TEXTS.tripDetail.deleteItemConfirm) && deleteItem(id)
-          }
+          onDelete={async (id) => {
+            if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
+              try {
+                await deleteItem(id);
+              } catch (error) {
+                logger.error("Error deleting budget item", error);
+                alert("Error deleting item. Please try again.");
+              }
+            }
+          }}
           onEdit={handleEditClick}
           isSubmitting={loadingItems}
-          destinationTimezone={trip.destinationTimezone}
+          destinationTimeZone={trip.destinationTimeZone}
           selectedDate={selectedDate}
         />
 
@@ -150,6 +159,8 @@ export default function TripDetailPage() {
         </section>
 
       </div>
+      
+      <BottomNavBar />
     </div>
   );
 }

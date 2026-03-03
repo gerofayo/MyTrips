@@ -201,13 +201,15 @@ export const BudgetItemForm = ({
         />
       </div>
 
-      <button type="submit" className="button" disabled={isSubmitting}>
-        {isSubmitting
-          ? TEXTS.budgetItemForm.submitSaving
-          : initialData
-          ? TEXTS.budgetItemForm.submitUpdate
-          : TEXTS.budgetItemForm.submitCreate}
-      </button>
+      <div className="form-actions">
+        <button type="submit" className="button" disabled={isSubmitting}>
+          {isSubmitting
+            ? TEXTS.budgetItemForm.submitSaving
+            : initialData
+            ? TEXTS.budgetItemForm.submitUpdate
+            : TEXTS.budgetItemForm.submitCreate}
+        </button>
+      </div>
     </form>
   );
 };

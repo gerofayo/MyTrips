@@ -6,7 +6,17 @@ interface Props {
 }
 
 export const TripHero = ({ trip }: Props) => {
-  const heroImage = `https://loremflickr.com/1200/800/${encodeURIComponent(trip.destination)},travel/all`;
+  // Image URL logic: User provided -> Fallback -> LoremFlickr
+  const getTripImage = () => {
+    if (trip.imageUrl) {
+      return trip.imageUrl;
+    }
+    
+    // Generic fallback image
+    return '/src/assets/trip-fallback.jpg';
+  };
+
+  const heroImage = getTripImage();
 
   return (
     <div 

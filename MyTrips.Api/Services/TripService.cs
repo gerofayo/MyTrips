@@ -37,7 +37,7 @@ public class TripService(ITripRepository tripRepository)
         return response;
     }
 
-    public TripResponse? UpdateTrip(Guid id, UpdateTripRequest request)
+    public TripResponse? UpdateTrip(Guid id, CreateTripRequest request)
     {
         var trip = _tripRepository.GetById(id);
         if (trip is null)
@@ -52,6 +52,11 @@ public class TripService(ITripRepository tripRepository)
             initialBudget: request.Budget,
             currency: request.Currency
         );
+
+        if (request.ImageUrl is not null)
+        {
+            trip.UpdateImageUrl(request.ImageUrl);
+        }
         
         _tripRepository.Update(trip);
 

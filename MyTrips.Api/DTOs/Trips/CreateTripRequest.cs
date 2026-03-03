@@ -32,6 +32,9 @@ public record class CreateTripRequest
     [Required]
     public required string Currency { get; set; }
 
+    [MaxLength(500)]
+    public string? ImageUrl { get; set; }
+
     
     public ICollection<CreateBudgetItemRequest> BudgetItems { get; set; } = new List<CreateBudgetItemRequest>();
 

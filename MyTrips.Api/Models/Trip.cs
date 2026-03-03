@@ -18,6 +18,8 @@ public class Trip
     public decimal InitialBudget { get; private set; }
     public string Currency { get; private set; }
 
+    public string? ImageUrl { get; private set; }
+
     public DateTime CreatedAt { get; private set; }
 
     public ICollection<BudgetItem> BudgetItems { get; private set; } = new List<BudgetItem>();
@@ -29,7 +31,8 @@ public class Trip
         DateOnly startDate,
         DateOnly endDate,
         decimal initialBudget,
-        string currency
+        string currency,
+        string? imageUrl = null
         )
     {
         Validate(title, destination, destinationTimeZone, startDate, endDate, initialBudget, currency);
@@ -42,6 +45,7 @@ public class Trip
         EndDate = endDate;
         InitialBudget = initialBudget;
         Currency = currency;
+        ImageUrl = imageUrl?.Trim();
         CreatedAt = DateTime.UtcNow;
     }
 
@@ -125,6 +129,11 @@ public class Trip
             return false;
 
         return BudgetItems.Remove(item);
+    }
+
+    public void UpdateImageUrl(string? imageUrl)
+    {
+        ImageUrl = imageUrl?.Trim();
     }
 
     public decimal GetTotalSpent()

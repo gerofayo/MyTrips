@@ -18,7 +18,8 @@ public static class TripMapper
             StartDate = trip.StartDate,
             EndDate = trip.EndDate,
             Budget = trip.InitialBudget,
-            Currency = trip.Currency
+            Currency = trip.Currency,
+            ImageUrl = trip.ImageUrl
         };
     }
 
@@ -31,7 +32,8 @@ public static class TripMapper
             startDate: request.StartDate,
             endDate: request.EndDate,
             initialBudget: request.Budget,
-            currency: request.Currency
+            currency: request.Currency,
+            imageUrl: request.ImageUrl
         );
     }
 

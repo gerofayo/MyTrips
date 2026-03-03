@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type { TripResponse } from "../types/Trip";
 import { PATHS } from "../routes/paths";
-import { logger } from "../utils/logger"; // Nuestro nuevo logger
+import { logger } from "../utils/logger";
 import "../styles/components/TripCard.css";
 
 interface Props {
@@ -30,8 +30,14 @@ export default function TripCard({ trip }: Props) {
     navigate(PATHS.TRIP_DETAILS(trip.id));
   };
 
-  //TODO: Sacar este placeholder
-  const cardImage = `https://loremflickr.com/400/300/${encodeURIComponent(trip.destination)},travel/all`;
+  const getTripImage = () => {
+    if (trip.imageUrl) {
+      return trip.imageUrl;
+    }
+    return '/src/assets/trip-fallback.jpg';
+  };
+
+  const cardImage = getTripImage();
 
   return (
     <div className="trip-card" onClick={handleCardClick}>
@@ -40,7 +46,7 @@ export default function TripCard({ trip }: Props) {
         style={{ backgroundImage: `url(${cardImage})` }}
       />
 
-      <div className="trip-card-budget badge-price">
+      <div className="trip-card-budget">
         <span className="amount-text">
           ${trip.budget.toLocaleString()}
         </span>
@@ -59,7 +65,7 @@ export default function TripCard({ trip }: Props) {
 
         <div className="item-meta trip-card-footer">
           <span className="trip-card-date-text">
-            🗓️ {formatDate(trip.startDate, trip.destinationTimezone)} — {formatDate(trip.endDate, trip.destinationTimezone)}
+            🗓️ {formatDate(trip.startDate, trip.destinationTimeZone)} — {formatDate(trip.endDate, trip.destinationTimeZone)}
           </span>
         </div>
       </div>

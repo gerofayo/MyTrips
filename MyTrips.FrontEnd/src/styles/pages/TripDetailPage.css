@@ -55,10 +55,11 @@
 /* Danger Zone */
 .danger-zone {
   margin-top: 80px;
+  margin-bottom: 0;
   text-align: center;
   padding: 2rem;
-  border: 1px solid #fee2e2;
-  background-color: #fef2f2;
+  border: 1px solid var(--danger-border);
+  background-color: var(--danger-bg);
   border-radius: var(--radius-lg);
 }
 

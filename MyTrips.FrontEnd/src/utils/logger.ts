@@ -1,5 +1,3 @@
-type LogLevel = 'info' | 'warn' | 'error';
-
 const isDev = import.meta.env.DEV;
 
 export const logger = {

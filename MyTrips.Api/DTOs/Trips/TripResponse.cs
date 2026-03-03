@@ -15,6 +15,8 @@ public record class TripResponse
     public decimal Budget { get; set; }
     public required string Currency { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public ICollection<BudgetItemResponse> BudgetItems { get; set; } = new List<BudgetItemResponse>();
 
 }

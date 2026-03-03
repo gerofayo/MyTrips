@@ -41,7 +41,7 @@ namespace MyTrips.Api.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public ActionResult<TripResponse> UpdateTrip(Guid id, UpdateTripRequest request)
+        public ActionResult<TripResponse> UpdateTrip(Guid id, CreateTripRequest request)
         {
             var trip = _tripService.UpdateTrip(id, request);
 
