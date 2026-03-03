@@ -24,7 +24,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins(
+                "http://localhost:5173",
+                "https://mytrips-frontend.vercel.app"
+            )
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -53,8 +56,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// HTTPS
-app.UseHttpsRedirection();
+// HTTPS - Comment out for production (Railway handles SSL)
+if (!app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 // Controllers
 app.MapControllers();
