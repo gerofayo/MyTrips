@@ -1,23 +1,21 @@
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using MyTrips.Api.DTOs.BudgetItems;
-using MyTrips.Api.Enums;
 
 namespace MyTrips.Api.DTOs;
 
-public record class CreateTripRequest
+public class CreateTripRequest
 {
     [Required]
     [MaxLength(100)]
-    public required string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     
     [Required]
     [MaxLength(100)]
-    public required string Destination { get; set; }
+    public string Destination { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(100)]
-    public required string DestinationTimeZone { get; set; }
+    public string DestinationTimeZone { get; set; } = string.Empty;
 
     [Required]
     public DateOnly StartDate { get; set; }
@@ -30,7 +28,7 @@ public record class CreateTripRequest
     public decimal Budget { get; set; }
 
     [Required]
-    public required string Currency { get; set; }
+    public string Currency { get; set; } = string.Empty;
 
     [MaxLength(500)]
     public string? ImageUrl { get; set; }

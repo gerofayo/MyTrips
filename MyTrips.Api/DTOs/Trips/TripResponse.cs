@@ -1,19 +1,18 @@
 using MyTrips.Api.DTOs.BudgetItems;
-using MyTrips.Api.Enums;
 
 namespace MyTrips.Api.DTOs.Trips;
 
-public record class TripResponse
+public class TripResponse
 {
     public Guid Id { get; set; }
-    public required string Title { get; set; }
-    public required string Destination { get; set; }
-    public required string DestinationTimeZone { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Destination { get; set; } = string.Empty;
+    public string DestinationTimeZone { get; set; } = string.Empty;
     public string StartDate { get; set; } = string.Empty;
     public string EndDate { get; set; } = string.Empty;
     public string CreatedAt { get; set; } = string.Empty;
     public decimal Budget { get; set; }
-    public required string Currency { get; set; }
+    public string Currency { get; set; } = string.Empty;
 
     public string? ImageUrl { get; set; }
 
