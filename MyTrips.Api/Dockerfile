@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 # Copy project file and restore dependencies
-COPY MyTrips.Api.csproj .
-RUN dotnet restore MyTrips.Api.csproj
+COPY MyTrips.Api/MyTrips.Api.csproj ./MyTrips.Api/
+RUN dotnet restore MyTrips.Api/MyTrips.Api.csproj
 
 # Copy remaining files and build
 COPY . .
