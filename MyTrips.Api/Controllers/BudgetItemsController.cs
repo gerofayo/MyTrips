@@ -16,14 +16,37 @@ namespace MyTrips.Api.Controllers
             _budgetItemService = budgetItemService;
         }
 
-        private Guid GetSessionId()
+        private Guid? TryGetSessionId()
         {
             var sessionIdHeader = Request.Headers["X-Session-Id"].FirstOrDefault();
+            
+            // Return null if SessionId is missing or invalid
+            // Do NOT generate a new GUID - this would create isolated sessions
             if (string.IsNullOrEmpty(sessionIdHeader) || !Guid.TryParse(sessionIdHeader, out var sessionId))
             {
-                sessionId = Guid.NewGuid();
+                return null;
             }
+            
             return sessionId;
+        }
+
+        private Guid GetSessionId()
+        {
+            var sessionId = TryGetSessionId();
+            if (!sessionId.HasValue)
+            {
+                throw new InvalidOperationException("X-Session-Id header is required and must be a valid GUID");
+            }
+            return sessionId.Value;
+        }
+
+        private ActionResult ValidateSessionId()
+        {
+            if (!TryGetSessionId().HasValue)
+            {
+                return BadRequest("X-Session-Id header is required and must be a valid GUID");
+            }
+            return null!;
         }
 
         [HttpPost]
@@ -31,6 +54,9 @@ namespace MyTrips.Api.Controllers
             Guid tripId,
             CreateBudgetItemRequest request)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var createdItem = _budgetItemService.CreateBudgetItem(sessionId, tripId, request);
 
@@ -47,6 +73,9 @@ namespace MyTrips.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<BudgetItemResponse>> GetAllBudgetItems(Guid tripId)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var items = _budgetItemService.GetAllBudgetItems(sessionId, tripId);
 
@@ -59,6 +88,9 @@ namespace MyTrips.Api.Controllers
         [HttpGet("{id:guid}")]
         public ActionResult<BudgetItemResponse> GetBudgetItemById(Guid tripId, Guid id)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var item = _budgetItemService.GetBudgetItemById(sessionId, tripId, id);
 
@@ -74,6 +106,9 @@ namespace MyTrips.Api.Controllers
             Guid id,
             UpdateBudgetItemRequest request)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var updatedItem = _budgetItemService.UpdateBudgetItem(sessionId, tripId, id, request);
 
@@ -86,6 +121,9 @@ namespace MyTrips.Api.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteBudgetItem(Guid tripId, Guid id)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var deleted = _budgetItemService.DeleteBudgetItem(sessionId, tripId, id);
 

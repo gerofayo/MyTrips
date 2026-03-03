@@ -14,19 +14,45 @@ namespace MyTrips.Api.Controllers
         private readonly TripService _tripService = tripService;
         private readonly ISessionRepository _sessionRepository = sessionRepository;
 
-        private Guid GetSessionId()
+        private Guid? TryGetSessionId()
         {
             var sessionIdHeader = Request.Headers["X-Session-Id"].FirstOrDefault();
+            
+            // Return null if SessionId is missing or invalid
+            // Do NOT generate a new GUID - this would create isolated sessions
             if (string.IsNullOrEmpty(sessionIdHeader) || !Guid.TryParse(sessionIdHeader, out var sessionId))
             {
-                sessionId = Guid.NewGuid();
+                return null;
             }
+            
             return sessionId;
+        }
+
+        private Guid GetSessionId()
+        {
+            var sessionId = TryGetSessionId();
+            if (!sessionId.HasValue)
+            {
+                throw new InvalidOperationException("X-Session-Id header is required and must be a valid GUID");
+            }
+            return sessionId.Value;
+        }
+
+        private ActionResult ValidateSessionId()
+        {
+            if (!TryGetSessionId().HasValue)
+            {
+                return BadRequest("X-Session-Id header is required and must be a valid GUID");
+            }
+            return null!;
         }
 
         [HttpPost]
         public ActionResult<TripResponse> CreateTrip(CreateTripRequest request)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var createdTrip = _tripService.CreateTrip(sessionId, request);
             return CreatedAtAction(nameof(GetTripById), new { id = createdTrip.Id }, createdTrip);
@@ -35,6 +61,9 @@ namespace MyTrips.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<TripResponse>> GetAllTrips()
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var response = _tripService.GetAllTrips(sessionId);
             return Ok(response);
@@ -43,6 +72,9 @@ namespace MyTrips.Api.Controllers
         [HttpGet("{id:guid}")]
         public ActionResult<TripResponse> GetTripById(Guid id)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var trip = _tripService.GetTripById(sessionId, id);
 
@@ -55,6 +87,9 @@ namespace MyTrips.Api.Controllers
         [HttpPut("{id:guid}")]
         public ActionResult<TripResponse> UpdateTrip(Guid id, CreateTripRequest request)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var trip = _tripService.UpdateTrip(sessionId, id, request);
 
@@ -68,6 +103,9 @@ namespace MyTrips.Api.Controllers
         [HttpDelete("{id:guid}")]
         public ActionResult DeleteTrip(Guid id)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             var isDeleted = _tripService.DeleteTrip(sessionId, id);
 
@@ -81,6 +119,9 @@ namespace MyTrips.Api.Controllers
         [HttpPost("import")]
         public IActionResult ImportTrips([FromForm] IFormFile file)
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             
             if (file == null || file.Length == 0)
@@ -106,6 +147,9 @@ namespace MyTrips.Api.Controllers
         [HttpGet("export")]
         public IActionResult ExportTrips()
         {
+            var validationError = ValidateSessionId();
+            if (validationError != null) return validationError;
+            
             var sessionId = GetSessionId();
             
             try
