@@ -1,5 +1,6 @@
 using MyTrips.Api.Repositories;
 using MyTrips.Api.Services;
+using Swashbuckle.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,8 @@ builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BudgetItemService>();
 
 
-// OpenAPI (nuevo enfoque .NET 8)
-builder.Services.AddOpenApi();
+// OpenAPI with Swagger
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
@@ -50,7 +51,8 @@ app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 // HTTPS - Comment out for production (Railway handles SSL)
