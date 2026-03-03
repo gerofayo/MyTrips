@@ -1,5 +1,4 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
 using MyTrips.Api.DTOs;
 using MyTrips.Api.DTOs.Trips;
 using MyTrips.Api.Mappers;
@@ -8,28 +7,41 @@ using MyTrips.Api.Repositories;
 
 namespace MyTrips.Api.Services;
 
-public class TripService(ITripRepository tripRepository)
+public class TripService
 {
-    private readonly ITripRepository _tripRepository = tripRepository;
+    private readonly Func<Guid, ISessionRepository> _sessionRepositoryFactory;
 
-    public TripResponse CreateTrip(CreateTripRequest request)
+    public TripService(Func<Guid, ISessionRepository> sessionRepositoryFactory)
+    {
+        _sessionRepositoryFactory = sessionRepositoryFactory;
+    }
+
+    private ISessionRepository GetRepository(Guid sessionId)
+    {
+        return _sessionRepositoryFactory(sessionId);
+    }
+
+    public TripResponse CreateTrip(Guid sessionId, CreateTripRequest request)
     {   
+        var repository = GetRepository(sessionId);
         var trip = TripMapper.ResponseToModel(request);
-        _tripRepository.Add(trip);
+        repository.Add(sessionId, trip);
         var response = TripMapper.ModelToResponse(trip);
         return response;
     }
 
-    public IEnumerable<TripResponse> GetAllTrips()
+    public IEnumerable<TripResponse> GetAllTrips(Guid sessionId)
     {
-        var trips = _tripRepository.GetAll();
+        var repository = GetRepository(sessionId);
+        var trips = repository.GetAll(sessionId);
         var response = trips.Select(TripMapper.ModelToResponse).ToList();
         return response;
     }
 
-    public TripResponse? GetTripById(Guid id)
+    public TripResponse? GetTripById(Guid sessionId, Guid id)
     {
-        var trip = _tripRepository.GetById(id);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, id);
         if (trip is null)
             return null;
 
@@ -37,9 +49,10 @@ public class TripService(ITripRepository tripRepository)
         return response;
     }
 
-    public TripResponse? UpdateTrip(Guid id, CreateTripRequest request)
+    public TripResponse? UpdateTrip(Guid sessionId, Guid id, CreateTripRequest request)
     {
-        var trip = _tripRepository.GetById(id);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, id);
         if (trip is null)
             return null;
 
@@ -58,19 +71,20 @@ public class TripService(ITripRepository tripRepository)
             trip.UpdateImageUrl(request.ImageUrl);
         }
         
-        _tripRepository.Update(trip);
+        repository.Update(sessionId, trip);
 
         var response = TripMapper.ModelToResponse(trip);
         return response;
     }
 
-    public bool DeleteTrip(Guid id)
+    public bool DeleteTrip(Guid sessionId, Guid id)
     {
-        var trip = _tripRepository.GetById(id);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, id);
         if (trip is null)
             return false;
 
-        _tripRepository.Delete(id);
+        repository.Delete(sessionId, id);
         return true;
     }
 

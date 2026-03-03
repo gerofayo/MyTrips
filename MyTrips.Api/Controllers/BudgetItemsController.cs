@@ -16,12 +16,23 @@ namespace MyTrips.Api.Controllers
             _budgetItemService = budgetItemService;
         }
 
+        private Guid GetSessionId()
+        {
+            var sessionIdHeader = Request.Headers["X-Session-Id"].FirstOrDefault();
+            if (string.IsNullOrEmpty(sessionIdHeader) || !Guid.TryParse(sessionIdHeader, out var sessionId))
+            {
+                sessionId = Guid.NewGuid();
+            }
+            return sessionId;
+        }
+
         [HttpPost]
         public ActionResult<BudgetItemResponse> CreateBudgetItem(
             Guid tripId,
             CreateBudgetItemRequest request)
         {
-            var createdItem = _budgetItemService.CreateBudgetItem(tripId, request);
+            var sessionId = GetSessionId();
+            var createdItem = _budgetItemService.CreateBudgetItem(sessionId, tripId, request);
 
             if (createdItem is null)
                 return NotFound();
@@ -36,7 +47,8 @@ namespace MyTrips.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<BudgetItemResponse>> GetAllBudgetItems(Guid tripId)
         {
-            var items = _budgetItemService.GetAllBudgetItems(tripId);
+            var sessionId = GetSessionId();
+            var items = _budgetItemService.GetAllBudgetItems(sessionId, tripId);
 
             if (items is null)
                 return NotFound();
@@ -47,7 +59,8 @@ namespace MyTrips.Api.Controllers
         [HttpGet("{id:guid}")]
         public ActionResult<BudgetItemResponse> GetBudgetItemById(Guid tripId, Guid id)
         {
-            var item = _budgetItemService.GetBudgetItemById(tripId, id);
+            var sessionId = GetSessionId();
+            var item = _budgetItemService.GetBudgetItemById(sessionId, tripId, id);
 
             if (item is null)
                 return NotFound();
@@ -61,7 +74,8 @@ namespace MyTrips.Api.Controllers
             Guid id,
             UpdateBudgetItemRequest request)
         {
-            var updatedItem = _budgetItemService.UpdateBudgetItem(tripId, id, request);
+            var sessionId = GetSessionId();
+            var updatedItem = _budgetItemService.UpdateBudgetItem(sessionId, tripId, id, request);
 
             if (updatedItem is null)
                 return NotFound();
@@ -72,7 +86,8 @@ namespace MyTrips.Api.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteBudgetItem(Guid tripId, Guid id)
         {
-            var deleted = _budgetItemService.DeleteBudgetItem(tripId, id);
+            var sessionId = GetSessionId();
+            var deleted = _budgetItemService.DeleteBudgetItem(sessionId, tripId, id);
 
             if (!deleted)
                 return NotFound();

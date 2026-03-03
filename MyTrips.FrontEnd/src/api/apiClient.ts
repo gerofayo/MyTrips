@@ -1,4 +1,31 @@
-  const BASE_URL = import.meta.env.VITE_API_URL
+const BASE_URL = import.meta.env.VITE_API_URL
+
+// Session ID management
+const SESSION_ID_KEY = 'mytrips_session_id';
+
+export function getSessionId(): string {
+  let sessionId = localStorage.getItem(SESSION_ID_KEY);
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem(SESSION_ID_KEY, sessionId);
+  }
+  return sessionId;
+}
+
+export function setSessionId(sessionId: string): void {
+  localStorage.setItem(SESSION_ID_KEY, sessionId);
+}
+
+export function clearSession(): void {
+  localStorage.removeItem(SESSION_ID_KEY);
+}
+
+function getHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    'X-Session-Id': getSessionId()
+  };
+}
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -13,12 +40,18 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export const apiClient = {
   get: <T>(endpoint: string, options?: RequestInit) => 
-    fetch(`${BASE_URL}${endpoint}`, options).then(res => handleResponse<T>(res)),
+    fetch(`${BASE_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        ...getHeaders(),
+        ...options?.headers
+      }
+    }).then(res => handleResponse<T>(res)),
     
   post: <T>(endpoint: string, data: any, options?: RequestInit) => 
     fetch(`${BASE_URL}${endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getHeaders(),
       body: JSON.stringify(data),
       ...options
     }).then(res => handleResponse<T>(res)),
@@ -26,11 +59,16 @@ export const apiClient = {
   put: <T>(endpoint: string, data: any, options?: RequestInit) => 
     fetch(`${BASE_URL}${endpoint}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getHeaders(),
       body: JSON.stringify(data),
       ...options
     }).then(res => handleResponse<T>(res)),
 
-  delete: (endpoint: string) => 
-    fetch(`${BASE_URL}${endpoint}`, { method: "DELETE" }).then(res => handleResponse<void>(res)),
+  delete: (endpoint: string, options?: RequestInit) => 
+    fetch(`${BASE_URL}${endpoint}`, { 
+      method: "DELETE",
+      headers: getHeaders(),
+      ...options
+    }).then(res => handleResponse<void>(res)),
 };
+

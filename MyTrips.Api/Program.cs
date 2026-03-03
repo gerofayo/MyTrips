@@ -15,9 +15,19 @@ builder.Services.AddControllers()
         );
     });
 
-// Use in-memory repository (no file persistence)
-// Export/Import functionality is available via API endpoints
-builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
+// Session-based repository (scoped per user, no central persistence)
+var sessionManager = new SessionManager(TimeSpan.FromMinutes(30));
+builder.Services.AddSingleton<SessionManager>(sessionManager);
+builder.Services.AddSingleton<SessionTripRepository>();
+builder.Services.AddSingleton<ISessionRepository>(sp => sp.GetRequiredService<SessionTripRepository>());
+
+// Factory for creating session repositories
+builder.Services.AddScoped<Func<Guid, ISessionRepository>>(sp =>
+{
+    var sessionRepository = sp.GetRequiredService<SessionTripRepository>();
+    return sessionId => sessionRepository;
+});
+
 builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BudgetItemService>();
 
@@ -67,3 +77,4 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();
+

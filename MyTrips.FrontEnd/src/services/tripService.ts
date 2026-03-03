@@ -1,4 +1,4 @@
-import { apiClient } from "../api/apiClient";
+import { apiClient, getSessionId } from "../api/apiClient";
 import type { TripResponse, CreateTripRequest } from "../types/Trip";
 
 export async function getTrips(): Promise<TripResponse[]> {
@@ -37,6 +37,9 @@ export async function importTrips(file: File): Promise<{ message: string }> {
   
   return fetch(`${import.meta.env.VITE_API_URL}/trips/import`, {
     method: 'POST',
+    headers: {
+      'X-Session-Id': getSessionId()
+    },
     body: formData
   }).then(res => {
     if (!res.ok) {
@@ -47,7 +50,11 @@ export async function importTrips(file: File): Promise<{ message: string }> {
 }
 
 export async function exportTrips(): Promise<Blob> {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/trips/export`);
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/trips/export`, {
+    headers: {
+      'X-Session-Id': getSessionId()
+    }
+  });
   if (!response.ok) {
     throw new Error('Export failed');
   }
@@ -63,3 +70,4 @@ export const tripService = {
   import: importTrips,
   export: exportTrips
 };
+

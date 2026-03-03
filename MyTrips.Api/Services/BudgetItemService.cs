@@ -7,21 +7,28 @@ namespace MyTrips.Api.Services;
 
 public class BudgetItemService
 {
-    private readonly ITripRepository _tripRepository;
+    private readonly Func<Guid, ISessionRepository> _sessionRepositoryFactory;
 
-    public BudgetItemService(ITripRepository tripRepository)
+    public BudgetItemService(Func<Guid, ISessionRepository> sessionRepositoryFactory)
     {
-        _tripRepository = tripRepository;
+        _sessionRepositoryFactory = sessionRepositoryFactory;
     }
 
-    private Trip? GetTrip(Guid tripId)
+    private ISessionRepository GetRepository(Guid sessionId)
     {
-        return _tripRepository.GetById(tripId);
+        return _sessionRepositoryFactory(sessionId);
     }
 
-    public BudgetItemResponse? CreateBudgetItem(Guid tripId, CreateBudgetItemRequest request)
+    private Trip? GetTrip(Guid sessionId, Guid tripId)
     {
-        var trip = GetTrip(tripId);
+        var repository = GetRepository(sessionId);
+        return repository.GetById(sessionId, tripId);
+    }
+
+    public BudgetItemResponse? CreateBudgetItem(Guid sessionId, Guid tripId, CreateBudgetItemRequest request)
+    {
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, tripId);
         if (trip is null)
             return null;
         
@@ -34,15 +41,15 @@ public class BudgetItemService
             description: request.Description
         );
 
-        _tripRepository.Update(trip);
-
+        repository.Update(sessionId, trip);
 
         return BudgetItemMapper.ModelToResponse(budgetItem);
     }
 
-    public IEnumerable<BudgetItemResponse>? GetAllBudgetItems(Guid tripId)
+    public IEnumerable<BudgetItemResponse>? GetAllBudgetItems(Guid sessionId, Guid tripId)
     {
-        var trip = GetTrip(tripId);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, tripId);
         if (trip is null)
             return null;
 
@@ -50,9 +57,10 @@ public class BudgetItemService
                    .Select(BudgetItemMapper.ModelToResponse);
     }
 
-    public BudgetItemResponse? GetBudgetItemById(Guid tripId, Guid budgetItemId)
+    public BudgetItemResponse? GetBudgetItemById(Guid sessionId, Guid tripId, Guid budgetItemId)
     {
-        var trip = GetTrip(tripId);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, tripId);
         if (trip is null)
             return null;
 
@@ -63,9 +71,10 @@ public class BudgetItemService
         return BudgetItemMapper.ModelToResponse(item);
     }
 
-    public BudgetItemResponse? UpdateBudgetItem(Guid tripId, Guid budgetItemId, UpdateBudgetItemRequest request)
+    public BudgetItemResponse? UpdateBudgetItem(Guid sessionId, Guid tripId, Guid budgetItemId, UpdateBudgetItemRequest request)
     {
-        var trip = GetTrip(tripId);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, tripId);
         if (trip is null)
             return null;
 
@@ -82,14 +91,15 @@ public class BudgetItemService
         if (item is null)
             return null;
 
-        _tripRepository.Update(trip);
+        repository.Update(sessionId, trip);
 
         return BudgetItemMapper.ModelToResponse(item);
     }
 
-    public bool DeleteBudgetItem(Guid tripId, Guid budgetItemId)
+    public bool DeleteBudgetItem(Guid sessionId, Guid tripId, Guid budgetItemId)
     {
-        var trip = GetTrip(tripId);
+        var repository = GetRepository(sessionId);
+        var trip = repository.GetById(sessionId, tripId);
         if (trip is null)
             return false;
 
@@ -97,7 +107,7 @@ public class BudgetItemService
         if (!removed)
             return false;
 
-        _tripRepository.Update(trip);
+        repository.Update(sessionId, trip);
 
         return true;
     }
