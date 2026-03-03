@@ -81,3 +81,9 @@
   min-height: 200px;
   color: var(--text-muted);
 }
+
+/* Move theme toggle to the right on TripFormPage */
+body:has(.trip-form-page) .theme-toggle {
+  left: auto;
+  right: var(--spacing-xl);
+}
