@@ -7,11 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Services
 // =======================
 
-// Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter()
+        );
+    });
 
-builder.Services.AddSingleton<ITripRepository>(provider => 
-    new JsonFileRepository("trips.json"));
+// Use in-memory repository (no file persistence)
+// Export/Import functionality is available via API endpoints
+builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
 builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BudgetItemService>();
 
@@ -32,15 +38,6 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
-
-builder.Services
-    .AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(
-            new System.Text.Json.Serialization.JsonStringEnumConverter()
-        );
-    });
 
 var app = builder.Build();
 
@@ -64,5 +61,9 @@ if (!app.Environment.IsProduction())
 
 // Controllers
 app.MapControllers();
+
+// Use Railway's PORT environment variable (defaults to 8080)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();

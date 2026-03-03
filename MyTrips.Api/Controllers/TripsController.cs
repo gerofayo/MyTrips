@@ -73,52 +73,32 @@ namespace MyTrips.Api.Controllers
             if (file.ContentType != "application/json")
                 return BadRequest("Only JSON files are allowed");
 
-            var tempPath = Path.GetTempFileName();
-            
             try
             {
-                using (var stream = new FileStream(tempPath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-
-                if (_tripRepository is JsonFileRepository jsonRepo)
-                {
-                    jsonRepo.ImportFromFile(tempPath);
-                    return Ok(new { message = "Trips imported successfully" });
-                }
-                else
-                {
-                    return BadRequest("Import functionality is only available with JSON file repository");
-                }
+                using var reader = new StreamReader(file.OpenReadStream());
+                var json = reader.ReadToEnd();
+                
+                _tripRepository.Import(json);
+                return Ok(new { message = "Trips imported successfully" });
             }
             catch (Exception ex)
             {
                 return BadRequest($"Import failed: {ex.Message}");
-            }
-            finally
-            {
-                if (System.IO.File.Exists(tempPath))
-                    System.IO.File.Delete(tempPath);
             }
         }
 
         [HttpGet("export")]
         public IActionResult ExportTrips()
         {
-            if (_tripRepository is JsonFileRepository jsonRepo)
+            try
             {
-                var exportPath = Path.GetTempFileName();
-                jsonRepo.ExportToFile(exportPath);
-
-                var fileBytes = System.IO.File.ReadAllBytes(exportPath);
-                System.IO.File.Delete(exportPath);
-
-                return File(fileBytes, "application/json", "mytrips_export.json");
+                var json = _tripRepository.Export();
+                var bytes = System.Text.Encoding.UTF8.GetBytes(json);
+                return File(bytes, "application/json", "mytrips_export.json");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Export functionality is only available with JSON file repository");
+                return BadRequest($"Export failed: {ex.Message}");
             }
         }
     }

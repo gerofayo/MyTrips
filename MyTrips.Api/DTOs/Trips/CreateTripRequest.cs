@@ -26,7 +26,7 @@ public record class CreateTripRequest
     public DateOnly EndDate { get; set; }
 
     [Required]
-    [Range(0, double.MaxValue)]
+    [Range(0.01, double.MaxValue)]
     public decimal Budget { get; set; }
 
     [Required]

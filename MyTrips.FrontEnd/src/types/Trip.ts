@@ -1,3 +1,5 @@
+import type { BudgetItem } from "./BudgetItem";
+
 export type CreateTripRequest = {
   title: string;
   destination: string;
@@ -20,4 +22,5 @@ export type TripResponse = {
   currency: string;
   imageUrl?: string;
   createdAt: string;
+  budgetItems: BudgetItem[];
 };

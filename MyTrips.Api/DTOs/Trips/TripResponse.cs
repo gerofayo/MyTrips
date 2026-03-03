@@ -9,9 +9,9 @@ public record class TripResponse
     public required string Title { get; set; }
     public required string Destination { get; set; }
     public required string DestinationTimeZone { get; set; }
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
-    public DateOnly CreatedAt { get; set; }
+    public string StartDate { get; set; } = string.Empty;
+    public string EndDate { get; set; } = string.Empty;
+    public string CreatedAt { get; set; } = string.Empty;
     public decimal Budget { get; set; }
     public required string Currency { get; set; }
 

@@ -1,27 +1,35 @@
 namespace MyTrips.Api.Models;
 
+using System.Text.Json.Serialization;
 using MyTrips.Api.Enums;
 
 public class BudgetItem
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; set; }
 
-    public Guid TripId { get; private set; }
+    public Guid TripId { get; set; }
+
+    // JsonIgnore prevents circular reference when serializing to JSON
+    [JsonIgnore]
     public Trip Trip { get; private set; } = null!;
 
-    public string Title { get; private set; } = null!;
-    public ExpenseCategory Category { get; private set; }
+    public string Title { get; set; } = null!;
+    public ExpenseCategory Category { get; set; }
 
-    public decimal Amount { get; private set; }
+    public decimal Amount { get; set; }
 
-    public bool IsEstimated { get; private set; }
+    public bool IsEstimated { get; set; }
 
-    public DateTimeOffset? Date { get; private set; }
+    public DateTimeOffset? Date { get; set; }
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; set; }
 
-    public string? Description { get; private set; }
+    public string? Description { get; set; }
 
+    // Parameterless constructor required for JSON deserialization
+    public BudgetItem() { }
+
+    [JsonConstructor]
     public BudgetItem(
         Guid tripId,
         string title,
@@ -49,6 +57,31 @@ public class BudgetItem
     {
         IsEstimated = false;
     }
+    
+    public BudgetItem WithUpdates(
+        string? title = null,
+        ExpenseCategory? category = null,
+        decimal? amount = null,
+        bool? isEstimated = null,
+        DateTimeOffset? date = null,
+        string? description = null)
+    {
+        var newTitle = title ?? Title;
+        var newCategory = category ?? Category;
+        var newAmount = amount ?? Amount;
+
+        Validate(newTitle, newCategory, newAmount);
+
+        return new BudgetItem(
+            TripId,
+            title?.Trim() ?? Title,
+            category ?? Category,
+            amount ?? Amount,
+            isEstimated ?? IsEstimated,
+            date ?? Date,
+            description?.Trim() ?? Description
+        );
+    }
 
     public void Update(
         string? title,
@@ -64,12 +97,12 @@ public class BudgetItem
 
         Validate(newTitle, newCategory, newAmount);
 
-        Title = newTitle.Trim();
+        Title = newTitle?.Trim() ?? Title;
         Category = newCategory;
         Amount = newAmount;
         IsEstimated = isEstimated ?? IsEstimated;
-        Date = date;
-        Description = description?.Trim();
+        Date = date ?? Date;
+        Description = description?.Trim() ?? Description;
     }
 
     private void Validate(

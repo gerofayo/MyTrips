@@ -2,6 +2,7 @@ using System;
 using MyTrips.Api.DTOs;
 using MyTrips.Api.DTOs.Trips;
 using MyTrips.Api.Models;
+using MyTrips.Api.Mappers;
 
 namespace MyTrips.Api.Mappers;
 
@@ -15,17 +16,19 @@ public static class TripMapper
             Title = trip.Title,
             Destination = trip.Destination,
             DestinationTimeZone = trip.DestinationTimeZone,
-            StartDate = trip.StartDate,
-            EndDate = trip.EndDate,
+            StartDate = trip.StartDate.ToString("yyyy-MM-dd"),
+            EndDate = trip.EndDate.ToString("yyyy-MM-dd"),
             Budget = trip.InitialBudget,
             Currency = trip.Currency,
-            ImageUrl = trip.ImageUrl
+            ImageUrl = trip.ImageUrl,
+            BudgetItems = trip.BudgetItems.Select(BudgetItemMapper.ModelToResponse).ToList(),
+            CreatedAt = trip.CreatedAt.ToString("yyyy-MM-dd")
         };
     }
 
     public static Trip ResponseToModel(CreateTripRequest request)
     {
-        return new Trip(
+        var trip = new Trip(
             title: request.Title,
             destination: request.Destination,
             destinationTimeZone: request.DestinationTimeZone,
@@ -35,6 +38,24 @@ public static class TripMapper
             currency: request.Currency,
             imageUrl: request.ImageUrl
         );
+
+        // Add initial budget items if provided
+        if (request.BudgetItems?.Count > 0)
+        {
+            foreach (var itemRequest in request.BudgetItems)
+            {
+                trip.AddBudgetItem(
+                    title: itemRequest.Title,
+                    amount: itemRequest.Amount,
+                    category: itemRequest.Category,
+                    isEstimated: itemRequest.IsEstimated,
+                    date: itemRequest.Date,
+                    description: itemRequest.Description
+                );
+            }
+        }
+
+        return trip;
     }
 
 }

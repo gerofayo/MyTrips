@@ -1,0 +1,86 @@
+[
+  {
+    "Id": "2aa9427c-cbd0-4564-94ca-94550dec787d",
+    "Title": "Tokyo 2028",
+    "Destination": "Japan",
+    "DestinationTimeZone": "Asia/Tokyo",
+    "StartDate": "2028-06-05",
+    "EndDate": "2028-06-23",
+    "InitialBudget": 5000000,
+    "Currency": "JPY",
+    "ImageUrl": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=500\u0026auto=format\u0026fit=crop\u0026q=60\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dG9reW98ZW58MHx8MHx8fDA%3D",
+    "CreatedAt": "2026-03-03T16:12:00.6427765Z",
+    "BudgetItems": []
+  },
+  {
+    "Id": "53f8097b-024d-4b4c-8b5c-6cc2d0be06ea",
+    "Title": "New york",
+    "Destination": "United States",
+    "DestinationTimeZone": "America/New_York",
+    "StartDate": "2026-03-08",
+    "EndDate": "2026-03-27",
+    "InitialBudget": 3000,
+    "Currency": "USD",
+    "ImageUrl": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80\u0026w=1170\u0026auto=format\u0026fit=crop\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "CreatedAt": "2026-03-03T16:12:00.6428009Z",
+    "BudgetItems": []
+  },
+  {
+    "Id": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
+    "Title": "Buenos Aires \uD83D\uDE0E",
+    "Destination": "Argentina",
+    "DestinationTimeZone": "America/Argentina/Buenos_Aires",
+    "StartDate": "2027-01-04",
+    "EndDate": "2027-01-29",
+    "InitialBudget": 2000000,
+    "Currency": "ARS",
+    "ImageUrl": "https://images.unsplash.com/photo-1600627094717-809e6a3f29f0?q=80\u0026w=765\u0026auto=format\u0026fit=crop\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "CreatedAt": "2026-03-03T16:12:00.6428185Z",
+    "BudgetItems": [
+      {
+        "Id": "fa8ab96a-8278-4b26-a703-d5a926815b54",
+        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
+        "Title": "Uber",
+        "Category": 1,
+        "Amount": 100000,
+        "IsEstimated": false,
+        "Date": null,
+        "CreatedAt": "2026-03-03T16:12:28.8969003Z",
+        "Description": ""
+      },
+      {
+        "Id": "77fd0f11-c1ee-4f69-bd03-f8192a40b57a",
+        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
+        "Title": "Pizza",
+        "Category": 0,
+        "Amount": 20000,
+        "IsEstimated": false,
+        "Date": "2027-01-04T15:30:00+00:00",
+        "CreatedAt": "2026-03-03T16:13:12.7341064Z",
+        "Description": "Best Buenos Aires pizza..."
+      },
+      {
+        "Id": "6fdda1fe-4b6a-4411-9f05-0f1872c20fd2",
+        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
+        "Title": "Theater tickets",
+        "Category": 3,
+        "Amount": 15000,
+        "IsEstimated": false,
+        "Date": "2027-01-05T22:00:00+00:00",
+        "CreatedAt": "2026-03-03T16:14:25.2415364Z",
+        "Description": "Phantom of the opera"
+      },
+      {
+        "Id": "de148bf8-7e39-48b5-8ebc-a22cd98626a6",
+        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
+        "Title": "Best hotel",
+        "Category": 2,
+        "Amount": 250000,
+        "IsEstimated": false,
+        "Date": null,
+        "CreatedAt": "2026-03-03T16:14:50.5562814Z",
+        "Description": ""
+      }
+    ]
+  }
+]

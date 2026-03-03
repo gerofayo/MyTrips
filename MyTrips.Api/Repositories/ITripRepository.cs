@@ -10,4 +10,8 @@ public interface ITripRepository
     void Add(Trip trip);
     void Update(Trip trip);
     void Delete(Guid id);
+    
+    // Export/Import methods - works with in-memory storage
+    string Export();
+    void Import(string json);
 }

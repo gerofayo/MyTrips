@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using MyTrips.Api.Models;
 
@@ -10,6 +11,7 @@ public class JsonFileRepository : ITripRepository
 {
     private readonly string _filePath;
     private List<Trip> _trips;
+    private readonly object _lock = new();
 
     public JsonFileRepository(string filePath = "trips.json")
     {
@@ -38,12 +40,15 @@ public class JsonFileRepository : ITripRepository
 
     private void SaveToFile()
     {
-        var options = new JsonSerializerOptions
+        lock (_lock)
         {
-            WriteIndented = true
-        };
-        var json = JsonSerializer.Serialize(_trips, options);
-        File.WriteAllText(_filePath, json);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            var json = JsonSerializer.Serialize(_trips, options);
+            File.WriteAllText(_filePath, json);
+        }
     }
 
     public IEnumerable<Trip> GetAll()
@@ -78,49 +83,68 @@ public class JsonFileRepository : ITripRepository
         }
     }
 
-    public void ImportFromFile(string filePath)
-    {
-        if (!File.Exists(filePath))
-            throw new FileNotFoundException($"File not found: {filePath}");
-
-        try
-        {
-            var json = File.ReadAllText(filePath);
-            var importedTrips = JsonSerializer.Deserialize<List<Trip>>(json);
-            
-            if (importedTrips != null)
-            {
-                // Merge trips, avoiding duplicates
-                foreach (var importedTrip in importedTrips)
-                {
-                    var existingTrip = _trips.FirstOrDefault(t => t.Id == importedTrip.Id);
-                    if (existingTrip == null)
-                    {
-                        _trips.Add(importedTrip);
-                    }
-                    else
-                    {
-                        // Update existing trip with imported data
-                        var index = _trips.IndexOf(existingTrip);
-                        _trips[index] = importedTrip;
-                    }
-                }
-                SaveToFile();
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException($"Failed to import from file: {ex.Message}");
-        }
-    }
-
-    public void ExportToFile(string filePath)
+    public string Export()
     {
         var options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNameCaseInsensitive = true
         };
-        var json = JsonSerializer.Serialize(_trips, options);
-        File.WriteAllText(filePath, json);
+        return JsonSerializer.Serialize(_trips, options);
+    }
+
+    public void Import(string json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            throw new ArgumentException("JSON content cannot be empty", nameof(json));
+
+        try
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var importedTrips = JsonSerializer.Deserialize<List<Trip>>(json, options);
+            
+            if (importedTrips == null)
+                throw new InvalidOperationException("Failed to deserialize trips from JSON");
+
+            // Merge trips, avoiding duplicates
+            foreach (var importedTrip in importedTrips)
+            {
+                var existingTrip = _trips.FirstOrDefault(t => t.Id == importedTrip.Id);
+                if (existingTrip == null)
+                {
+                    _trips.Add(importedTrip);
+                }
+                else
+                {
+                    // Existing trip - merge budget items from both sides
+                    var index = _trips.IndexOf(existingTrip);
+                    var existingBudgetItems = existingTrip.BudgetItems?.ToList() ?? new List<BudgetItem>();
+                    var importedBudgetItems = importedTrip.BudgetItems?.ToList() ?? new List<BudgetItem>();
+                    
+                    // Update trip with imported data
+                    _trips[index] = importedTrip;
+                    
+                    // Merge budget items: add imported items that don't exist in current
+                    var existingItemIds = existingBudgetItems.Select(b => b.Id).ToHashSet();
+                    foreach (var importedItem in importedBudgetItems)
+                    {
+                        if (!existingItemIds.Contains(importedItem.Id))
+                        {
+                            existingBudgetItems.Add(importedItem);
+                        }
+                    }
+                    
+                    _trips[index].BudgetItems = existingBudgetItems;
+                }
+            }
+            SaveToFile();
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to import trips: {ex.Message}", ex);
+        }
     }
 }

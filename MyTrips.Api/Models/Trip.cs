@@ -1,28 +1,46 @@
-namespace MyTrips.Api.Models;
-
+using System.Text.Json.Serialization;
 using MyTrips.Api.Enums;
+
+namespace MyTrips.Api.Models;
 
 
 public class Trip
 {
-    public Guid Id { get; private set; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
-    public string Title { get; private set; }
-    public string Destination { get; private set; }
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = string.Empty;
 
-    public string DestinationTimeZone { get; private set; }
+    [JsonPropertyName("destination")]
+    public string Destination { get; set; } = string.Empty;
 
-    public DateOnly StartDate { get; private set; }
-    public DateOnly EndDate { get; private set; }
+    [JsonPropertyName("destinationTimeZone")]
+    public string DestinationTimeZone { get; set; } = string.Empty;
 
-    public decimal InitialBudget { get; private set; }
-    public string Currency { get; private set; }
+    [JsonPropertyName("startDate")]
+    public DateOnly StartDate { get; set; }
 
-    public string? ImageUrl { get; private set; }
+    [JsonPropertyName("endDate")]
+    public DateOnly EndDate { get; set; }
 
-    public DateTime CreatedAt { get; private set; }
+    [JsonPropertyName("initialBudget")]
+    public decimal InitialBudget { get; set; }
 
-    public ICollection<BudgetItem> BudgetItems { get; private set; } = new List<BudgetItem>();
+    [JsonPropertyName("currency")]
+    public string Currency { get; set; } = string.Empty;
+
+    [JsonPropertyName("imageUrl")]
+    public string? ImageUrl { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("budgetItems")]
+    public ICollection<BudgetItem> BudgetItems { get; set; } = new List<BudgetItem>();
+
+    // Parameterless constructor required for JSON deserialization
+    public Trip() { }
 
     public Trip(
         string title,
@@ -117,9 +135,17 @@ public class Trip
         if (item is null)
             return null;
 
-        item.Update(title, category, amount, isEstimated, date, description);
+        var updatedItem = item.WithUpdates(title, category, amount, isEstimated, date, description);
 
-        return item;
+        // Replace the item in the collection with the new immutable instance
+        var index = BudgetItems.ToList().FindIndex(x => x.Id == budgetItemId);
+        if (index >= 0)
+        {
+            BudgetItems.Remove(item);
+            BudgetItems.Add(updatedItem);
+        }
+
+        return updatedItem;
     }
 
     public bool DeleteBudgetItem(Guid budgetItemId)

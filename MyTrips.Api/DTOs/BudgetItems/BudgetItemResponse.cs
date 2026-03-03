@@ -8,7 +8,7 @@ public record class BudgetItemResponse
     public string Title { get; set; } = null!;
     public ExpenseCategory Category { get; set; }
     public decimal Amount { get; set; }
-    public DateTimeOffset? Date { get; set; }
+    public string? Date { get; set; }
     public bool IsEstimated { get; set; }
     public string? Description { get; set; }
 }

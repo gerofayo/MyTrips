@@ -7,7 +7,6 @@ import { TripInfoCard } from "../components/TripInfoCard";
 import { TripCalendar } from "../components/TripCalendar";
 import { BudgetItemList } from "../components/BudgetItemList";
 import { BudgetItemForm } from "../components/BudgetItemForm";
-import BottomNavBar from "../components/BottomNavBar";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { deleteTrip } from "../services/tripService";
 import { PATHS } from "../routes/paths";
