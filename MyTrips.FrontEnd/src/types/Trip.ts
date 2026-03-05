@@ -3,7 +3,6 @@ import type { BudgetItem } from "./BudgetItem";
 export type CreateTripRequest = {
   title: string;
   destination: string;
-  destinationTimeZone: string;
   startDate: string;
   endDate: string;
   budget: number;
@@ -15,7 +14,6 @@ export type TripResponse = {
   id: string;
   title: string;
   destination: string;
-  destinationTimeZone: string;
   startDate: string;
   endDate: string;
   budget: number;
@@ -24,3 +22,4 @@ export type TripResponse = {
   createdAt: string;
   budgetItems: BudgetItem[];
 };
+

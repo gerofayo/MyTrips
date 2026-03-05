@@ -5,13 +5,13 @@ import "../styles/components/BudgetItemList.css";
 import "../styles/components/ExpenseCategoryColors.css";
 import { TEXTS } from "../config/texts";
 import { getCategoryClass } from "../utils/category";
+import { parseDateAsUTC } from "../utils/date";
 
 interface Props {
   items: BudgetItem[];
   onDelete: (id: string) => void;
   onEdit: (item: BudgetItem) => void;
   isSubmitting: boolean;
-  destinationTimeZone: string;
   selectedDate?: string | null;
 }
 
@@ -19,8 +19,7 @@ export const BudgetItemList = ({
   items,
   onDelete,
   onEdit,
-  isSubmitting,
-  destinationTimeZone
+  isSubmitting
 }: Props) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
@@ -42,12 +41,14 @@ export const BudgetItemList = ({
     items.forEach((item) => {
       let dateKey: string = TEXTS.budgetItemList.unscheduledKey;
       if (item.date) {
+        // Parse as UTC for consistent date handling
+        const date = new Date(item.date);
         dateKey = new Intl.DateTimeFormat("en-CA", {
-          timeZone: destinationTimeZone,
+          timeZone: "UTC",
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
-        }).format(new Date(item.date));
+        }).format(date);
       }
 
       if (!grouped[dateKey]) grouped[dateKey] = [];
@@ -64,12 +65,15 @@ export const BudgetItemList = ({
       grouped[date].sort((a, b) => {
         if (!a.date) return 1;
         if (!b.date) return -1;
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
+        // Use UTC timestamp for consistent sorting
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
       });
     });
 
     return { grouped, sortedDates };
-  }, [items, destinationTimeZone]);
+  }, [items]);
 
   const getDayTotal = (dayItems: BudgetItem[]) =>
     dayItems.reduce((sum, i) => sum + i.amount, 0);
@@ -78,12 +82,13 @@ export const BudgetItemList = ({
     if (dateStr === TEXTS.budgetItemList.unscheduledKey) {
       return TEXTS.budgetItemList.unscheduledTitle;
     }
-    const date = new Date(`${dateStr}T00:00:00`);
+    // Use UTC parsing for consistent date handling
+    const date = parseDateAsUTC(dateStr);
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       day: "numeric",
       month: "long",
-      timeZone: destinationTimeZone,
+      timeZone: "UTC",
     }).format(date);
   };
 
@@ -92,7 +97,7 @@ export const BudgetItemList = ({
     return new Intl.DateTimeFormat("en-US", {
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: destinationTimeZone,
+      timeZone: "UTC",
     }).format(new Date(dateStr));
   };
 
@@ -194,3 +199,4 @@ export const BudgetItemList = ({
     </div>
   );
 };
+
