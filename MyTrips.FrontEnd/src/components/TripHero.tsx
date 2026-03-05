@@ -1,4 +1,5 @@
 import type { TripResponse } from "../types/Trip";
+import { IMAGES } from "../config/images";
 import "../styles/components/TripHero.css";
 
 interface Props {
@@ -6,14 +7,14 @@ interface Props {
 }
 
 export const TripHero = ({ trip }: Props) => {
-  // Image URL logic: User provided -> Fallback -> LoremFlickr
+  // Image URL logic: User provided -> Fallback
   const getTripImage = () => {
     if (trip.imageUrl) {
       return trip.imageUrl;
     }
     
-    // Generic fallback image
-    return '/src/assets/trip-fallback.jpg';
+    // Generic fallback image from Unsplash
+    return IMAGES.tripFallback;
   };
 
   const heroImage = getTripImage();
