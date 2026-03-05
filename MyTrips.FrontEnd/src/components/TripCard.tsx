@@ -4,6 +4,7 @@ import type { TripResponse } from "../types/Trip";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
 import { parseDateAsUTC } from "../utils/date";
+import { IMAGES } from "../config/images";
 import "../styles/components/TripCard.css";
 
 interface Props {
@@ -37,7 +38,7 @@ export default function TripCard({ trip }: Props) {
     if (trip.imageUrl) {
       return trip.imageUrl;
     }
-    return '/src/assets/trip-fallback.jpg';
+    return IMAGES.tripFallback;
   };
 
   const cardImage = getTripImage();
