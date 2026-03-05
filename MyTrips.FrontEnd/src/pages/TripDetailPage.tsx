@@ -134,7 +134,6 @@ export default function TripDetailPage() {
             startDate={trip.startDate}
             endDate={trip.endDate}
             selectedDate={selectedDate}
-            destinationTimeZone={trip.destinationTimeZone}
             onDateSelect={setSelectedDate}
           />
 
@@ -161,7 +160,6 @@ export default function TripDetailPage() {
           }}
           onEdit={handleEditClick}
           isSubmitting={loadingItems}
-          destinationTimeZone={trip.destinationTimeZone}
           selectedDate={selectedDate}
         />
 

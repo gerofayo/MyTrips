@@ -7,7 +7,6 @@ interface TripCalendarProps {
   startDate: string;
   endDate: string;
   selectedDate: string | null;
-  destinationTimeZone: string;
   onDateSelect: (date: string | null) => void;
 }
 
@@ -15,7 +14,6 @@ export const TripCalendar = ({
   startDate,
   endDate,
   selectedDate,
-  destinationTimeZone,
   onDateSelect
 }: TripCalendarProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,8 +50,8 @@ export const TripCalendar = ({
         </button>
 
         {days.map((day) => {
-          const dayName = getDayName(day, destinationTimeZone);
-          const dayNumber = getDayNumber(day, destinationTimeZone);
+          const dayName = getDayName(day);
+          const dayNumber = getDayNumber(day);
 
           return (
             <button
@@ -75,3 +73,4 @@ export const TripCalendar = ({
     </div>
   );
 };
+

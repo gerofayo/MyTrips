@@ -12,13 +12,11 @@ type Props = {
 
 function TripForm({ onSubmit, initialData }: Props) {
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
-  const [availableTimezones, setAvailableTimezones] = useState<string[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<CreateTripRequest>({
     title: "",
     destination: "",
-    destinationTimeZone: "",
     startDate: "",
     endDate: "",
     budget: 0,
@@ -33,7 +31,6 @@ function TripForm({ onSubmit, initialData }: Props) {
       code,
       name: country.countryName,
       currencyCode: country.currencyCode,
-      timezones: country.timeZone || [],
     }));
   }, []);
 
@@ -56,7 +53,6 @@ function TripForm({ onSubmit, initialData }: Props) {
       const countryEntry = countries.find((c) => c.name === initialData.destination);
       if (countryEntry) {
         setSelectedCountryCode(countryEntry.code);
-        setAvailableTimezones(countryEntry.timezones);
       }
     }
   }, [initialData, countries]);
@@ -76,16 +72,12 @@ function TripForm({ onSubmit, initialData }: Props) {
     const country = countries.find((c) => c.code === code);
     
     if (!country) {
-      setAvailableTimezones([]);
       return;
     }
 
-    const zones = country.timezones;
-    setAvailableTimezones(zones);
     setFormData((prev) => ({
       ...prev,
       destination: country.name,
-      destinationTimeZone: zones.length === 1 ? zones[0] : "",
       currency: country.currencyCode || prev.currency,
     }));
   };
@@ -129,27 +121,6 @@ function TripForm({ onSubmit, initialData }: Props) {
             <option value="">{TEXTS.tripForm.selectCountryPlaceholder}</option>
             {countries.map((c) => (
               <option key={c.code} value={c.code}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="section-label">{TEXTS.tripForm.timezoneLabel}</label>
-          <select
-            className="form-select"
-            name="destinationTimeZone"
-            value={formData.destinationTimeZone}
-            onChange={handleChange}
-            required
-            disabled={availableTimezones.length === 0}
-          >
-            <option value="">
-              {availableTimezones.length === 0
-                ? TEXTS.tripForm.timezonePlaceholderNoCountry
-                : TEXTS.tripForm.timezonePlaceholder}
-            </option>
-            {availableTimezones.map((tz) => (
-              <option key={tz} value={tz}>{tz}</option>
             ))}
           </select>
         </div>
@@ -228,3 +199,4 @@ function TripForm({ onSubmit, initialData }: Props) {
 }
 
 export default TripForm;
+
