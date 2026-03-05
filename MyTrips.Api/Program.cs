@@ -31,18 +31,36 @@ builder.Services.AddScoped<Func<Guid, ISessionRepository>>(sp =>
 builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<BudgetItemService>();
 
+// CORS - Use environment variable for allowed origins (comma-separated)
+// In Development: default to localhost:5173
+// In Production: require CORS_ALLOWED_ORIGINS environment variable
+var isDevelopment = builder.Environment.IsDevelopment();
+var allowedOrigins = builder.Configuration["CORS_ALLOWED_ORIGINS"] 
+    ?? (isDevelopment ? "http://localhost:5173" : "");
 
-// OpenAPI - disabled for Railway compatibility
-// builder.Services.AddSwaggerGen();
+var corsOrigins = allowedOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries)
+    .Select(o => o.Trim())
+    .ToArray();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+            if (corsOrigins.Length > 0)
+            {
+                policy.WithOrigins(corsOrigins)
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
+            }
+            else
+            {
+                // Fallback: allow any origin in production if not configured
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            }
         });
 });
 

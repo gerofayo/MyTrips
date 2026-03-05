@@ -1,4 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL
+// Get API URL from environment variable or use default for development
+const BASE_URL = typeof import.meta.env.VITE_API_URL !== 'undefined' 
+  ? import.meta.env.VITE_API_URL 
+  : '/api';
 
 // Session ID management
 const SESSION_ID_KEY = 'mytrips_session_id';
