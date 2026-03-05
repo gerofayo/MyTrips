@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { getBudgetItemCategories } from "../services/budgetItemService";
 import { TEXTS } from "../config/texts";
+import { SearchableSelect, type SearchableSelectOption } from "./SearchableSelect";
 import "../styles/components/BudgetItemForm.css";
 
 type Props = {
@@ -66,6 +67,19 @@ export const BudgetItemForm = ({
     }));
   };
 
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      category: value,
+    }));
+  };
+
+  // Prepare options for SearchableSelect
+  const categoryOptions: SearchableSelectOption[] = categories.map((cat) => ({
+    value: cat,
+    label: cat,
+  }));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -127,16 +141,13 @@ export const BudgetItemForm = ({
       <div className="form-row budget-item-two-col">
         <div className="form-group">
           <label className="section-label">{TEXTS.budgetItemForm.categoryLabel}</label>
-          <select 
-            name="category" 
-            className="form-input" 
-            value={formData.category} 
-            onChange={handleChange} 
+          <SearchableSelect
+            options={categoryOptions}
+            value={formData.category}
+            onChange={handleCategoryChange}
+            placeholder={TEXTS.budgetItemForm.categoryPlaceholder}
             required
-          >
-            <option value="">{TEXTS.budgetItemForm.categoryPlaceholder}</option>
-            {categories.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
-          </select>
+          />
         </div>
 
         {(selectedDate || initialData?.date) ? (

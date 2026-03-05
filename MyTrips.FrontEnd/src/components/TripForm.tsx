@@ -3,6 +3,7 @@ import type { CreateTripRequest } from "../types/Trip";
 import { getAllCountries, getAllCurrencies } from "country-tz-currency";
 import { logger } from "../utils/logger";
 import { TEXTS } from "../config/texts";
+import { SearchableSelect, type SearchableSelectOption } from "./SearchableSelect";
 import "../styles/forms.css";
 
 type Props = {
@@ -66,8 +67,7 @@ function TripForm({ onSubmit, initialData }: Props) {
     }));
   };
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const code = e.target.value;
+  const handleCountryChange = (code: string) => {
     setSelectedCountryCode(code);
     const country = countries.find((c) => c.code === code);
     
@@ -81,6 +81,24 @@ function TripForm({ onSubmit, initialData }: Props) {
       currency: country.currencyCode || prev.currency,
     }));
   };
+
+  const handleCurrencyChange = (code: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      currency: code,
+    }));
+  };
+
+  // Prepare options for SearchableSelect
+  const countryOptions: SearchableSelectOption[] = countries.map((c) => ({
+    value: c.code,
+    label: c.name,
+  }));
+
+  const currencyOptions: SearchableSelectOption[] = currencies.map((curr) => ({
+    value: curr,
+    label: curr,
+  }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,12 +135,13 @@ function TripForm({ onSubmit, initialData }: Props) {
       <div className="form-grid">
         <div className="form-group">
           <label className="section-label">{TEXTS.tripForm.destinationCountryLabel}</label>
-          <select className="form-select" value={selectedCountryCode} onChange={handleCountryChange} required>
-            <option value="">{TEXTS.tripForm.selectCountryPlaceholder}</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>{c.name}</option>
-            ))}
-          </select>
+          <SearchableSelect
+            options={countryOptions}
+            value={selectedCountryCode}
+            onChange={handleCountryChange}
+            placeholder={TEXTS.tripForm.selectCountryPlaceholder}
+            required
+          />
         </div>
       </div>
 
@@ -170,12 +189,13 @@ function TripForm({ onSubmit, initialData }: Props) {
 
         <div className="form-group">
           <label className="section-label">{TEXTS.tripForm.currencyLabel}</label>
-          <select className="form-select" name="currency" value={formData.currency} onChange={handleChange} required>
-            <option value="">{TEXTS.tripForm.currencyPlaceholder}</option>
-            {currencies.map((curr) => (
-              <option key={curr} value={curr}>{curr}</option>
-            ))}
-          </select>
+          <SearchableSelect
+            options={currencyOptions}
+            value={formData.currency}
+            onChange={handleCurrencyChange}
+            placeholder={TEXTS.tripForm.currencyPlaceholder}
+            required
+          />
         </div>
       </div>
 
