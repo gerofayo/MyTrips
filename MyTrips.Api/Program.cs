@@ -90,8 +90,17 @@ app.MapGet("/health", () => new { status = "healthy", timestamp = DateTime.UtcNo
 // Controllers
 app.MapControllers();
 
-// Use Railway's PORT environment variable (defaults to 8080)
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+// Use Railway's PORT environment variable (defaults to 8080 in production)
+// In development, use the port from launchSettings.json (5234)
+var port = Environment.GetEnvironmentVariable("PORT");
+if (string.IsNullOrEmpty(port) && !app.Environment.IsProduction())
+{
+    port = "5234";
+}
+else if (string.IsNullOrEmpty(port))
+{
+    port = "8080";
+}
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();

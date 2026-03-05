@@ -7,7 +7,6 @@ public class TripResponse
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Destination { get; set; } = string.Empty;
-    public string DestinationTimeZone { get; set; } = string.Empty;
     public string StartDate { get; set; } = string.Empty;
     public string EndDate { get; set; } = string.Empty;
     public string CreatedAt { get; set; } = string.Empty;
@@ -19,3 +18,4 @@ public class TripResponse
     public ICollection<BudgetItemResponse> BudgetItems { get; set; } = new List<BudgetItemResponse>();
 
 }
+

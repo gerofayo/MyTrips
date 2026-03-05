@@ -14,10 +14,6 @@ public class CreateTripRequest
     public string Destination { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(100)]
-    public string DestinationTimeZone { get; set; } = string.Empty;
-
-    [Required]
     public DateOnly StartDate { get; set; }
 
     [Required]
@@ -37,3 +33,4 @@ public class CreateTripRequest
     public ICollection<CreateBudgetItemRequest> BudgetItems { get; set; } = new List<CreateBudgetItemRequest>();
 
 }
+

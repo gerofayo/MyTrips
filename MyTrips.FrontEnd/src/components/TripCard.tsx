@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import type { TripResponse } from "../types/Trip";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
+import { parseDateAsUTC } from "../utils/date";
 import "../styles/components/TripCard.css";
 
 interface Props {
@@ -12,13 +13,14 @@ interface Props {
 export default function TripCard({ trip }: Props) {
   const navigate = useNavigate();
 
-  const formatDate = (dateString: string, timezone: string) => {
+  const formatDate = (dateString: string) => {
     try {
-      const date = new Date(`${dateString}T00:00:00`);
+      // Use UTC parsing to ensure consistent behavior
+      const date = parseDateAsUTC(dateString);
       return new Intl.DateTimeFormat('en-US', {
         month: 'short',
         day: 'numeric',
-        timeZone: timezone,
+        timeZone: 'UTC',
       }).format(date);
     } catch (error) {
       logger.error(`Error formatting date for trip ${trip.id}`, error);
@@ -67,10 +69,11 @@ export default function TripCard({ trip }: Props) {
         <div className="item-meta trip-card-footer">
           <span className="trip-card-date-text">
             <Icon icon="mdi:calendar" className="trip-card-date-icon" />
-            {formatDate(trip.startDate, trip.destinationTimeZone)} — {formatDate(trip.endDate, trip.destinationTimeZone)}
+            {formatDate(trip.startDate)} — {formatDate(trip.endDate)}
           </span>
         </div>
       </div>
     </div>
   );
 }
+

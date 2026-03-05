@@ -15,7 +15,6 @@ public static class TripMapper
             Id = trip.Id,
             Title = trip.Title,
             Destination = trip.Destination,
-            DestinationTimeZone = trip.DestinationTimeZone,
             StartDate = trip.StartDate.ToString("yyyy-MM-dd"),
             EndDate = trip.EndDate.ToString("yyyy-MM-dd"),
             Budget = trip.InitialBudget,
@@ -31,7 +30,6 @@ public static class TripMapper
         var trip = new Trip(
             title: request.Title,
             destination: request.Destination,
-            destinationTimeZone: request.DestinationTimeZone,
             startDate: request.StartDate,
             endDate: request.EndDate,
             initialBudget: request.Budget,
@@ -59,3 +57,4 @@ public static class TripMapper
     }
 
 }
+

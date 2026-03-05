@@ -59,7 +59,6 @@ public class TripService
         trip.Update(
             title: request.Title,
             destination: request.Destination,
-            destinationTimeZone: request.DestinationTimeZone,
             startDate: request.StartDate,
             endDate: request.EndDate,
             initialBudget: request.Budget,

@@ -15,9 +15,6 @@ public class Trip
     [JsonPropertyName("destination")]
     public string Destination { get; set; } = string.Empty;
 
-    [JsonPropertyName("destinationTimeZone")]
-    public string DestinationTimeZone { get; set; } = string.Empty;
-
     [JsonPropertyName("startDate")]
     public DateOnly StartDate { get; set; }
 
@@ -45,7 +42,6 @@ public class Trip
     public Trip(
         string title,
         string destination,
-        string destinationTimeZone,
         DateOnly startDate,
         DateOnly endDate,
         decimal initialBudget,
@@ -53,12 +49,11 @@ public class Trip
         string? imageUrl = null
         )
     {
-        Validate(title, destination, destinationTimeZone, startDate, endDate, initialBudget, currency);
+        Validate(title, destination, startDate, endDate, initialBudget, currency);
 
         Id = Guid.NewGuid();
         Title = title.Trim();
         Destination = destination.Trim();
-        DestinationTimeZone = destinationTimeZone.Trim();
         StartDate = startDate;
         EndDate = endDate;
         InitialBudget = initialBudget;
@@ -70,7 +65,6 @@ public class Trip
     public void Update(
         string? title,
         string? destination,
-        string? destinationTimeZone,
         DateOnly? startDate,
         DateOnly? endDate,
         decimal? initialBudget,
@@ -79,17 +73,15 @@ public class Trip
     {
         var newTitle = title?.Trim() ?? Title;
         var newDestination = destination?.Trim() ?? Destination;
-        var newDestinationTimeZone = destinationTimeZone?.Trim() ?? DestinationTimeZone;
         var newStartDate = startDate ?? StartDate;
         var newEndDate = endDate ?? EndDate;
         var newBudget = initialBudget ?? InitialBudget;
         var newCurrency = currency ?? Currency;
 
-        Validate(newTitle, newDestination, newDestinationTimeZone, newStartDate, newEndDate, newBudget, newCurrency);
+        Validate(newTitle, newDestination, newStartDate, newEndDate, newBudget, newCurrency);
 
         Title = newTitle;
         Destination = newDestination;
-        DestinationTimeZone = newDestinationTimeZone;
         StartDate = newStartDate;
         EndDate = newEndDate;
         InitialBudget = newBudget;
@@ -181,7 +173,6 @@ public class Trip
     private void Validate(
         string title,
         string destination,
-        string destinationTimeZone,
         DateOnly startDate,
         DateOnly endDate,
         decimal budget,
@@ -193,9 +184,6 @@ public class Trip
         if (string.IsNullOrWhiteSpace(destination))
             throw new ArgumentException("Destination is required");
 
-        if (string.IsNullOrWhiteSpace(destinationTimeZone))
-            throw new ArgumentException("Destination time zone is required");
-
         if (endDate < startDate)
             throw new ArgumentException("End date must be after start date");
 
@@ -206,3 +194,4 @@ public class Trip
             throw new ArgumentException("Currency is required");
     }
 }
+
