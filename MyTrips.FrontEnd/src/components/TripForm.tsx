@@ -37,7 +37,8 @@ function TripForm({ onSubmit, initialData }: Props) {
 
   const currencies = useMemo(() => {
     const raw = getAllCurrencies();
-    return raw ? Object.keys(raw).sort() : [];
+    if (!raw) return [];
+    return Object.values(raw).sort((a, b) => a.code.localeCompare(b.code));
   }, []);
 
   useEffect(() => {
@@ -96,8 +97,8 @@ function TripForm({ onSubmit, initialData }: Props) {
   }));
 
   const currencyOptions: SearchableSelectOption[] = currencies.map((curr) => ({
-    value: curr,
-    label: curr,
+    value: curr.code,
+    label: `${curr.code} - ${curr.name}`,
   }));
 
   const handleSubmit = (e: React.FormEvent) => {
