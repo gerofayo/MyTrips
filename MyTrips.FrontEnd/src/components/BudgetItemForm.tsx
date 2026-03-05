@@ -3,6 +3,7 @@ import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { getBudgetItemCategories } from "../services/budgetItemService";
 import { TEXTS } from "../config/texts";
 import { SearchableSelect, type SearchableSelectOption } from "./SearchableSelect";
+import { useNumericInput } from "../hooks/useNumericInput";
 import "../styles/components/BudgetItemForm.css";
 
 type Props = {
@@ -21,7 +22,7 @@ export const BudgetItemForm = ({
   const [categories, setCategories] = useState<string[]>([]);
   const [time, setTime] = useState("");
   const [isPerDay, setIsPerDay] = useState(false);
-  const [daysCount, setDaysCount] = useState(1);
+  const [daysCountInput, setDaysCount, getDaysCount] = useNumericInput(1);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -91,7 +92,7 @@ export const BudgetItemForm = ({
       finalIsoDate = new Date(`${activeDate}T${timePart}:00`).toISOString();
     }
 
-    const finalAmount = isPerDay ? formData.amount * daysCount : formData.amount;
+    const finalAmount = isPerDay ? formData.amount * getDaysCount() : formData.amount;
 
     await onSubmit({
       ...formData,
@@ -129,7 +130,7 @@ export const BudgetItemForm = ({
             name="amount"
             className="form-input"
             type="number"
-            value={formData.amount === 0 ? "" : formData.amount}
+            value={formData.amount || ""}
             placeholder={TEXTS.budgetItemForm.amountPlaceholder}
             min={0}
             onChange={handleChange}
@@ -189,12 +190,12 @@ export const BudgetItemForm = ({
               type="number" 
               className="form-input budget-item-days-input"
               min={1} 
-              value={daysCount} 
-              onChange={(e) => setDaysCount(Number(e.target.value))} 
+              value={daysCountInput} 
+              onChange={setDaysCount} 
             />
             <span className="total-preview">
               {TEXTS.budgetItemForm.durationTotalPrefix}
-              {(formData.amount * daysCount).toLocaleString()}
+              {(formData.amount * getDaysCount()).toLocaleString()}
             </span>
           </div>
         </div>

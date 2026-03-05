@@ -4,6 +4,7 @@ import { getAllCountries, getAllCurrencies } from "country-tz-currency";
 import { logger } from "../utils/logger";
 import { TEXTS } from "../config/texts";
 import { SearchableSelect, type SearchableSelectOption } from "./SearchableSelect";
+import { useNumericInput } from "../hooks/useNumericInput";
 import "../styles/forms.css";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 function TripForm({ onSubmit, initialData }: Props) {
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
   const [dateError, setDateError] = useState<string | null>(null);
+  const [budgetInput, setBudget, getBudget] = useNumericInput(0);
 
   const [formData, setFormData] = useState<CreateTripRequest>({
     title: "",
@@ -110,7 +112,10 @@ function TripForm({ onSubmit, initialData }: Props) {
       return;
     }
 
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      budget: getBudget(),
+    });
   };
 
   return (
@@ -182,8 +187,8 @@ function TripForm({ onSubmit, initialData }: Props) {
             name="budget"
             type="number"
             placeholder={TEXTS.tripForm.totalBudgetPlaceholder}
-            value={formData.budget || ""}
-            onChange={handleChange}
+            value={budgetInput}
+            onChange={setBudget}
             required
           />
         </div>
