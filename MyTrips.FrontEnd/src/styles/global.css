@@ -9,10 +9,39 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* App Layout with Top Bar */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 64px; /* Height of top bar */
+}
+
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+/* Responsive main content */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: 56px;
+  }
+  
+  .app-container {
+    padding: 0 1rem;
+  }
 }
 
 /* 2. Scrollbar Global (Sutil) */

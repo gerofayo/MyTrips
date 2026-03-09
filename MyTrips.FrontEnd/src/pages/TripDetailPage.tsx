@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { useTrip } from "../hooks/useTrip";
 import { useBudgetItems } from "../hooks/useBudgetItems";
 import { TripHero } from "../components/TripHero";
@@ -14,6 +15,8 @@ import { logger } from "../utils/logger";
 import { TEXTS } from "../config/texts";
 import "../styles/pages/TripDetailPage.css";
 
+type TabId = "budget" | "map" | "photos" | "settings";
+
 export default function TripDetailPage() {
   const { id: tripId } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -21,9 +24,10 @@ export default function TripDetailPage() {
   const { trip, loading: tripLoading } = useTrip(tripId);
   const { items, createItem, updateItem, deleteItem, isSubmitting, loading: loadingItems } = useBudgetItems(tripId!);
 
-  const [editingItem, setEditingItem] = useState<BudgetItem | null>(null);
+  const [activeTab, setActiveTab] = useState<TabId>("budget");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingItem, setEditingItem] = useState<BudgetItem | null>(null);
 
   const displayedItems = useMemo(() => {
     if (!selectedDate) return items;
@@ -43,7 +47,7 @@ export default function TripDetailPage() {
     }
   };
 
-  const handleEditClick = (item: BudgetItem) => {
+  const handleEditItem = (item: BudgetItem) => {
     setEditingItem(item);
     setShowForm(true);
   };
@@ -60,6 +64,11 @@ export default function TripDetailPage() {
     } catch (error) {
       logger.error("Error submitting budget item", error);
     }
+  };
+
+  const handleCancelForm = () => {
+    setShowForm(false);
+    setEditingItem(null);
   };
 
   if (tripLoading) return (
@@ -88,90 +97,178 @@ export default function TripDetailPage() {
     <div className="trip-detail">
       <div className="app-container trip-detail-wrapper">
         
-
-        <div className="relative-container">
+        {/* Hero with back button */}
+        <div className="hero-wrapper">
           <TripHero trip={trip} />
-          <div className="floating-buttons">
+          <div className="hero-floating-actions">
             <button
-              className="btn-back-floating"
+              className="floater-btn"
               onClick={() => navigate(PATHS.TRIPS_LIST)}
+              title="Back"
             >
-              {TEXTS.tripDetail.backButton}
-            </button>
-            <button
-              className="btn-edit-floating"
-              onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
-            >
-              {TEXTS.tripDetail.editButton}
+              <Icon icon="mdi:arrow-left" />
             </button>
           </div>
         </div>
 
-        <TripInfoCard trip={trip} items={items} />
-
-        <div className="divider-line" />
-
-        <div className="itinerary-header">
-          <div>
-            <h3 className="section-label">{TEXTS.tripDetail.itineraryTitle}</h3>
-            {showForm && (
-              <p className="itinerary-hint">
-                {selectedDate
-                  ? TEXTS.tripDetail.itineraryHintDated
-                  : TEXTS.tripDetail.itineraryHintGeneric}
-              </p>
-            )}
-          </div>
-          <button
-            className={showForm ? "button-outline danger" : "button button-sm"}
-            onClick={showForm ? () => { setShowForm(false); setEditingItem(null); } : () => setShowForm(true)}
+        {/* Tab Navigation */}
+        <nav className="tab-nav">
+          <button 
+            className={`tab-btn ${activeTab === "budget" ? "active" : ""}`}
+            onClick={() => setActiveTab("budget")}
           >
-            {showForm ? TEXTS.tripDetail.addExpenseCancel : TEXTS.tripDetail.addExpense}
+            <Icon icon="mdi:wallet-outline" />
+            <span>Budget</span>
           </button>
-        </div>
-
-          <TripCalendar
-            startDate={trip.startDate}
-            endDate={trip.endDate}
-            selectedDate={selectedDate}
-            onDateSelect={setSelectedDate}
-          />
-
-        <div className={`form-wrapper ${showForm ? "expanded" : "collapsed"}`}>
-          <BudgetItemForm
-            onSubmit={handleFormSubmit}
-            isSubmitting={isSubmitting}
-            selectedDate={selectedDate}
-            initialData={editingItem}
-          />
-        </div>
-
-        <BudgetItemList
-          items={displayedItems}
-          onDelete={async (id) => {
-            if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
-              try {
-                await deleteItem(id);
-              } catch (error) {
-                logger.error("Error deleting budget item", error);
-                alert("Error deleting item. Please try again.");
-              }
-            }
-          }}
-          onEdit={handleEditClick}
-          isSubmitting={loadingItems}
-          selectedDate={selectedDate}
-        />
-
-        <section className="danger-zone">
-          <h4 className="danger-zone-title">{TEXTS.tripDetail.deleteTripDangerTitle}</h4>
-          <p className="danger-zone-text">{TEXTS.tripDetail.deleteTripDangerText}</p>
-          <button className="btn-delete-trip" onClick={handleDeleteTrip}>
-            {TEXTS.tripDetail.deleteTripButton}
+          <button 
+            className={`tab-btn ${activeTab === "map" ? "active" : ""}`}
+            onClick={() => setActiveTab("map")}
+          >
+            <Icon icon="mdi:map-marker-outline" />
+            <span>Map</span>
           </button>
-        </section>
+          <button 
+            className={`tab-btn ${activeTab === "photos" ? "active" : ""}`}
+            onClick={() => setActiveTab("photos")}
+          >
+            <Icon icon="mdi:image-multiple-outline" />
+            <span>Photos</span>
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === "settings" ? "active" : ""}`}
+            onClick={() => setActiveTab("settings")}
+          >
+            <Icon icon="mdi:cog-outline" />
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        {/* Content based on active tab */}
+        <div className="tab-content-wrapper">
+          
+          {/* BUDGET TAB - Includes Calendar */}
+          {activeTab === "budget" && (
+            <div className="tab-content">
+              {/* Budget Summary */}
+              <div className="budget-summary-section">
+                <TripInfoCard trip={trip} items={items} />
+              </div>
+
+              {/* Calendar Strip */}
+              <div className="calendar-strip-section">
+                <TripCalendar
+                  startDate={trip.startDate}
+                  endDate={trip.endDate}
+                  selectedDate={selectedDate}
+                  onDateSelect={setSelectedDate}
+                />
+              </div>
+
+              {/* Add Expense Button */}
+              <div className="budget-actions">
+                <button
+                  className={`btn-add ${showForm ? "cancel" : ""}`}
+                  onClick={showForm ? handleCancelForm : () => setShowForm(true)}
+                >
+                  <Icon icon={showForm ? "mdi:close" : "mdi:plus"} />
+                  {showForm ? "Cancel" : "Add Expense"}
+                </button>
+              </div>
+
+              {/* Expense Form */}
+              <div className={`expense-form ${showForm ? "expanded" : "collapsed"}`}>
+                <BudgetItemForm
+                  onSubmit={handleFormSubmit}
+                  isSubmitting={isSubmitting}
+                  selectedDate={selectedDate}
+                  initialData={editingItem}
+                />
+              </div>
+
+              {/* Budget Items List */}
+              <div className="expenses-list-section">
+                <BudgetItemList
+                  items={displayedItems}
+                  onDelete={async (id) => {
+                    if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
+                      try {
+                        await deleteItem(id);
+                      } catch (error) {
+                        logger.error("Error deleting budget item", error);
+                        alert("Error deleting item. Please try again.");
+                      }
+                    }
+                  }}
+                  onEdit={handleEditItem}
+                  isSubmitting={loadingItems}
+                  selectedDate={selectedDate}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* MAP TAB - Placeholder */}
+          {activeTab === "map" && (
+            <div className="tab-content placeholder-tab">
+              <div className="placeholder-content">
+                <Icon icon="mdi:map-marker-outline" className="placeholder-icon" />
+                <h3>Trip Map</h3>
+                <p>Map view is coming soon. You'll be able to see all your trip locations here.</p>
+              </div>
+            </div>
+          )}
+
+          {/* PHOTOS TAB - Placeholder */}
+          {activeTab === "photos" && (
+            <div className="tab-content placeholder-tab">
+              <div className="placeholder-content">
+                <Icon icon="mdi:image-multiple-outline" className="placeholder-icon" />
+                <h3>Trip Photos</h3>
+                <p>Photo gallery is coming soon. Upload and organize your trip memories here.</p>
+              </div>
+            </div>
+          )}
+
+          {/* SETTINGS TAB - Edit & Delete */}
+          {activeTab === "settings" && (
+            <div className="tab-content settings-tab">
+              <div className="settings-section">
+                <h3 className="settings-title">Trip Settings</h3>
+                <p className="settings-subtitle">Manage your trip details</p>
+                
+                <div className="settings-actions">
+                  <button 
+                    className="settings-action-btn"
+                    onClick={() => navigate(PATHS.EDIT_TRIP(tripId!))}
+                  >
+                    <Icon icon="mdi:pencil-outline" />
+                    <div className="settings-action-text">
+                      <span className="settings-action-title">Edit Trip</span>
+                      <span className="settings-action-desc">Change destination, dates, budget</span>
+                    </div>
+                    <Icon icon="mdi:chevron-right" className="settings-chevron" />
+                  </button>
+
+                  <button 
+                    className="settings-action-btn danger"
+                    onClick={handleDeleteTrip}
+                  >
+                    <Icon icon="mdi:trash-can-outline" />
+                    <div className="settings-action-text">
+                      <span className="settings-action-title">Delete Trip</span>
+                      <span className="settings-action-desc">Permanently remove this trip</span>
+                    </div>
+                    <Icon icon="mdi:chevron-right" className="settings-chevron" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
 
       </div>
     </div>
   );
 }
+

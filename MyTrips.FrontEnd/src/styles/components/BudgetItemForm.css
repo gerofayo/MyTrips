@@ -1,57 +1,111 @@
-/* src/styles/components/BudgetItemForm.css */
+/* BudgetItemForm - Fully Responsive */
 
 .mini-form-card {
   background: var(--card-bg);
-  padding: 24px;
+  padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Form Fields - Single Column */
 .form-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
+.budget-item-two-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.budget-item-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.budget-item-field label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.budget-item-field input,
+.budget-item-field select,
+.budget-item-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  background: var(--bg-main);
+  color: var(--text-dark);
+  transition: border-color 0.2s;
+}
+
+.budget-item-field input:focus,
+.budget-item-field select:focus,
+.budget-item-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.budget-item-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Per Day Box */
 .per-day-box {
   background: var(--bg-main);
-  padding: 16px;
+  padding: var(--spacing-md);
   border-radius: var(--radius-md);
   border: 1px dashed var(--primary);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--spacing-sm);
   animation: slideDown 0.3s ease-out;
 }
 
 .total-preview {
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   color: var(--primary);
-  background: white;
-  padding: 4px 12px;
+  background: var(--card-bg);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 20px;
   border: 1px solid var(--primary-light);
+  text-align: center;
 }
 
+/* Checkbox */
 .checkbox-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 0;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
 }
 
-/* Custom Checkbox Styling */
 .checkbox-group input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-sm);
   background-color: var(--card-bg);
@@ -72,10 +126,10 @@
 .checkbox-group input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
-  left: 6px;
-  top: 2px;
+  left: 5px;
+  top: 1px;
   width: 6px;
-  height: 11px;
+  height: 10px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
@@ -86,38 +140,93 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-.budget-item-two-col {
-  grid-template-columns: 1fr 1fr;
+.checkbox-group label {
+  font-size: var(--font-size-sm);
+  color: var(--text-dark);
+  cursor: pointer;
 }
 
+/* Helper Text */
 .budget-item-helper {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .budget-item-helper-text {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   opacity: 0.7;
-}
-
-.budget-item-per-day-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.budget-item-days-input {
-  width: 100px;
+  color: var(--text-muted);
 }
 
 .budget-item-date-hint {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   opacity: 0.7;
-  margin-top: 8px;
+  color: var(--text-muted);
+  margin-top: var(--spacing-xs);
 }
 
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.form-actions .button {
+  flex: 1;
+  justify-content: center;
+}
+
+.form-actions .button-outline {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Animation */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Responsive - Single Column Always */
+@media (max-width: 768px) {
+  .mini-form-card {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions .button,
+  .form-actions .button-outline {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mini-form-card {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+    border-radius: var(--radius-md);
+  }
+  
+  .per-day-box {
+    padding: var(--spacing-sm);
+  }
+  
+  .checkbox-group {
+    gap: var(--spacing-xs);
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+  }
+}
+

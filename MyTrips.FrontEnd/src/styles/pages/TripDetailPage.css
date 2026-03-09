@@ -1,125 +1,378 @@
-/* src/styles/pages/TripDetailPage.css */
+/* Trip Detail Page Styles */
+
+.trip-detail {
+  min-height: 100vh;
+  background: var(--bg-main);
+}
 
 .trip-detail-wrapper {
+  padding-top: 96px;
+  padding-bottom: 100px;
+}
+
+/* ================================
+   Hero Wrapper with Floating Actions
+   ================================ */
+
+.hero-wrapper {
   position: relative;
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
-
-/* Contenedor de botones flotantes - siempre a la derecha */
-.floating-buttons {
+.hero-floating-actions {
   position: absolute;
-  top: var(--spacing-xl);
-  right: var(--spacing-xl);
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-xs);
   z-index: 10;
+}
+
+.floater-btn {
   display: flex;
-  gap: var(--spacing-sm);
-}
-
-/* Botón flotante sobre el Hero */
-.btn-edit-floating,
-.btn-back-floating {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text-dark);
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  font-size: var(--font-size-sm);
-}
-
-.btn-edit-floating:hover,
-.btn-back-floating:hover {
-  background: var(--glass-bg-hover);
-  transform: scale(1.02);
-}
-
-.btn-back-floating {
-  color: var(--text-dark);
-}
-
-/* Mobile: Back button above edit button */
-@media (max-width: 480px) {
-  .floating-buttons {
-    flex-direction: column;
-    gap: 8px;
-    top: 70px;
-  }
-  
-  .btn-edit-floating,
-  .btn-back-floating {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-  }
-}
-
-.itinerary-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 2rem 0 1rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Animación del formulario de gastos */
-.form-wrapper {
+.floater-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.floater-btn svg {
+  font-size: 1.2rem;
+}
+
+/* ================================
+   Tab Navigation
+   ================================ */
+
+.tab-nav {
+  display: flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: var(--bg-main);
+  color: var(--text-dark);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.tab-btn svg {
+  font-size: 1.2rem;
+}
+
+/* ================================
+   Tab Content Wrapper
+   ================================ */
+
+.tab-content-wrapper {
+  min-height: 400px;
+  padding-bottom: 100px;
+}
+
+/* ================================
+   Budget Tab
+   ================================ */
+
+.budget-summary-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.calendar-strip-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.budget-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-add.cancel {
+  background: var(--danger);
+}
+
+.btn-add svg {
+  font-size: 1.1rem;
+}
+
+.expense-form {
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.form-wrapper.collapsed {
+.expense-form.collapsed {
   max-height: 0;
   opacity: 0;
   margin-bottom: 0;
 }
 
-.form-wrapper.expanded {
-  max-height: 1000px;
+.expense-form.expanded {
+  max-height: 800px;
   opacity: 1;
-  margin-bottom: 2rem;
-}
-
-/* Danger Zone */
-.danger-zone {
-  margin-top: 80px;
-  margin-bottom: 80px;
-  text-align: center;
-  padding: 2rem;
-  border: 1px solid var(--danger-border);
-  background-color: var(--danger-bg);
+  padding: var(--spacing-md);
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.danger-zone-title {
+.expenses-list-section {
+  margin-top: var(--spacing-lg);
+}
+
+/* ================================
+   Calendar Tab - Google Calendar Style
+   ================================ */
+
+.calendar-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.calendar-expenses {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+}
+
+.calendar-expenses-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-md) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ================================
+   Placeholder Tabs (Map, Photos)
+   ================================ */
+
+.placeholder-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.placeholder-icon {
+  font-size: 4rem;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.placeholder-content h3 {
+  font-size: var(--font-size-xl);
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.placeholder-content p {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* ================================
+   Settings Tab
+   ================================ */
+
+.settings-tab {
+  padding: var(--spacing-md) 0;
+}
+
+.settings-section {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+}
+
+.settings-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.settings-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.settings-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.settings-action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.settings-action-btn:hover {
+  border-color: var(--primary);
+  background: var(--card-bg);
+}
+
+.settings-action-btn.danger:hover {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.settings-action-btn svg:first-child {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+}
+
+.settings-action-btn.danger svg:first-child {
   color: var(--danger);
-  margin-top: 0;
+}
+
+.settings-action-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-action-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.settings-action-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.settings-chevron {
+  color: var(--text-muted);
   font-size: 1.2rem;
 }
 
-.danger-zone-text {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
+/* ================================
+   Danger Section - Minimal
+   ================================ */
+
+.danger-section {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl) 0;
 }
 
-.btn-delete-trip {
-  background-color: var(--danger);
-  color: white;
-  padding: 10px 24px;
-  border-radius: var(--radius-md);
+.btn-danger-text {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: transparent;
   border: none;
-  font-weight: 600;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: opacity 0.2s;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 }
 
-.btn-delete-trip:hover {
-  opacity: 0.9;
+.btn-danger-text:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
 }
 
-/* Not Found Container */
+.btn-danger-text svg {
+  font-size: 1.1rem;
+}
+
+/* ================================
+   Not Found & Loading
+   ================================ */
+
 .not-found-container {
   min-height: 60vh;
   display: flex;
@@ -142,3 +395,133 @@
   margin-bottom: var(--spacing-lg);
   font-weight: 500;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+/* ================================
+   Responsive Styles
+   ================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .trip-detail-wrapper {
+    padding-top: 72px;
+    padding-bottom: 80px;
+  }
+  
+  .hero-wrapper {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .hero-floating-actions {
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+  
+  .floater-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .floater-btn svg {
+    font-size: 1.1rem;
+  }
+  
+  .tab-nav {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-xs);
+  }
+  
+  .tab-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+  
+  .tab-btn span {
+    display: none;
+  }
+  
+  .tab-btn svg {
+    font-size: 1.3rem;
+  }
+  
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+    padding: var(--spacing-md);
+  }
+  
+  .expense-form.expanded {
+    padding: var(--spacing-md);
+  }
+  
+  .calendar-expenses {
+    padding: var(--spacing-md);
+  }
+  
+  .placeholder-icon {
+    font-size: 3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .trip-detail-wrapper {
+    padding-top: 64px;
+    padding-bottom: 100px;
+  }
+  
+  .hero-wrapper {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .hero-floating-actions {
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+  
+  .floater-btn {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .tab-nav {
+    position: fixed;
+    bottom: 60px;
+    left: var(--spacing-sm);
+    right: var(--spacing-sm);
+    margin-bottom: 0;
+    border-radius: var(--radius-lg);
+    z-index: 100;
+  }
+  
+  .tab-btn {
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--spacing-xs);
+  }
+  
+  .tab-btn span {
+    display: block;
+    font-size: 0.65rem;
+  }
+  
+  .tab-btn svg {
+    font-size: 1.2rem;
+  }
+  
+  .danger-section {
+    padding: var(--spacing-lg) 0;
+    margin-bottom: 80px;
+  }
+  
+  .placeholder-tab {
+    min-height: 300px;
+  }
+}
+

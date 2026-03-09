@@ -1,5 +1,5 @@
 import type { BudgetItem } from "../types/BudgetItem";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Icon } from "@iconify/react";
 import "../styles/components/BudgetItemList.css";
 import "../styles/components/ExpenseCategoryColors.css";
@@ -21,27 +21,12 @@ export const BudgetItemList = ({
   onEdit,
   isSubmitting
 }: Props) => {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-
-  const toggleDescription = (itemId: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        newSet.add(itemId);
-      }
-      return newSet;
-    });
-  };
-
   const groupedData = useMemo(() => {
     const grouped: Record<string, BudgetItem[]> = {};
 
     items.forEach((item) => {
       let dateKey: string = TEXTS.budgetItemList.unscheduledKey;
       if (item.date) {
-        // Parse as UTC for consistent date handling
         const date = new Date(item.date);
         dateKey = new Intl.DateTimeFormat("en-CA", {
           timeZone: "UTC",
@@ -65,7 +50,6 @@ export const BudgetItemList = ({
       grouped[date].sort((a, b) => {
         if (!a.date) return 1;
         if (!b.date) return -1;
-        // Use UTC timestamp for consistent sorting
         const dateA = new Date(a.date).getTime();
         const dateB = new Date(b.date).getTime();
         return dateA - dateB;
@@ -82,7 +66,6 @@ export const BudgetItemList = ({
     if (dateStr === TEXTS.budgetItemList.unscheduledKey) {
       return TEXTS.budgetItemList.unscheduledTitle;
     }
-    // Use UTC parsing for consistent date handling
     const date = parseDateAsUTC(dateStr);
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
@@ -117,7 +100,6 @@ export const BudgetItemList = ({
                   {formatLongDate(date)}
                 </h4>
               </div>
-
               <div className="day-header-total">
                 <span>
                   <strong>{TEXTS.budgetItemList.headerTotalLabel}:</strong>{" "}
@@ -128,30 +110,16 @@ export const BudgetItemList = ({
 
             <div className="items-container">
               {groupedData.grouped[date].map((item) => (
-                <div key={item.id} className={`budget-item-card ${expandedItems.has(item.id) ? 'expanded' : ''}`}>
+                <div 
+                  key={item.id} 
+                  className={`budget-item-card ${date === TEXTS.budgetItemList.unscheduledKey ? 'generic' : ''}`}
+                >
                   <div className="item-main">
                     <div className={`category-indicator ${getCategoryClass(item.category)}`} />
                     <div className="item-details">
-                      <div 
-                        className={`item-name-container ${item.description ? 'clickable' : ''}`}
-                        onClick={() => item.description && toggleDescription(item.id)}
-                        title={item.description ? "Click to view details" : undefined}
-                      >
+                      <div className="item-name-container">
                         <p className="item-name">{item.title}</p>
-                        {item.description && (
-                          <div className="description-indicator">
-                            <Icon icon="mdi:chevron-down" />
-                          </div>
-                        )}
                       </div>
-                      {item.description && (
-                        <div className={`item-description ${expandedItems.has(item.id) ? 'expanded' : 'collapsed'}`}>
-                          <div className="description-content">
-                            <span className="description-label">Details:</span>
-                            <p>{item.description}</p>
-                          </div>
-                        </div>
-                      )}
                       <div className="item-meta">
                         <span className="item-tag">{item.category}</span>
                         {item.date && (
@@ -172,7 +140,7 @@ export const BudgetItemList = ({
                     </span>
                     <div className="item-actions">
                       <button className="action-btn-edit" onClick={() => onEdit(item)} title="Edit">
-                        <Icon icon="mdi:pencil" />
+                        <Icon icon="mdi:pencil-outline" />
                       </button>
                       <button 
                         className="action-btn-delete" 
@@ -180,7 +148,7 @@ export const BudgetItemList = ({
                         disabled={isSubmitting}
                         title="Delete"
                       >
-                        <Icon icon="mdi:trash-can" />
+                        <Icon icon="mdi:trash-can-outline" />
                       </button>
                     </div>
                   </div>
@@ -190,10 +158,8 @@ export const BudgetItemList = ({
           </div>
         ))
       ) : (
-        <div className="form-container itinerary-empty-state">
-          <p className="section-label">
-            {TEXTS.budgetItemList.emptySelection}
-          </p>
+        <div className="itinerary-empty-state">
+          <p>{TEXTS.budgetItemList.emptySelection}</p>
         </div>
       )}
     </div>

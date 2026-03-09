@@ -20,6 +20,48 @@
   padding: 0 2rem;
 }
 
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.hero-action-btn:hover {
+  background: var(--bg-elevated);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.hero-action-btn.primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.hero-action-btn.primary:hover {
+  background: var(--primary-dark);
+  color: white;
+}
+
 .page-title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -236,7 +278,6 @@
 @media (max-width: 768px) {
   .trips-section {
     padding: 1.5rem;
-    padding-bottom: 80px; /* Add space for bottom nav */
   }
   
   .trips-grid {
@@ -250,6 +291,20 @@
   
   .hero-content {
     padding: 0 1rem;
+  }
+  
+  .hero-actions {
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  
+  .hero-action-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .hero-action-btn span {
+    display: none;
   }
   
   .page-title {

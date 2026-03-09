@@ -25,73 +25,81 @@ export const TripInfoCard = ({ trip, items }: Props) => {
 
   return (
     <div className="trip-info-card">
-      <div className="budget-summary">
-        
-        <div className="budget-header">
-          <div>
-            <span className="section-label">{TEXTS.tripInfoCard.remainingBudgetLabel}</span>
-            <h2 className={`budget-remaining-value ${isOverBudget ? 'over-budget' : ''}`}>
-              ${remaining.toLocaleString()} {trip.currency}
-            </h2>
-          </div>
-          <div>
-            <span className="section-label">{TEXTS.tripInfoCard.totalSpentLabel}</span>
-            <p className="total-spent-value">${totalSpent.toLocaleString()} {trip.currency}</p>
-          </div>
+      {/* Stats Row - 3 Columns */}
+      <div className="budget-stats">
+        <div className="stat-item remaining">
+          <span className="stat-label">{TEXTS.tripInfoCard.remainingBudgetLabel}</span>
+          <span className={`stat-value ${isOverBudget ? 'over-budget' : ''}`}>
+            ${remaining.toLocaleString()}
+          </span>
+          <span className="stat-currency">{trip.currency}</span>
         </div>
+        
+        <div className="stat-item spent">
+          <span className="stat-label">{TEXTS.tripInfoCard.totalSpentLabel}</span>
+          <span className="stat-value">
+            ${totalSpent.toLocaleString()}
+          </span>
+          <span className="stat-currency">{trip.currency}</span>
+        </div>
+        
+        <div className="stat-item total">
+          <span className="stat-label">Total Budget</span>
+          <span className="stat-value">
+            ${trip.budget.toLocaleString()}
+          </span>
+          <span className="stat-currency">{trip.currency}</span>
+        </div>
+      </div>
 
+      {/* Progress Bar */}
+      <div className="progress-section">
+        <div className="progress-labels">
+          <span>{spentPercentage.toFixed(0)}% spent</span>
+          <span className={isOverBudget ? 'text-danger' : ''}>
+            {isOverBudget ? 'Over budget!' : `${(100 - spentPercentage).toFixed(0)}% remaining`}
+          </span>
+        </div>
         <div className="progress-bar-container">
           <div 
             className={`progress-bar-fill ${isOverBudget ? 'danger' : ''}`}
             style={{ width: `${spentPercentage}%` }} 
           />
         </div>
-
-        <span className="section-label">{TEXTS.tripInfoCard.categoryBreakdownLabel}</span>
-        
-        <div className="category-distribution-bar">
-          {totalSpent > 0
-            ? Object.entries(categories).map(([cat, amount]) => (
-                <div
-                  key={cat}
-                  className={getCategoryClass(cat)}
-                  style={{ width: `${(amount / totalSpent) * 100}%` }}
-                  title={`${cat}: ${amount}`}
-                />
-              ))
-            : (
-              <div
-                className="progress-bar-container"
-                style={{ width: "100%", marginBottom: 0 }}
-              />
-            )}
-        </div>
-
-        <div className="category-legend">
-          {items.length > 0
-            ? Object.entries(categories).map(([cat, amount]) => (
-                <div key={cat} className="legend-item">
-                  <span className={`legend-dot ${getCategoryClass(cat)}`} />
-                  <span className="cat-name">{cat}</span>
-                  <span className="cat-amount">
-                    {((amount / totalSpent) * 100).toFixed(0)}%
-                  </span>
-                </div>
-              ))
-            : (
-              <p
-                className="cat-name"
-                style={{
-                  gridColumn: "1/-1",
-                  textAlign: "center",
-                  opacity: 0.6,
-                }}
-              >
-                {TEXTS.tripInfoCard.noExpensesText}
-              </p>
-            )}
-        </div>
       </div>
+
+      {/* Category Distribution */}
+      {items.length > 0 && (
+        <div className="category-section">
+          <span className="section-label">{TEXTS.tripInfoCard.categoryBreakdownLabel}</span>
+          
+          {/* Colored distribution bar */}
+          <div className="category-distribution-bar">
+            {Object.entries(categories).map(([cat, amount]) => (
+              <div
+                key={cat}
+                className={`category-bar-fill ${getCategoryClass(cat)}`}
+                style={{ width: `${(amount / totalSpent) * 100}%` }}
+                title={`${cat}: $${amount.toLocaleString()}`}
+              />
+            ))}
+          </div>
+          
+          {/* Category Legend - 3 columns */}
+          <div className="category-legend">
+            {Object.entries(categories).map(([cat, amount]) => (
+              <div key={cat} className="legend-item">
+                <span className={`legend-dot ${getCategoryClass(cat)}`} />
+                <span className="cat-name">{cat}</span>
+                <span className="cat-amount">
+                  {((amount / totalSpent) * 100).toFixed(0)}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
