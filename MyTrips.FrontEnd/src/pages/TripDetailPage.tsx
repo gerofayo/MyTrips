@@ -15,7 +15,7 @@ import { logger } from "../utils/logger";
 import { TEXTS } from "../config/texts";
 import "../styles/pages/TripDetailPage.css";
 
-type TabId = "budget" | "map" | "photos" | "settings";
+type TabId = "budget" | "expense" | "map" | "photos" | "settings";
 
 export default function TripDetailPage() {
   const { id: tripId } = useParams<{ id: string }>();
@@ -26,7 +26,6 @@ export default function TripDetailPage() {
 
   const [activeTab, setActiveTab] = useState<TabId>("budget");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<BudgetItem | null>(null);
 
   const displayedItems = useMemo(() => {
@@ -47,28 +46,35 @@ export default function TripDetailPage() {
     }
   };
 
+  const handleAddExpense = () => {
+    setEditingItem(null);
+    setActiveTab("expense");
+  };
+
   const handleEditItem = (item: BudgetItem) => {
     setEditingItem(item);
-    setShowForm(true);
+    setActiveTab("expense");
   };
 
   const handleFormSubmit = async (formData: CreateBudgetItemRequest) => {
     try {
       if (editingItem) {
         await updateItem(editingItem.id, formData);
+        logger.info(`Budget item updated: ${editingItem.id}`);
       } else {
         await createItem(formData);
+        logger.info(`Budget item created for trip: ${tripId}`);
       }
       setEditingItem(null);
-      setShowForm(false);
+      setActiveTab("budget");
     } catch (error) {
       logger.error("Error submitting budget item", error);
     }
   };
 
   const handleCancelForm = () => {
-    setShowForm(false);
     setEditingItem(null);
+    setActiveTab("budget");
   };
 
   if (tripLoading) return (
@@ -167,22 +173,12 @@ export default function TripDetailPage() {
               {/* Add Expense Button */}
               <div className="budget-actions">
                 <button
-                  className={`btn-add ${showForm ? "cancel" : ""}`}
-                  onClick={showForm ? handleCancelForm : () => setShowForm(true)}
+                  className={`btn-add`}
+                  onClick={handleAddExpense}
                 >
-                  <Icon icon={showForm ? "mdi:close" : "mdi:plus"} />
-                  {showForm ? "Cancel" : "Add Expense"}
+                  <Icon icon="mdi:plus" />
+                  Add Expense
                 </button>
-              </div>
-
-              {/* Expense Form */}
-              <div className={`expense-form ${showForm ? "expanded" : "collapsed"}`}>
-                <BudgetItemForm
-                  onSubmit={handleFormSubmit}
-                  isSubmitting={isSubmitting}
-                  selectedDate={selectedDate}
-                  initialData={editingItem}
-                />
               </div>
 
               {/* Budget Items List */}
@@ -203,6 +199,29 @@ export default function TripDetailPage() {
                   isSubmitting={loadingItems}
                   selectedDate={selectedDate}
                 />
+              </div>
+            </div>
+          )}
+
+          {/* EXPENSE TAB - Add/Edit Form */}
+          {activeTab === "expense" && (
+            <div className="tab-content">
+              <div className="expense-form-container">
+                <h3 className="expense-form-title">
+                  {editingItem ? "Edit Expense" : "Add Expense"}
+                </h3>
+                <BudgetItemForm
+                  onSubmit={handleFormSubmit}
+                  isSubmitting={isSubmitting}
+                  selectedDate={selectedDate}
+                  initialData={editingItem}
+                />
+                <button 
+                  className="button cancel-btn"
+                  onClick={handleCancelForm}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}

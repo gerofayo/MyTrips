@@ -85,7 +85,10 @@ export const BudgetItemForm = ({
     e.preventDefault();
 
     let finalIsoDate: string | null = null;
-    const activeDate = selectedDate || (initialData?.date ? initialData.date.split("T")[0] : null);
+    // When editing, use the original date from initialData; otherwise use selectedDate
+    const activeDate = initialData?.date 
+      ? initialData.date.split("T")[0] 
+      : (selectedDate || null);
 
     if (activeDate) {
       const timePart = time || "00:00";

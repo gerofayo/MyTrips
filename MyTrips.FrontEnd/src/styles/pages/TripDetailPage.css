@@ -185,6 +185,39 @@
 }
 
 /* ================================
+   Expense Tab - Add/Edit Form
+   ================================ */
+
+.expense-form-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.expense-form-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.cancel-btn {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.cancel-btn:hover {
+  background: var(--bg-main);
+  border-color: var(--text-muted);
+}
+
+/* ================================
    Calendar Tab - Google Calendar Style
    ================================ */
 

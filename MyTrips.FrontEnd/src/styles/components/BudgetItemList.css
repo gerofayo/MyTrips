@@ -9,6 +9,85 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* Category Stats - Shown in view all mode */
+.category-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.category-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--bg-main);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+}
+
+/* Category Stats Grid - For average per day view */
+.category-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.category-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--spacing-sm);
+  background: var(--bg-main);
+  border-radius: var(--radius-sm);
+}
+
+.category-stat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.category-stat-card .category-name {
+  font-size: 0.75rem;
+}
+
+.category-stat-card .category-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.category-stat-card .category-percent {
+  font-size: 0.65rem;
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.category-name {
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.category-amount {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.category-percent {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
 /* Minimal Day Header */
 .day-header {
   display: flex;
