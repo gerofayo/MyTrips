@@ -38,6 +38,7 @@ public class BudgetItemService
             category: request.Category,
             isEstimated: request.IsEstimated,
             date: request.Date,
+            time: request.Time,
             description: request.Description
         );
 
@@ -85,6 +86,7 @@ public class BudgetItemService
             category: request.Category,
             isEstimated: request.IsEstimated,
             date: request.Date,
+            time: request.Time,
             description: request.Description
         );
 

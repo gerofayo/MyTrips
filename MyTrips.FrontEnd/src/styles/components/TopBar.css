@@ -1,0 +1,106 @@
+/* Top Bar - Horizontal Navigation */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.top-bar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.top-bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-dark);
+  transition: opacity 0.2s ease;
+}
+
+.top-bar-brand:hover {
+  opacity: 0.8;
+}
+
+.brand-icon {
+  font-size: 28px;
+  color: var(--primary);
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.top-bar-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Theme Toggle in TopBar */
+.top-bar .theme-toggle {
+  position: static;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+}
+
+.top-bar .theme-toggle:hover {
+  background: var(--card-bg);
+  border-color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-bar-container {
+    padding: 0 16px;
+  }
+  
+  .brand-text {
+    font-size: 1.25rem;
+  }
+  
+  .brand-icon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    height: 56px;
+  }
+  
+  .top-bar-container {
+    padding: 0 12px;
+  }
+  
+  .brand-text {
+    font-size: 1.1rem;
+  }
+  
+  .brand-icon {
+    font-size: 22px;
+  }
+  
+  .top-bar .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+

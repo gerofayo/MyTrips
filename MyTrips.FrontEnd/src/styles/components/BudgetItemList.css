@@ -1,296 +1,355 @@
-/* src/styles/components/BudgetItemList.css */
+/* Budget Item List Styles - Minimal & Clean */
 
 .itinerary-list {
-  margin-top: 24px;
+  margin-top: var(--spacing-md);
 }
 
+/* Day Group */
 .day-group {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-lg);
 }
 
+/* Category Stats - Shown in view all mode */
+.category-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.category-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--bg-main);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+}
+
+/* Category Stats Grid - For average per day view */
+.category-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.category-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--spacing-sm);
+  background: var(--bg-main);
+  border-radius: var(--radius-sm);
+}
+
+.category-stat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.category-stat-card .category-name {
+  font-size: 0.75rem;
+}
+
+.category-stat-card .category-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.category-stat-card .category-percent {
+  font-size: 0.65rem;
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.category-name {
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.category-amount {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.category-percent {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+/* Minimal Day Header */
 .day-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .day-header-main {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.day-header-total {
-  display: flex;
-  gap: 8px;
-  font-size: 0.8rem;
+  gap: var(--spacing-sm);
 }
 
 .day-badge {
-  background: var(--bg-main);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--text-muted);
+  text-transform: uppercase;
 }
 
 .day-title-text {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
   color: var(--text-dark);
 }
 
+.day-header-total {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.day-header-total strong {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Items Container */
 .items-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
+/* Empty State */
 .itinerary-empty-state {
   text-align: center;
-  padding: 40px;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
 }
 
-/* Card de Gasto Individual */
+/* ================================
+   Budget Item Card - Dated Expenses
+   ================================ */
+
 .budget-item-card {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background: var(--card-bg);
-  padding: 16px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   transition: all 0.2s ease;
 }
 
 .budget-item-card:hover {
-  border-color: var(--primary);
+  border-color: var(--primary-light);
   box-shadow: var(--shadow-sm);
-  transform: translateX(4px);
 }
 
+/* Category Color Indicator */
+.category-indicator {
+  width: 3px;
+  height: 32px;
+  border-radius: 2px;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+/* Item Main */
 .item-main {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
 }
 
-/* El indicador de color lateral */
-.category-indicator {
-  width: 4px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--border-color);
+.item-details {
+  flex: 1;
+  min-width: 0;
 }
 
 .item-name-container {
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: default;
-  transition: all 0.2s ease;
-}
-
-.item-name-container.clickable {
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.item-name-container.clickable:hover {
-  background: var(--bg-main);
+  gap: var(--spacing-xs);
 }
 
 .item-name {
-  font-weight: 600;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--text-dark);
   margin: 0;
-  color: var(--text-dark);
-  transition: color 0.2s ease;
-}
-
-.description-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-  transform: rotate(0deg);
-}
-
-.item-name-container.clickable:hover .description-indicator {
-  color: var(--text-dark);
-  transform: rotate(180deg);
-}
-
-.item-description {
-  margin-top: 12px;
-  padding: 12px;
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transition: all 0.3s ease;
-}
-
-.item-description.collapsed {
-  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 0;
-  padding: 0;
-  border: none;
-  height: 0;
+  white-space: nowrap;
   overflow: hidden;
-}
-
-.description-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.description-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.description-content p {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--text-dark);
-}
-
-.budget-item-card.expanded {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 200px;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 200px;
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-8px);
-    max-height: 0;
-  }
+  text-overflow: ellipsis;
 }
 
 .item-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
+  gap: var(--spacing-xs);
+  font-size: 0.75rem;
   color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .item-tag {
   background: var(--bg-main);
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 1px 6px;
+  border-radius: 4px;
   text-transform: capitalize;
+  font-size: 0.7rem;
 }
 
+/* Item Right */
 .item-right {
-  text-align: right;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .item-price {
   font-family: 'Inter', sans-serif;
   font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
   color: var(--text-dark);
 }
 
+/* Item Actions */
 .item-actions {
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
+  gap: var(--spacing-xs);
   opacity: 0;
-  transform: translateX(8px);
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .budget-item-card:hover .item-actions {
   opacity: 1;
-  transform: translateX(0);
 }
 
 .item-actions button {
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
 }
 
 .item-actions button:hover {
   background: var(--bg-main);
 }
 
-.action-btn-edit {
+.action-btn-edit:hover {
   color: var(--primary);
 }
 
-.action-btn-edit:hover {
-  background: rgba(99, 102, 241, 0.1);
-}
-
-.action-btn-delete {
+.action-btn-delete:hover {
   color: var(--danger);
 }
 
-.action-btn-delete:hover {
-  background: rgba(239, 68, 68, 0.1);
+.item-actions svg {
+  font-size: 1rem;
 }
 
-/* Mobile: always show actions */
+/* ================================
+   Generic/Unscheduled Expenses - Different Style
+   ================================ */
+
+.budget-item-card.generic {
+  background: var(--bg-main);
+  border-style: dashed;
+  border-color: var(--border-color);
+}
+
+.budget-item-card.generic:hover {
+  border-style: solid;
+  border-color: var(--primary-light);
+  background: var(--card-bg);
+}
+
+.budget-item-card.generic .category-indicator {
+  background: var(--text-muted);
+}
+
+.budget-item-card.generic .item-name {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.budget-item-card.generic:hover .item-name {
+  color: var(--text-dark);
+  font-style: normal;
+}
+
+/* Description - Collapsed by default */
+.item-description {
+  display: none;
+}
+
+/* ================================
+   Responsive
+   ================================ */
+
 @media (max-width: 768px) {
+  .budget-item-card {
+    padding: var(--spacing-sm);
+  }
+  
   .item-actions {
     opacity: 1;
-    transform: translateX(0);
+  }
+  
+  .item-name {
+    max-width: 150px;
   }
 }
 
-.category-indicator {
-  width: 4px;
-  height: 40px;
-  border-radius: 10px;
-  background-color: var(--border-color);
-  flex-shrink: 0;
+@media (max-width: 480px) {
+  .day-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .day-header-total {
+    font-size: 0.75rem;
+  }
+  
+  .item-name {
+    max-width: 120px;
+  }
+  
+  .item-price {
+    font-size: 0.85rem;
+  }
+  
+  .item-meta {
+    display: none;
+  }
 }
+

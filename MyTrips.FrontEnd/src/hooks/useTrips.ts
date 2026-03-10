@@ -46,7 +46,7 @@ export function useTrips() {
   }
 
   async function fetchTripById(id: string): Promise<TripResponse> {
-    var response: TripResponse = await getTripById(id);
+    const response: TripResponse = await getTripById(id);
     return response;
   }
 

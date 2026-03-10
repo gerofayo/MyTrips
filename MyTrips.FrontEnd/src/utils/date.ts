@@ -54,3 +54,9 @@ export const parseDateAsUTC = (dateString: string): Date => {
   return new Date(Date.UTC(year, month - 1, day));
 };
 
+// Extract date part from ISO datetime string
+export const getDatePart = (isoDate: string | null | undefined): string | null => {
+  if (!isoDate) return null;
+  return isoDate.split('T')[0];
+};
+

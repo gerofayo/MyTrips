@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useTrips } from "../hooks/useTrips";
 import TripCard from "../components/TripCard";
-import BottomNavBar from "../components/BottomNavBar";
 import { PATHS } from "../routes/paths";
 import { logger } from "../utils/logger";
 import { TEXTS } from "../config/texts";
@@ -41,11 +40,25 @@ const TripsGrid = ({ trips }: { trips: TripResponse[] }) => {
 };
 
 // Hero Section Component
-const TripsHero = () => (
+const TripsHero = ({ onImport, onExport }: { onImport: () => void; onExport: () => void }) => (
   <div className="trips-hero">
     <div className="hero-content">
       <h1 className="page-title">{TEXTS.tripsList.title}</h1>
       <p className="page-subtitle">{TEXTS.tripsList.subtitle}</p>
+    </div>
+    <div className="hero-actions">
+      <button className="hero-action-btn" onClick={onImport} aria-label="Import trips">
+        <Icon icon="mdi:import" />
+        <span>Import</span>
+      </button>
+      <button className="hero-action-btn" onClick={onExport} aria-label="Export trips">
+        <Icon icon="mdi:export" />
+        <span>Export</span>
+      </button>
+      <NavLink to={PATHS.CREATE_TRIP} className="hero-action-btn primary">
+        <Icon icon="mdi:plus" />
+        <span>New Trip</span>
+      </NavLink>
     </div>
   </div>
 );
@@ -64,7 +77,7 @@ export default function TripListPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    logger.info("Cargando lista de viajes");
+    logger.info("Loading trips list");
     reload();
   }, []);
 
@@ -84,8 +97,9 @@ export default function TripListPage() {
       await reload();
       logger.info("Trips imported successfully");
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
       logger.error("Failed to import trips", error);
-      alert("Failed to import trips. Please try again.");
+      alert(`Failed to import trips: ${errorMessage}`);
     }
   };
 
@@ -112,7 +126,7 @@ export default function TripListPage() {
   if (error) {
     return (
       <div className="trips-page">
-        <TripsHero />
+        <TripsHero onImport={handleImport} onExport={handleExport} />
         <div className="trips-section">
           <div className="error-state">
             <h3>Error Loading Trips</h3>
@@ -130,7 +144,7 @@ export default function TripListPage() {
   if (loading) {
     return (
       <div className="trips-page">
-        <TripsHero />
+        <TripsHero onImport={handleImport} onExport={handleExport} />
         <LoadingState />
       </div>
     );
@@ -138,8 +152,8 @@ export default function TripListPage() {
 
   return (
     <>
-      <div className="trips-page has-bottom-nav">
-        <TripsHero />
+      <div className="trips-page">
+        <TripsHero onImport={handleImport} onExport={handleExport} />
         
         <div className="trips-section">
           {trips.length === 0 ? (
@@ -148,8 +162,6 @@ export default function TripListPage() {
             <TripsGrid trips={trips} />
           )}
         </div>
-        
-        <BottomNavBar onImport={handleImport} onExport={handleExport} />
       </div>
       
       <input

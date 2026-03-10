@@ -20,7 +20,9 @@ public class BudgetItem
 
     public bool IsEstimated { get; set; }
 
-    public DateTimeOffset? Date { get; set; }
+    // Store as plain strings to avoid timezone issues
+    public string? Date { get; set; }  // YYYY-MM-DD format - just the day
+    public string? Time { get; set; }  // HH:MM format - just the time
 
     public DateTime CreatedAt { get; set; }
 
@@ -36,7 +38,8 @@ public class BudgetItem
         ExpenseCategory category,
         decimal amount,
         bool isEstimated,
-        DateTimeOffset? date = null,
+        string? date = null,
+        string? time = null,
         string? description = null)
     {
 
@@ -49,6 +52,7 @@ public class BudgetItem
         Amount = amount;
         IsEstimated = isEstimated;
         Date = date;
+        Time = time;
         CreatedAt = DateTime.UtcNow;
         Description = description?.Trim();
     }
@@ -63,7 +67,8 @@ public class BudgetItem
         ExpenseCategory? category = null,
         decimal? amount = null,
         bool? isEstimated = null,
-        DateTimeOffset? date = null,
+        string? date = null,
+        string? time = null,
         string? description = null)
     {
         var newTitle = title ?? Title;
@@ -79,6 +84,7 @@ public class BudgetItem
             amount ?? Amount,
             isEstimated ?? IsEstimated,
             date ?? Date,
+            time ?? Time,
             description?.Trim() ?? Description
         );
     }
@@ -88,7 +94,8 @@ public class BudgetItem
         ExpenseCategory? category,
         decimal? amount,
         bool? isEstimated,
-        DateTimeOffset? date = null,
+        string? date = null,
+        string? time = null,
         string? description = null)
     {
         var newTitle = title ?? Title;
@@ -102,6 +109,7 @@ public class BudgetItem
         Amount = newAmount;
         IsEstimated = isEstimated ?? IsEstimated;
         Date = date ?? Date;
+        Time = time ?? Time;
         Description = description?.Trim() ?? Description;
     }
 

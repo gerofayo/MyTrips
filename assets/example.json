@@ -1,83 +1,542 @@
 [
   {
-    "Id": "2aa9427c-cbd0-4564-94ca-94550dec787d",
-    "Title": "Tokyo 2028",
-    "Destination": "Japan",
-    "StartDate": "2028-06-05",
-    "EndDate": "2028-06-23",
-    "InitialBudget": 5000000,
-    "Currency": "JPY",
-    "ImageUrl": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=500\u0026auto=format\u0026fit=crop\u0026q=60\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dG9reW98ZW58MHx8MHx8fDA%3D",
-    "CreatedAt": "2026-03-03T16:12:00.6427765Z",
-    "BudgetItems": []
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "title": "Tokyo Adventure",
+    "destination": "Japan",
+    "startDate": "2025-04-10",
+    "endDate": "2025-04-20",
+    "initialBudget": 350000,
+    "currency": "JPY",
+    "imageUrl": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-01-15T10:30:00Z",
+    "budgetItems": [
+      {
+        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "tripId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "Haneda Airport Limousine Bus",
+        "category": 1,
+        "amount": 3200,
+        "isEstimated": false,
+        "date": "2025-04-10",
+        "time": "14:30",
+        "createdAt": "2025-01-15T10:35:00Z",
+        "description": "Airport transfer to hotel in Shinjuku"
+      },
+      {
+        "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "tripId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "Tokyo Disneyland Day 1",
+        "category": 3,
+        "amount": 15000,
+        "isEstimated": false,
+        "date": "2025-04-11",
+        "time": "09:00",
+        "createdAt": "2025-01-15T10:36:00Z",
+        "description": "Single day passport"
+      },
+      {
+        "id": "d4e5f6a7-b8c9-0123-def0-234567890123",
+        "tripId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "Sushi Dinner at Tsukiji",
+        "category": 0,
+        "amount": 25000,
+        "isEstimated": false,
+        "date": "2025-04-12",
+        "time": "19:00",
+        "createdAt": "2025-01-15T10:37:00Z",
+        "description": "Omakase experience at sushi master"
+      },
+      {
+        "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+        "tripId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "Shibuya Excel Hotel",
+        "category": 2,
+        "amount": 120000,
+        "isEstimated": false,
+        "date": "2025-04-10",
+        "createdAt": "2025-01-15T10:38:00Z",
+        "description": "10 nights in Shibuya"
+      },
+      {
+        "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
+        "tripId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "JR Pass 7 Days",
+        "category": 1,
+        "amount": 35000,
+        "isEstimated": true,
+        "date": "2025-04-13",
+        "createdAt": "2025-01-15T10:39:00Z",
+        "description": "Japan Rail Pass for intercity travel"
+      }
+    ]
   },
   {
-    "Id": "53f8097b-024d-4b4c-8b5c-6cc2d0be06ea",
-    "Title": "New york",
-    "Destination": "United States",
-    "StartDate": "2026-03-08",
-    "EndDate": "2026-03-27",
-    "InitialBudget": 3000,
-    "Currency": "USD",
-    "ImageUrl": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80\u0026w=1170\u0026auto=format\u0026fit=crop\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "CreatedAt": "2026-03-03T16:12:00.6428009Z",
-    "BudgetItems": []
+    "id": "b2c3d4e5-f6a7-8901-bcde-1234567890ab",
+    "title": "Paris Romantic Getaway",
+    "destination": "France",
+    "startDate": "2025-06-15",
+    "endDate": "2025-06-22",
+    "initialBudget": 5000,
+    "currency": "EUR",
+    "imageUrl": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-02-20T14:00:00Z",
+    "budgetItems": [
+{
+        "id": "c3d4e5f6-a7b8-9012-cdef-2345678901bc",
+        "tripId": "b2c3d4e5-f6a7-8901-bcde-1234567890ab",
+        "title": "Flight NYC to Paris",
+        "category": 1,
+        "amount": 850,
+        "isEstimated": false,
+        "date": "2025-06-15",
+        "time": "18:00",
+        "createdAt": "2025-02-20T14:05:00Z",
+        "description": "Direct flight CDG"
+      },
+      {
+        "id": "d4e5f6a7-b8c9-0123-ef01-3456789012cd",
+        "tripId": "b2c3d4e5-f6a7-8901-bcde-1234567890ab",
+        "title": "Eiffel Tower Skip-the-line",
+        "category": 3,
+        "amount": 28,
+        "isEstimated": false,
+        "date": "2025-06-16",
+        "time": "10:30",
+        "createdAt": "2025-02-20T14:06:00Z",
+        "description": "Summit access tickets"
+      },
+      {
+        "id": "e5f6a7b8-c9d0-1234-cd01-4567890123de",
+        "tripId": "b2c3d4e5-f6a7-8901-bcde-1234567890ab",
+        "title": "Le Marais Hotel",
+        "category": 2,
+        "amount": 1400,
+        "isEstimated": false,
+        "date": "2025-06-15",
+        "createdAt": "2025-02-20T14:07:00Z",
+        "description": "7 nights boutique hotel"
+      },
+      {
+        "id": "f6a7b8c9-d0e1-2345-ab01-5678901234ef",
+        "tripId": "b2c3d4e5-f6a7-8901-bcde-1234567890ab",
+        "title": "Louvre Museum",
+        "category": 3,
+        "amount": 22,
+        "isEstimated": true,
+        "date": "2025-06-18",
+        "createdAt": "2025-02-20T14:08:00Z",
+        "description": "General admission"
+      }
+    ]
   },
   {
-    "Id": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
-    "Title": "Buenos Aires \uD83D\uDE0E",
-    "Destination": "Argentina",
-    "StartDate": "2027-01-04",
-    "EndDate": "2027-01-29",
-    "InitialBudget": 2000000,
-    "Currency": "ARS",
-    "ImageUrl": "https://images.unsplash.com/photo-1600627094717-809e6a3f29f0?q=80\u0026w=765\u0026auto=format\u0026fit=crop\u0026ixlib=rb-4.1.0\u0026ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "CreatedAt": "2026-03-03T16:12:00.6428185Z",
-    "BudgetItems": [
+    "id": "c3d4e5f6-a7b8-9012-cdef-2345678901ab",
+    "title": "Australian Road Trip",
+    "destination": "Australia",
+    "startDate": "2025-09-01",
+    "endDate": "2025-09-15",
+    "initialBudget": 8000,
+    "currency": "AUD",
+    "imageUrl": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-03-10T09:00:00Z",
+    "budgetItems": [
       {
-        "Id": "fa8ab96a-8278-4b26-a703-d5a926815b54",
-        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
-        "Title": "Uber",
-        "Category": 1,
-        "Amount": 100000,
-        "IsEstimated": false,
-        "Date": null,
-        "CreatedAt": "2026-03-03T16:12:28.8969003Z",
-        "Description": ""
+        "id": "d4e5f6a7-b8c9-0123-def0-3456789012cd",
+        "tripId": "c3d4e5f6-a7b8-9012-cdef-2345678901ab",
+        "title": "Sydney to Melbourne Drive",
+        "category": 1,
+        "amount": 450,
+        "isEstimated": false,
+        "date": "2025-09-02",
+        "createdAt": "2025-03-10T09:05:00Z",
+        "description": "Rental car fuel and tolls"
       },
       {
-        "Id": "77fd0f11-c1ee-4f69-bd03-f8192a40b57a",
-        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
-        "Title": "Pizza",
-        "Category": 0,
-        "Amount": 20000,
-        "IsEstimated": false,
-        "Date": "2027-01-04T15:30:00+00:00",
-        "CreatedAt": "2026-03-03T16:13:12.7341064Z",
-        "Description": "Best Buenos Aires pizza..."
+        "id": "e5f6a7b8-c9d0-1234-ef01-4567890123ef",
+        "tripId": "c3d4e5f6-a7b8-9012-cdef-2345678901ab",
+        "title": "Great Ocean Road Tour",
+        "category": 3,
+        "amount": 180,
+        "isEstimated": true,
+        "date": "2025-09-05",
+        "createdAt": "2025-03-10T09:06:00Z",
+        "description": "Guided tour"
       },
       {
-        "Id": "6fdda1fe-4b6a-4411-9f05-0f1872c20fd2",
-        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
-        "Title": "Theater tickets",
-        "Category": 3,
-        "Amount": 15000,
-        "IsEstimated": false,
-        "Date": "2027-01-05T22:00:00+00:00",
-        "CreatedAt": "2026-03-03T16:14:25.2415364Z",
-        "Description": "Phantom of the opera"
+        "id": "f6a7b8c9-d0e1-2345-f012-5678901234fa",
+        "tripId": "c3d4e5f6-a7b8-9012-cdef-2345678901ab",
+        "title": "Melbourne CBD Apartment",
+        "category": 2,
+        "amount": 2200,
+        "isEstimated": false,
+        "date": "2025-09-01",
+        "createdAt": "2025-03-10T09:07:00Z",
+        "description": "14 nights apartment rental"
+      }
+    ]
+  },
+  {
+    "id": "d4e5f6a7-b8c9-0123-def0-3456789012ab",
+    "title": "UK London Business Trip",
+    "destination": "United Kingdom",
+    "startDate": "2025-05-05",
+    "endDate": "2025-05-09",
+    "initialBudget": 2500,
+    "currency": "GBP",
+    "imageUrl": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-04-01T11:00:00Z",
+    "budgetItems": [
+      {
+        "id": "e5f6a7b8-c9d0-1234-ef01-4567890123bc",
+        "tripId": "d4e5f6a7-b8c9-0123-def0-3456789012ab",
+        "title": "Heathrow Express",
+        "category": 1,
+        "amount": 50,
+        "isEstimated": false,
+        "date": "2025-05-05",
+        "time": "12:00",
+        "createdAt": "2025-04-01T11:05:00Z",
+        "description": "Airport to Paddington"
       },
       {
-        "Id": "de148bf8-7e39-48b5-8ebc-a22cd98626a6",
-        "TripId": "a07962b2-1d76-44b7-905f-0c623bc7fe9c",
-        "Title": "Best hotel",
-        "Category": 2,
-        "Amount": 250000,
-        "IsEstimated": false,
-        "Date": null,
-        "CreatedAt": "2026-03-03T16:14:50.5562814Z",
-        "Description": ""
+        "id": "f6a7b8c9-d0e1-2345-f012-5678901234cd",
+        "tripId": "d4e5f6a7-b8c9-0123-def0-3456789012ab",
+        "title": "City Center Premier Inn",
+        "category": 2,
+        "amount": 650,
+        "isEstimated": false,
+        "date": "2025-05-05",
+        "createdAt": "2025-04-01T11:06:00Z",
+        "description": "4 nights"
+      }
+    ]
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-ef01-4567890123ab",
+    "title": "Caribbean Beach Vacation",
+    "destination": "Mexico",
+    "startDate": "2025-12-20",
+    "endDate": "2025-12-27",
+    "initialBudget": 3500,
+    "currency": "USD",
+    "imageUrl": "https://images.unsplash.com/photo-1552074291-ad4dfd8b11c0?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-06-15T16:00:00Z",
+    "budgetItems": [
+      {
+        "id": "f6a7b8c9-d0e1-2345-f012-5678901234de",
+        "tripId": "e5f6a7b8-c9d0-1234-ef01-4567890123ab",
+        "title": "All-Inclusive Resort",
+        "category": 2,
+        "amount": 2200,
+        "isEstimated": false,
+        "date": "2025-12-20",
+        "createdAt": "2025-06-15T16:05:00Z",
+        "description": "7 nights Grand Riviera"
+      },
+      {
+        "id": "a7b8c9d0-e1f2-3456-0123-6789012345ef",
+        "tripId": "e5f6a7b8-c9d0-1234-ef01-4567890123ab",
+        "title": "Snorkeling Excursion",
+        "category": 3,
+        "amount": 85,
+        "isEstimated": false,
+        "date": "2025-12-22",
+        "time": "09:00",
+        "createdAt": "2025-06-15T16:06:00Z",
+        "description": "Cozumel reef tour"
+      },
+      {
+        "id": "b8c9d0e1-f2a3-4567-1234-7890123456fa",
+        "tripId": "e5f6a7b8-c9d0-1234-ef01-4567890123ab",
+        "title": "Airport Transfer",
+        "category": 1,
+        "amount": 60,
+        "isEstimated": true,
+        "date": "2025-12-20",
+        "createdAt": "2025-06-15T16:07:00Z",
+        "description": "Round trip shuttle"
+      }
+    ]
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+    "title": "Italian Food Tour",
+    "destination": "Italy",
+    "startDate": "2025-10-01",
+    "endDate": "2025-10-14",
+    "initialBudget": 6000,
+    "currency": "EUR",
+    "imageUrl": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-05-20T13:30:00Z",
+    "budgetItems": [
+      {
+        "id": "a7b8c9d0-e1f2-3456-0123-6789012345bc",
+        "tripId": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+        "title": "Rome Food Walking Tour",
+        "category": 0,
+        "amount": 120,
+        "isEstimated": false,
+        "date": "2025-10-02",
+        "time": "11:00",
+        "createdAt": "2025-05-20T13:35:00Z",
+        "description": "Trastevere food tour with tastings"
+      },
+      {
+        "id": "b8c9d0e1-f2a3-4567-1234-7890123456cd",
+        "tripId": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+        "title": "Pizza Making Class",
+        "category": 0,
+        "amount": 80,
+        "isEstimated": false,
+        "date": "2025-10-05",
+        "time": "18:00",
+        "createdAt": "2025-05-20T13:36:00Z",
+        "description": "Naples with wine pairing"
+      },
+      {
+        "id": "c9d0e1f2-a3b4-5678-2345-8901234567de",
+        "tripId": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+        "title": "Tuscan Wine Tasting",
+        "category": 0,
+        "amount": 95,
+        "isEstimated": false,
+        "date": "2025-10-08",
+        "time": "14:00",
+        "createdAt": "2025-05-20T13:37:00Z",
+        "description": "Chianti region day tour"
+      },
+      {
+        "id": "d0e1f2a3-b4c5-6789-3456-9012345678ef",
+        "tripId": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+        "title": "Florence Hotel",
+        "category": 2,
+        "amount": 1100,
+        "isEstimated": false,
+        "date": "2025-10-01",
+        "createdAt": "2025-05-20T13:38:00Z",
+        "description": "5 nights near Duomo"
+      },
+      {
+        "id": "e1f2a3b4-c5d6-7890-4567-0123456789fa",
+        "tripId": "f6a7b8c9-d0e1-2345-f012-6789012345ab",
+        "title": "Venice Water Taxi",
+        "category": 1,
+        "amount": 45,
+        "isEstimated": true,
+        "date": "2025-10-10",
+        "createdAt": "2025-05-20T13:39:00Z",
+        "description": "Transfer from station to hotel"
+      }
+    ]
+  },
+  {
+    "id": "a7b8c9d0-e1f2-3456-0123-6789012345ab",
+    "title": "Swiss Alps Adventure",
+    "destination": "Switzerland",
+    "startDate": "2026-01-10",
+    "endDate": "2026-01-17",
+    "initialBudget": 7500,
+    "currency": "CHF",
+    "imageUrl": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-07-01T10:00:00Z",
+    "budgetItems": [
+      {
+        "id": "b8c9d0e1-f2a3-4567-1234-7890123456bc",
+        "tripId": "a7b8c9d0-e1f2-3456-0123-6789012345ab",
+        "title": "Swiss Half Fare Card",
+        "category": 1,
+        "amount": 120,
+        "isEstimated": false,
+        "date": "2026-01-10",
+        "createdAt": "2025-07-01T10:05:00Z",
+        "description": "Half price on all transport"
+      },
+      {
+        "id": "c9d0e1f2-a3b4-5678-2345-8901234567cd",
+        "tripId": "a7b8c9d0-e1f2-3456-0123-6789012345ab",
+        "title": "Jungfrau Jungfrau Ticket",
+        "category": 3,
+        "amount": 230,
+        "isEstimated": false,
+        "date": "2026-01-12",
+        "createdAt": "2025-07-01T10:06:00Z",
+        "description": "Top of Europe train + entrance"
+      },
+      {
+        "id": "d0e1f2a3-b4c5-6789-3456-9012345678de",
+        "tripId": "a7b8c9d0-e1f2-3456-0123-6789012345ab",
+        "title": "Zermatt Alpine Lodge",
+        "category": 2,
+        "amount": 1800,
+        "isEstimated": false,
+        "date": "2026-01-10",
+        "createdAt": "2025-07-01T10:07:00Z",
+        "description": "7 nights with Matterhorn view"
+      }
+    ]
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4567-1234-7890123456ab",
+    "title": "Brazil Carnival",
+    "destination": "Brazil",
+    "startDate": "2026-02-12",
+    "endDate": "2026-02-20",
+    "initialBudget": 4000,
+    "currency": "BRL",
+    "imageUrl": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-08-15T15:00:00Z",
+    "budgetItems": [
+      {
+        "id": "c9d0e1f2-a3b4-5678-2345-8901234567bc",
+        "tripId": "b8c9d0e1-f2a3-4567-1234-7890123456ab",
+        "title": "Samba School Ticket",
+        "category": 3,
+        "amount": 350,
+        "isEstimated": false,
+        "date": "2026-02-14",
+        "time": "21:00",
+        "createdAt": "2025-08-15T15:05:00Z",
+        "description": "Parade sector seating"
+      },
+      {
+        "id": "d0e1f2a3-b4c5-6789-3456-9012345678cd",
+        "tripId": "b8c9d0e1-f2a3-4567-1234-7890123456ab",
+        "title": "Copacabana Hotel",
+        "category": 2,
+        "amount": 1500,
+        "isEstimated": false,
+        "date": "2026-02-12",
+        "createdAt": "2025-08-15T15:06:00Z",
+        "description": "8 nights"
+      },
+      {
+        "id": "e1f2a3b4-c5d6-7890-4567-0123456789de",
+        "tripId": "b8c9d0e1-f2a3-4567-1234-7890123456ab",
+        "title": "Christ Redeemer Tour",
+        "category": 3,
+        "amount": 80,
+        "isEstimated": true,
+        "date": "2026-02-15",
+        "createdAt": "2025-08-15T15:07:00Z",
+        "description": "Morning tour with transport"
+      }
+    ]
+  },
+  {
+    "id": "c9d0e1f2-a3b4-5678-2345-8901234567ab",
+    "title": "Weekend NYC",
+    "destination": "United States",
+    "startDate": "2025-11-14",
+    "endDate": "2025-11-16",
+    "initialBudget": 1500,
+    "currency": "USD",
+    "imageUrl": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2025-09-01T12:00:00Z",
+    "budgetItems": [
+      {
+        "id": "d0e1f2a3-b4c5-6789-3456-9012345678bc",
+        "tripId": "c9d0e1f2-a3b4-5678-2345-8901234567ab",
+        "title": "Broadway Show",
+        "category": 3,
+        "amount": 250,
+        "isEstimated": false,
+        "date": "2025-11-14",
+        "time": "20:00",
+        "createdAt": "2025-09-01T12:05:00Z",
+        "description": "Hamilton"
+      },
+      {
+        "id": "e1f2a3b4-c5d6-7890-4567-0123456789cd",
+        "tripId": "c9d0e1f2-a3b4-5678-2345-8901234567ab",
+        "title": "Manhattan Hotel",
+        "category": 2,
+        "amount": 650,
+        "isEstimated": false,
+        "date": "2025-11-14",
+        "createdAt": "2025-09-01T12:06:00Z",
+        "description": "2 nights midtown"
+      },
+      {
+        "id": "f2a3b4c5-d6e7-8901-5678-1234567890de",
+        "tripId": "c9d0e1f2-a3b4-5678-2345-8901234567ab",
+        "title": "Subway MetroCard",
+        "category": 1,
+        "amount": 33,
+        "isEstimated": false,
+        "date": "2025-11-14",
+        "createdAt": "2025-09-01T12:07:00Z",
+        "description": "Unlimited 3-day pass"
+      }
+    ]
+  },
+  {
+    "id": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+    "title": "New Zealand Nature",
+    "destination": "New Zealand",
+    "startDate": "2025-03-15",
+    "endDate": "2025-03-28",
+    "initialBudget": 9000,
+    "currency": "NZD",
+    "imageUrl": "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=500&auto=format&fit=crop&q=60",
+    "createdAt": "2024-12-01T09:00:00Z",
+    "budgetItems": [
+      {
+        "id": "e1f2a3b4-c5d6-7890-4567-0123456789bc",
+        "tripId": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+        "title": "Auckland Campervan",
+        "category": 1,
+        "amount": 1800,
+        "isEstimated": false,
+        "date": "2025-03-15",
+        "createdAt": "2024-12-01T09:05:00Z",
+        "description": "14 day campervan rental"
+      },
+      {
+        "id": "f2a3b4c5-d6e7-8901-5678-1234567890cd",
+        "tripId": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+        "title": "Milford Sound Cruise",
+        "category": 3,
+        "amount": 180,
+        "isEstimated": false,
+        "date": "2025-03-20",
+        "time": "09:00",
+        "createdAt": "2024-12-01T09:06:00Z",
+        "description": "Full day excursion"
+      },
+      {
+        "id": "a3b4c5d6-e7f8-9012-6789-2345678901de",
+        "tripId": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+        "title": "Hobbiton Movie Set",
+        "category": 3,
+        "amount": 95,
+        "isEstimated": false,
+        "date": "2025-03-17",
+        "createdAt": "2024-12-01T09:07:00Z",
+        "description": "Guided tour"
+      },
+      {
+        "id": "b4c5d6e7-f8a9-0123-7890-3456789012ef",
+        "tripId": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+        "title": "Queenstown Lakeside",
+        "category": 2,
+        "amount": 2100,
+        "isEstimated": false,
+        "date": "2025-03-18",
+        "createdAt": "2024-12-01T09:08:00Z",
+        "description": "4 nights"
+      },
+      {
+        "id": "c5d6e7f8-a9b0-1234-8901-4567890123fa",
+        "tripId": "d0e1f2a3-b4c5-6789-3456-9012345678ab",
+        "title": "Waitomo Glowworms",
+        "category": 3,
+        "amount": 55,
+        "isEstimated": true,
+        "date": "2025-03-16",
+        "createdAt": "2024-12-01T09:09:00Z",
+        "description": "Cave adventure"
       }
     ]
   }
 ]
+

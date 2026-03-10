@@ -15,7 +15,8 @@ public static class BudgetItemMapper
             Amount = model.Amount,
             Category = model.Category,
             IsEstimated = model.IsEstimated,
-            Date = model.Date?.ToString("yyyy-MM-dd"),
+            Date = model.Date,
+            Time = model.Time,
             Description = model.Description
         };
     }
@@ -28,7 +29,8 @@ public static class BudgetItemMapper
             category: request.Category,
             amount: request.Amount,
             isEstimated: request.IsEstimated,
-            date: request.Date
+            date: request.Date,
+            time: request.Time
         );
     }
 }

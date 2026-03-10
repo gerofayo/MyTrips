@@ -14,7 +14,8 @@ public record class CreateBudgetItemRequest
     [Required]
     [Range(0, double.MaxValue)]
     public decimal Amount { get; set; }
-    public DateTimeOffset? Date { get; set; }
+    public string? Date { get; set; }  // YYYY-MM-DD format - just the day
+    public string? Time { get; set; }  // HH:MM format - just the time
     [Required]
     public bool IsEstimated { get; set; }
     [MaxLength(500)]

@@ -1,11 +1,11 @@
 import { AppRouter } from "./routes/AppRouter";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import ThemeToggle from "./components/ThemeToggle";
+import TopBar from "./components/TopBar";
 
 function App() {
   return (
     <div className="app-layout">
-      <ThemeToggle />
+      <TopBar />
       <ErrorBoundary>
         <main className="main-content">
           <AppRouter />
