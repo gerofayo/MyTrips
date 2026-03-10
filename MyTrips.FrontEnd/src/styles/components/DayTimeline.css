@@ -1,0 +1,256 @@
+/* DayTimeline - Minimal Design */
+
+.day-timeline {
+  padding: 8px 0;
+}
+
+.timeline-hour-slot {
+  display: flex;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.timeline-hour-slot:hover {
+  background-color: var(--bg-main);
+}
+
+.hour-label {
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.hour-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.hour-content {
+  flex: 1;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.budget-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.budget-item-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.budget-category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.budget-item-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.budget-item-time {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 2px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.budget-item-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.budget-item-amount {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  flex-shrink: 0;
+}
+
+.budget-item-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.budget-action-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  transition: all 0.15s ease;
+}
+
+.budget-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.budget-item:hover .budget-action-btn,
+.budget-item.expanded .budget-action-btn {
+  opacity: 1;
+}
+
+.budget-action-btn.edit-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.budget-action-btn.delete-btn:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.budget-item-description {
+  padding: 6px 10px 8px 21px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.budget-item-expanded {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 6px 10px 8px 21px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.expanded-time {
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.expanded-description {
+  color: var(--text-secondary);
+}
+
+.empty-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 40px;
+  color: var(--border-color);
+  margin-bottom: 8px;
+}
+
+.empty-timeline p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.empty-hint {
+  margin-top: 2px !important;
+  font-size: 11px !important;
+  opacity: 0.6;
+}
+
+.unscheduled-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px dashed var(--border-color);
+}
+
+.unscheduled-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.unscheduled-header svg {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.unscheduled-header span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .budget-item-main {
+    padding: 10px 12px;
+  }
+
+  .budget-item-title {
+    font-size: 14px;
+  }
+
+  .budget-item-amount {
+    font-size: 14px;
+  }
+
+  .budget-item-actions {
+    gap: 4px;
+  }
+
+  .budget-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .budget-action-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+

@@ -8,6 +8,7 @@ import { TripInfoCard } from "../components/TripInfoCard";
 import { TripCalendar } from "../components/TripCalendar";
 import { BudgetItemList } from "../components/BudgetItemList";
 import { BudgetItemForm } from "../components/BudgetItemForm";
+import { DayTimeline } from "../components/DayTimeline";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { deleteTrip } from "../services/tripService";
 import { PATHS } from "../routes/paths";
@@ -22,10 +23,11 @@ export default function TripDetailPage() {
   const navigate = useNavigate();
   
   const { trip, loading: tripLoading } = useTrip(tripId);
-  const { items, createItem, updateItem, deleteItem, isSubmitting, loading: loadingItems } = useBudgetItems(tripId!);
+  const { items, createItem, updateItem, updateItemTime, deleteItem, isSubmitting, loading: loadingItems } = useBudgetItems(tripId!);
 
   const [activeTab, setActiveTab] = useState<TabId>("budget");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<BudgetItem | null>(null);
 
   const displayedItems = useMemo(() => {
@@ -74,6 +76,7 @@ export default function TripDetailPage() {
 
   const handleCancelForm = () => {
     setEditingItem(null);
+    setSelectedTime(null);
     setActiveTab("budget");
   };
 
@@ -181,24 +184,58 @@ export default function TripDetailPage() {
                 </button>
               </div>
 
-              {/* Budget Items List */}
+              {/* Budget Items - Show Timeline when date selected, otherwise show list */}
               <div className="expenses-list-section">
-                <BudgetItemList
-                  items={displayedItems}
-                  onDelete={async (id) => {
-                    if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
-                      try {
-                        await deleteItem(id);
-                      } catch (error) {
-                        logger.error("Error deleting budget item", error);
-                        alert("Error deleting item. Please try again.");
+                {selectedDate ? (
+                  <DayTimeline
+                    date={selectedDate}
+                    items={displayedItems}
+                    onEditItem={handleEditItem}
+                    onDeleteItem={async (id) => {
+                      if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
+                        try {
+                          await deleteItem(id);
+                        } catch (error) {
+                          logger.error("Error deleting budget item", error);
+                          alert("Error deleting item. Please try again.");
+                        }
                       }
-                    }
-                  }}
-                  onEdit={handleEditItem}
-                  isSubmitting={loadingItems}
-                  selectedDate={selectedDate}
-                />
+                    }}
+                    onAddAtTime={(hour) => {
+                      // Pre-fill form with the selected time
+                      const formattedHour = hour.toString().padStart(2, '0') + ':00';
+                      setSelectedTime(formattedHour);
+                      handleAddExpense();
+                    }}
+                    onUpdateItemTime={async (id, newDate) => {
+                      try {
+                        await updateItemTime(id, newDate);
+                        logger.info(`Budget item time updated: ${id}`);
+                      } catch (error) {
+                        logger.error("Error updating budget item time", error);
+                        alert("Error updating item time. Please try again.");
+                      }
+                    }}
+                    isSubmitting={loadingItems}
+                  />
+                ) : (
+                  <BudgetItemList
+                    items={displayedItems}
+                    onDelete={async (id) => {
+                      if (window.confirm(TEXTS.tripDetail.deleteItemConfirm)) {
+                        try {
+                          await deleteItem(id);
+                        } catch (error) {
+                          logger.error("Error deleting budget item", error);
+                          alert("Error deleting item. Please try again.");
+                        }
+                      }
+                    }}
+                    onEdit={handleEditItem}
+                    isSubmitting={loadingItems}
+                    selectedDate={selectedDate}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -214,7 +251,10 @@ export default function TripDetailPage() {
                   onSubmit={handleFormSubmit}
                   isSubmitting={isSubmitting}
                   selectedDate={selectedDate}
+                  selectedTime={selectedTime}
                   initialData={editingItem}
+                  tripStartDate={trip.startDate}
+                  tripEndDate={trip.endDate}
                 />
                 <button 
                   className="button cancel-btn"

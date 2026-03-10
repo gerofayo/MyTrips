@@ -1,34 +1,44 @@
-/* Centralized colors for expense categories.
-   These class names are used by multiple components (TripInfoCard, BudgetItemList, etc.)
-   and should stay in sync with the backend ExpenseCategory enum. */
+/* Centralized colors for expense categories using CSS variables */
+:root {
+  --cat-food: #f87171;
+  --cat-transport: #60a5fa;
+  --cat-lodging: #34d399;
+  --cat-entertainment: #fbbf24;
+  --cat-other: #94a3b8;
+}
 
 .category-indicator.cat-food,
 .legend-dot.cat-food,
-.category-distribution-bar .cat-food {
-  background-color: #f87171;
+.category-distribution-bar .cat-food,
+.budget-category-dot.cat-food {
+  background-color: var(--cat-food);
 }
 
 .category-indicator.cat-transport,
 .legend-dot.cat-transport,
-.category-distribution-bar .cat-transport {
-  background-color: #60a5fa;
+.category-distribution-bar .cat-transport,
+.budget-category-dot.cat-transport {
+  background-color: var(--cat-transport);
 }
 
 .category-indicator.cat-lodging,
 .legend-dot.cat-lodging,
-.category-distribution-bar .cat-lodging {
-  background-color: #34d399;
+.category-distribution-bar .cat-lodging,
+.budget-category-dot.cat-lodging {
+  background-color: var(--cat-lodging);
 }
 
 .category-indicator.cat-entertainment,
 .legend-dot.cat-entertainment,
-.category-distribution-bar .cat-entertainment {
-  background-color: #fbbf24;
+.category-distribution-bar .cat-entertainment,
+.budget-category-dot.cat-entertainment {
+  background-color: var(--cat-entertainment);
 }
 
 .category-indicator.cat-other,
 .legend-dot.cat-other,
-.category-distribution-bar .cat-other {
-  background-color: #94a3b8;
+.category-distribution-bar .cat-other,
+.budget-category-dot.cat-other {
+  background-color: var(--cat-other);
 }
 

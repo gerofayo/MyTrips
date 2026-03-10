@@ -4,23 +4,35 @@ import { getBudgetItemCategories } from "../services/budgetItemService";
 import { TEXTS } from "../config/texts";
 import { SearchableSelect, type SearchableSelectOption } from "./SearchableSelect";
 import { useNumericInput } from "../hooks/useNumericInput";
+import { Icon } from "@iconify/react";
+import { logger } from "../utils/logger";
 import "../styles/components/BudgetItemForm.css";
 
 type Props = {
   onSubmit: (item: Omit<CreateBudgetItemRequest, "id">) => Promise<void>;
   isSubmitting: boolean;
   selectedDate: string | null;
+  selectedTime?: string | null;
   initialData: BudgetItem | null;
+  tripStartDate?: string;
+  tripEndDate?: string;
 };
+
+type DateMode = "specific" | "allday" | "none";
 
 export const BudgetItemForm = ({
   onSubmit,
   isSubmitting,
   selectedDate,
-  initialData
+  selectedTime,
+  initialData,
+  tripStartDate,
+  tripEndDate,
 }: Props) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [time, setTime] = useState("");
+  const [dateMode, setDateMode] = useState<DateMode>("specific");
+  const [formDate, setFormDate] = useState<string>("");
   const [isPerDay, setIsPerDay] = useState(false);
   const [daysCountInput, setDaysCount, getDaysCount] = useNumericInput(1);
 
@@ -41,23 +53,38 @@ export const BudgetItemForm = ({
         isEstimated: initialData.isEstimated,
         description: initialData.description || "",
       });
-      if (initialData.date) {
-        const extractedTime = initialData.date.split("T")[1]?.substring(0, 5);
-        setTime(extractedTime || "");
+      
+      // Determine date mode from existing data
+      if (!initialData.date) {
+        setDateMode("none"); // No date
+      } else if (!initialData.time) {
+        setDateMode("allday"); // All day (has date but no time)
+      } else {
+        setDateMode("specific"); // Specific date and time
+        setFormDate(initialData.date.split("T")[0]);
+        setTime(initialData.time);
       }
-      setIsPerDay(false); 
     } else {
+      // New item
       setFormData({ title: "", amount: 0, category: "", isEstimated: false, description: "" });
-      setTime("");
+      setTime(selectedTime || "");
+      
+      // Default based on selected date
+      if (selectedDate) {
+        setDateMode("specific");
+        setFormDate(selectedDate);
+      } else {
+        setDateMode("none");
+      }
       setIsPerDay(false);
       setDaysCount(1);
     }
-  }, [initialData, selectedDate]);
+  }, [initialData, selectedDate, selectedTime]);
 
   useEffect(() => {
     getBudgetItemCategories()
       .then(setCategories)
-      .catch((err) => console.error(err));
+      .catch((err) => logger.error("Failed to fetch categories", err));
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -75,7 +102,6 @@ export const BudgetItemForm = ({
     }));
   };
 
-  // Prepare options for SearchableSelect
   const categoryOptions: SearchableSelectOption[] = categories.map((cat) => ({
     value: cat,
     label: cat,
@@ -84,28 +110,32 @@ export const BudgetItemForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let finalIsoDate: string | null = null;
-    // When editing, use the original date from initialData; otherwise use selectedDate
-    const activeDate = initialData?.date 
-      ? initialData.date.split("T")[0] 
-      : (selectedDate || null);
+    let finalDate: string | null = null;
+    let finalTime: string | null = null;
 
-    if (activeDate) {
-      const timePart = time || "00:00";
-      finalIsoDate = new Date(`${activeDate}T${timePart}:00`).toISOString();
+    if (dateMode === "specific" && formDate) {
+      finalDate = formDate;
+      finalTime = time || null;
+    } else if (dateMode === "allday" && formDate) {
+      finalDate = formDate;
+      finalTime = null; // All day
     }
+    // dateMode "none" means no date and no time (generic)
 
     const finalAmount = isPerDay ? formData.amount * getDaysCount() : formData.amount;
 
     await onSubmit({
       ...formData,
       amount: finalAmount,
-      date: finalIsoDate,
+      date: finalDate,
+      time: finalTime,
     });
 
     if (!initialData) {
       setFormData({ title: "", amount: 0, category: "", isEstimated: false, description: "" });
       setTime("");
+      setDateMode(selectedDate ? "specific" : "none");
+      setFormDate(selectedDate || "");
       setIsPerDay(false);
       setDaysCount(1);
     }
@@ -154,36 +184,77 @@ export const BudgetItemForm = ({
           />
         </div>
 
-        {(selectedDate || initialData?.date) ? (
-          <div className="form-group">
-            <label className="section-label">{TEXTS.budgetItemForm.timeLabel}</label>
+        <div className="form-group">
+          {/* Date mode selector */}
+          <div className="date-mode-selector">
+            <button
+              type="button"
+              className={`mode-btn ${dateMode === "specific" ? "active" : ""}`}
+              onClick={() => setDateMode("specific")}
+            >
+              <Icon icon="mdi:calendar" />
+              Date
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${dateMode === "allday" ? "active" : ""}`}
+              onClick={() => setDateMode("allday")}
+            >
+              <Icon icon="mdi:calendar-clock" />
+              All Day
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${dateMode === "none" ? "active" : ""}`}
+              onClick={() => setDateMode("none")}
+            >
+              <Icon icon="mdi:calendar-remove" />
+              None
+            </button>
+          </div>
+
+          {/* Date picker - shown for specific or allday */}
+          {(dateMode === "specific" || dateMode === "allday") && (
+            <input 
+              type="date" 
+              className="form-input" 
+              value={formDate} 
+              onChange={(e) => setFormDate(e.target.value)}
+              min={tripStartDate}
+              max={tripEndDate}
+            />
+          )}
+
+          {/* Time picker - shown only for specific */}
+          {dateMode === "specific" && (
             <input 
               type="time" 
               className="form-input" 
               value={time} 
-              onChange={(e) => setTime(e.target.value)} 
-              required 
+              onChange={(e) => setTime(e.target.value)}
             />
-          </div>
-        ) : !initialData && (
-          <div className="checkbox-group">
-            <input 
-              type="checkbox" 
-              id="perDay" 
-              checked={isPerDay} 
-              onChange={(e) => setIsPerDay(e.target.checked)} 
-            />
-            <div className="budget-item-helper">
-              <label htmlFor="perDay">
-                {TEXTS.budgetItemForm.multiDayLabel}
-              </label>
-              <span className="budget-item-helper-text">
-                {TEXTS.budgetItemForm.multiDayHelper}
-              </span>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {dateMode === "none" && !initialData && (
+        <div className="checkbox-group">
+          <input 
+            type="checkbox" 
+            id="perDay" 
+            checked={isPerDay} 
+            onChange={(e) => setIsPerDay(e.target.checked)} 
+          />
+          <div className="budget-item-helper">
+            <label htmlFor="perDay">
+              {TEXTS.budgetItemForm.multiDayLabel}
+            </label>
+            <span className="budget-item-helper-text">
+              {TEXTS.budgetItemForm.multiDayHelper}
+            </span>
+          </div>
+        </div>
+      )}
 
       {isPerDay && (
         <div className="per-day-box">
@@ -228,3 +299,4 @@ export const BudgetItemForm = ({
     </form>
   );
 };
+

@@ -93,7 +93,8 @@ public class Trip
         decimal amount,
         ExpenseCategory category = ExpenseCategory.Other,
         bool isEstimated = true,
-        DateTimeOffset? date = null,
+        string? date = null,
+        string? time = null,
         string? description = null)
     {
         var item = new BudgetItem(
@@ -103,6 +104,7 @@ public class Trip
             amount: amount,
             isEstimated: isEstimated,
             date: date,
+            time: time,
             description: description
             );
 
@@ -120,14 +122,15 @@ public class Trip
     ExpenseCategory? category = null,
     decimal? amount = null,
     bool? isEstimated = null,
-    DateTimeOffset? date = null,
+    string? date = null,
+    string? time = null,
     string? description = null)
     {
         var item = GetBudgetItemById(budgetItemId);
         if (item is null)
             return null;
 
-        var updatedItem = item.WithUpdates(title, category, amount, isEstimated, date, description);
+        var updatedItem = item.WithUpdates(title, category, amount, isEstimated, date, time, description);
 
         // Replace the item in the collection with the new immutable instance
         var index = BudgetItems.ToList().FindIndex(x => x.Id == budgetItemId);

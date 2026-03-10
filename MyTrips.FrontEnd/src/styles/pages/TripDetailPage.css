@@ -155,31 +155,6 @@
   font-size: 1.1rem;
 }
 
-.expense-form {
-  overflow: hidden;
-  transition: all 0.3s ease;
-  margin-bottom: var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.expense-form.collapsed {
-  max-height: 0;
-  opacity: 0;
-  margin-bottom: 0;
-}
-
-.expense-form.expanded {
-  max-height: 800px;
-  opacity: 1;
-  padding: var(--spacing-md);
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-sizing: border-box;
-  width: 100%;
-}
-
 .expenses-list-section {
   margin-top: var(--spacing-lg);
 }
@@ -215,32 +190,6 @@
 .cancel-btn:hover {
   background: var(--bg-main);
   border-color: var(--text-muted);
-}
-
-/* ================================
-   Calendar Tab - Google Calendar Style
-   ================================ */
-
-.calendar-tab {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.calendar-expenses {
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  border: 1px solid var(--border-color);
-}
-
-.calendar-expenses-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0 0 var(--spacing-md) 0;
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 1px solid var(--border-color);
 }
 
 /* ================================
@@ -370,39 +319,6 @@
 }
 
 /* ================================
-   Danger Section - Minimal
-   ================================ */
-
-.danger-section {
-  display: flex;
-  justify-content: center;
-  padding: var(--spacing-xl) 0;
-}
-
-.btn-danger-text {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-}
-
-.btn-danger-text:hover {
-  color: var(--danger);
-  background: var(--danger-bg);
-}
-
-.btn-danger-text svg {
-  font-size: 1.1rem;
-}
-
-/* ================================
    Not Found & Loading
    ================================ */
 
@@ -525,7 +441,7 @@
   
   .tab-nav {
     position: fixed;
-    bottom: 60px;
+    bottom: 10px;
     left: var(--spacing-sm);
     right: var(--spacing-sm);
     margin-bottom: 0;
