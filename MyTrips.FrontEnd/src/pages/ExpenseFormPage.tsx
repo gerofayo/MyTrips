@@ -28,9 +28,14 @@ export default function ExpenseFormPage() {
     }
   }, [isEditing, itemId, items]);
 
-  const handleSubmit = async (formData: CreateBudgetItemRequest) => {
+  const handleSubmit = async (formData: CreateBudgetItemRequest | CreateBudgetItemRequest[]) => {
     try {
-      if (isEditing && itemId) {
+      // Check if it's an array (factory mode - not used in ExpenseFormPage but for type compatibility)
+      if (Array.isArray(formData)) {
+        // Factory mode not supported in this page, but handle for type compatibility
+        await Promise.all(formData.map(item => createItem(item)));
+        logger.info(`Budget items created (factory): ${formData.length} items`);
+      } else if (isEditing && itemId) {
         await updateItem(itemId, formData);
         logger.info(`Budget item updated: ${itemId}`);
       } else {
@@ -80,7 +85,7 @@ export default function ExpenseFormPage() {
             ← Cancel
           </button>
           <h1 className="trip-form-title">
-            {isEditing ? TEXTS.budgetItemForm.submitUpdate : "Add Expense"}
+            {isEditing ? TEXTS.expenseForm.editTitle : TEXTS.expenseForm.addTitle}
           </h1>
           <div style={{ width: 60 }} /> {/* Spacer for alignment */}
         </div>

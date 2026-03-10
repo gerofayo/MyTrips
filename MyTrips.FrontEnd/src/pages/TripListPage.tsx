@@ -77,7 +77,7 @@ export default function TripListPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    logger.info("Cargando lista de viajes");
+    logger.info("Loading trips list");
     reload();
   }, []);
 
@@ -97,8 +97,9 @@ export default function TripListPage() {
       await reload();
       logger.info("Trips imported successfully");
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
       logger.error("Failed to import trips", error);
-      alert("Failed to import trips. Please try again.");
+      alert(`Failed to import trips: ${errorMessage}`);
     }
   };
 

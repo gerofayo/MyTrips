@@ -167,11 +167,11 @@ export const BudgetItemList = ({
       <div className="day-group">
         <div className="day-header">
           <div className="day-header-main">
-            <span className="day-badge">AVERAGE</span>
-            <h4 className="day-title-text">Per Day Category Average</h4>
+            <span className="day-badge">{TEXTS.budgetItemList.badgeAverage}</span>
+            <h4 className="day-title-text">{TEXTS.budgetItemList.averageTitle}</h4>
           </div>
           <div className="day-header-total">
-            <span><strong>Total:</strong> ${total.toLocaleString()}</span>
+            <span><strong>{TEXTS.budgetItemList.headerTotalLabel}:</strong> ${total.toLocaleString()}</span>
           </div>
         </div>
         <div className="category-stats-grid">

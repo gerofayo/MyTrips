@@ -58,9 +58,14 @@ export default function TripDetailPage() {
     setActiveTab("expense");
   };
 
-  const handleFormSubmit = async (formData: CreateBudgetItemRequest) => {
+  const handleFormSubmit = async (formData: CreateBudgetItemRequest | CreateBudgetItemRequest[]) => {
     try {
-      if (editingItem) {
+      // Check if it's an array (factory mode)
+      if (Array.isArray(formData)) {
+        // Create all items in parallel
+        await Promise.all(formData.map(item => createItem(item)));
+        logger.info(`Budget items created (factory): ${formData.length} items for trip: ${tripId}`);
+      } else if (editingItem) {
         await updateItem(editingItem.id, formData);
         logger.info(`Budget item updated: ${editingItem.id}`);
       } else {
@@ -127,28 +132,28 @@ export default function TripDetailPage() {
             onClick={() => setActiveTab("budget")}
           >
             <Icon icon="mdi:wallet-outline" />
-            <span>Budget</span>
+            <span>{TEXTS.tabs.budget}</span>
           </button>
           <button 
             className={`tab-btn ${activeTab === "map" ? "active" : ""}`}
             onClick={() => setActiveTab("map")}
           >
             <Icon icon="mdi:map-marker-outline" />
-            <span>Map</span>
+            <span>{TEXTS.tabs.map}</span>
           </button>
           <button 
             className={`tab-btn ${activeTab === "photos" ? "active" : ""}`}
             onClick={() => setActiveTab("photos")}
           >
             <Icon icon="mdi:image-multiple-outline" />
-            <span>Photos</span>
+            <span>{TEXTS.tabs.photos}</span>
           </button>
           <button 
             className={`tab-btn ${activeTab === "settings" ? "active" : ""}`}
             onClick={() => setActiveTab("settings")}
           >
             <Icon icon="mdi:cog-outline" />
-            <span>Settings</span>
+            <span>{TEXTS.tabs.settings}</span>
           </button>
         </nav>
 
@@ -180,7 +185,7 @@ export default function TripDetailPage() {
                   onClick={handleAddExpense}
                 >
                   <Icon icon="mdi:plus" />
-                  Add Expense
+                  {TEXTS.tripDetail.addExpense}
                 </button>
               </div>
 
@@ -245,7 +250,7 @@ export default function TripDetailPage() {
             <div className="tab-content">
               <div className="expense-form-container">
                 <h3 className="expense-form-title">
-                  {editingItem ? "Edit Expense" : "Add Expense"}
+                  {editingItem ? TEXTS.expenseForm.editTitle : TEXTS.expenseForm.addTitle}
                 </h3>
                 <BudgetItemForm
                   onSubmit={handleFormSubmit}
@@ -260,7 +265,7 @@ export default function TripDetailPage() {
                   className="button cancel-btn"
                   onClick={handleCancelForm}
                 >
-                  Cancel
+                  {TEXTS.expenseForm.cancel}
                 </button>
               </div>
             </div>
@@ -271,8 +276,8 @@ export default function TripDetailPage() {
             <div className="tab-content placeholder-tab">
               <div className="placeholder-content">
                 <Icon icon="mdi:map-marker-outline" className="placeholder-icon" />
-                <h3>Trip Map</h3>
-                <p>Map view is coming soon. You'll be able to see all your trip locations here.</p>
+                <h3>{TEXTS.placeholders.mapTitle}</h3>
+                <p>{TEXTS.placeholders.mapDescription}</p>
               </div>
             </div>
           )}
@@ -282,8 +287,8 @@ export default function TripDetailPage() {
             <div className="tab-content placeholder-tab">
               <div className="placeholder-content">
                 <Icon icon="mdi:image-multiple-outline" className="placeholder-icon" />
-                <h3>Trip Photos</h3>
-                <p>Photo gallery is coming soon. Upload and organize your trip memories here.</p>
+                <h3>{TEXTS.placeholders.photosTitle}</h3>
+                <p>{TEXTS.placeholders.photosDescription}</p>
               </div>
             </div>
           )}
@@ -292,8 +297,8 @@ export default function TripDetailPage() {
           {activeTab === "settings" && (
             <div className="tab-content settings-tab">
               <div className="settings-section">
-                <h3 className="settings-title">Trip Settings</h3>
-                <p className="settings-subtitle">Manage your trip details</p>
+                <h3 className="settings-title">{TEXTS.settings.title}</h3>
+                <p className="settings-subtitle">{TEXTS.settings.subtitle}</p>
                 
                 <div className="settings-actions">
                   <button 
@@ -302,8 +307,8 @@ export default function TripDetailPage() {
                   >
                     <Icon icon="mdi:pencil-outline" />
                     <div className="settings-action-text">
-                      <span className="settings-action-title">Edit Trip</span>
-                      <span className="settings-action-desc">Change destination, dates, budget</span>
+                      <span className="settings-action-title">{TEXTS.settings.editTripTitle}</span>
+                      <span className="settings-action-desc">{TEXTS.settings.editTripDesc}</span>
                     </div>
                     <Icon icon="mdi:chevron-right" className="settings-chevron" />
                   </button>
@@ -314,8 +319,8 @@ export default function TripDetailPage() {
                   >
                     <Icon icon="mdi:trash-can-outline" />
                     <div className="settings-action-text">
-                      <span className="settings-action-title">Delete Trip</span>
-                      <span className="settings-action-desc">Permanently remove this trip</span>
+                      <span className="settings-action-title">{TEXTS.settings.deleteTripTitle}</span>
+                      <span className="settings-action-desc">{TEXTS.settings.deleteTripDesc}</span>
                     </div>
                     <Icon icon="mdi:chevron-right" className="settings-chevron" />
                   </button>

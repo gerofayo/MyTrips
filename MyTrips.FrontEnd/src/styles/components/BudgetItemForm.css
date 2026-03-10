@@ -191,6 +191,69 @@
   margin-bottom: var(--spacing-sm);
 }
 
+.amount-mode-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.amount-mode-selector {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.amount-mode-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  padding: 0 var(--spacing-xs);
+  text-align: center;
+}
+
+.repeat-box {
+  background: var(--bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  animation: slideDown 0.3s ease-out;
+}
+
+.repeat-dates-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.repeat-dates-row .form-group {
+  flex: 1;
+}
+
+.repeat-dates-row .form-input {
+  width: 100%;
+}
+
+.repeat-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.repeat-days-count {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.repeat-total {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
 .mode-btn {
   flex: 1;
   display: flex;
@@ -244,6 +307,11 @@
   
   .form-actions .button {
     width: 100%;
+  }
+  
+  .repeat-dates-row {
+    flex-direction: column;
+    gap: var(--spacing-sm);
   }
 }
 

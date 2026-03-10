@@ -3,7 +3,7 @@ import type { BudgetItem } from "../types/BudgetItem";
 import { Icon } from "@iconify/react";
 import { getCategoryClass } from "../utils/category";
 import { getDatePart } from "../utils/date";
-import { logger } from "../utils/logger";
+import { TEXTS } from "../config/texts";
 import "../styles/components/DayTimeline.css";
 import "../styles/components/ExpenseCategoryColors.css";
 
@@ -12,8 +12,8 @@ interface DayTimelineProps {
   items: BudgetItem[];
   onEditItem: (item: BudgetItem) => void;
   onDeleteItem: (id: string) => void;
-  onAddAtTime: (hour: number) => void;
-  onUpdateItemTime: (id: string, newDate: string | null) => Promise<void>;
+  onAddAtTime?: (hour: number) => void;
+  onUpdateItemTime?: (id: string, newDate: string | null) => Promise<void>;
   isSubmitting: boolean;
 }
 
@@ -22,8 +22,8 @@ export const DayTimeline = ({
   items,
   onEditItem,
   onDeleteItem,
-  onAddAtTime,
-  onUpdateItemTime,
+  onAddAtTime: _onAddAtTime,
+  onUpdateItemTime: _onUpdateItemTime,
   isSubmitting,
 }: DayTimelineProps) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -179,8 +179,8 @@ export const DayTimeline = ({
         ) : (
           <div className="empty-timeline">
             <Icon icon="mdi:calendar-blank" className="empty-icon" />
-            <p>No scheduled expenses</p>
-            <p className="empty-hint">Tap + to add</p>
+            <p>{TEXTS.dayTimeline.emptyTitle}</p>
+            <p className="empty-hint">{TEXTS.dayTimeline.emptyHint}</p>
           </div>
         )}
       </div>
@@ -189,7 +189,7 @@ export const DayTimeline = ({
         <div className="unscheduled-section">
           <div className="unscheduled-header">
             <Icon icon="mdi:clock-outline" />
-            <span>Unscheduled</span>
+            <span>{TEXTS.dayTimeline.unscheduledTitle}</span>
           </div>
           <div className="category-items">
             {unscheduledItems.map(item => renderItem(item))}

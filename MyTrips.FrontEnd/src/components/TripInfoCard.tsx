@@ -44,7 +44,7 @@ export const TripInfoCard = ({ trip, items }: Props) => {
         </div>
         
         <div className="stat-item total">
-          <span className="stat-label">Total Budget</span>
+          <span className="stat-label">{TEXTS.tripInfoCard.totalBudgetLabel}</span>
           <span className="stat-value">
             ${trip.budget.toLocaleString()}
           </span>
@@ -55,9 +55,9 @@ export const TripInfoCard = ({ trip, items }: Props) => {
       {/* Progress Bar */}
       <div className="progress-section">
         <div className="progress-labels">
-          <span>{spentPercentage.toFixed(0)}% spent</span>
+          <span>{spentPercentage.toFixed(0)}{TEXTS.tripInfoCard.spentPercentageLabel}</span>
           <span className={isOverBudget ? 'text-danger' : ''}>
-            {isOverBudget ? 'Over budget!' : `${(100 - spentPercentage).toFixed(0)}% remaining`}
+            {isOverBudget ? TEXTS.tripInfoCard.overBudgetText : `${(100 - spentPercentage).toFixed(0)}${TEXTS.tripInfoCard.remainingPercentageLabel}`}
           </span>
         </div>
         <div className="progress-bar-container">

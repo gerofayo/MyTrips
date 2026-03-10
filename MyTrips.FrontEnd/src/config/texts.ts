@@ -21,7 +21,7 @@ export const TEXTS = {
       "You're adding a generic expense not tied to a specific day.",
     itineraryHintDated:
       "You're adding an expense scheduled for this day.",
-    addExpense: "+ Add Expense",
+    addExpense: "Add Expense",
     addExpenseCancel: "Cancel",
     deleteTripConfirm:
       "Are you sure you want to delete this entire trip? This action cannot be undone.",
@@ -77,6 +77,12 @@ export const TEXTS = {
       "This is a quick calculator: it multiplies your daily rate by number of days and saves a single total amount.",
     durationLabel: "Duration",
     durationTotalPrefix: "Total: ",
+    repeatDailyLabel: "Repeat each day",
+    repeatDailyHelper: "Creates a separate expense for each day in the selected range.",
+    repeatStartDateLabel: "From",
+    repeatEndDateLabel: "To",
+    repeatDaysCount: "days",
+    repeatTotalItems: "Total $",
     descriptionLabel: "Description",
     descriptionPlaceholder: "Optional details about this expense...",
     dateUsageHint:
@@ -94,6 +100,8 @@ export const TEXTS = {
     headerSpentLabel: "Spent",
     headerEstimatedLabel: "Estimated",
     headerTotalLabel: "Total",
+    averageTitle: "Per Day Category Average",
+    badgeAverage: "AVERAGE",
   },
   tripCalendar: {
     sectionLabel: "Trip Schedule",
@@ -103,8 +111,53 @@ export const TEXTS = {
   tripInfoCard: {
     remainingBudgetLabel: "Remaining Budget",
     totalSpentLabel: "Total Spent",
+    totalBudgetLabel: "Total Budget",
     categoryBreakdownLabel: "Category Breakdown",
     noExpensesText: "No expenses recorded yet.",
+    spentPercentageLabel: "% spent",
+    remainingPercentageLabel: "% remaining",
+    overBudgetText: "Over budget!",
+  },
+  dayTimeline: {
+    emptyTitle: "No scheduled expenses",
+    emptyHint: "Tap + to add",
+    unscheduledTitle: "Unscheduled",
+  },
+  tabs: {
+    budget: "Budget",
+    map: "Map",
+    photos: "Photos",
+    settings: "Settings",
+  },
+  settings: {
+    title: "Trip Settings",
+    subtitle: "Manage your trip details",
+    editTripTitle: "Edit Trip",
+    editTripDesc: "Change destination, dates, budget",
+    deleteTripTitle: "Delete Trip",
+    deleteTripDesc: "Permanently remove this trip",
+  },
+  placeholders: {
+    mapTitle: "Trip Map",
+    mapDescription: "Map view is coming soon. You'll be able to see all your trip locations here.",
+    photosTitle: "Trip Photos",
+    photosDescription: "Photo gallery is coming soon. Upload and organize your trip memories here.",
+  },
+  expenseForm: {
+    addTitle: "Add Expense",
+    editTitle: "Edit Expense",
+    cancel: "Cancel",
+  },
+  dateMode: {
+    specific: "Date",
+    allday: "All Day",
+    none: "None",
+  },
+  amountMode: {
+    single: "Single",
+    perDay: "Daily Rate",
+    repeat: "Repeat Daily",
+    singleHint: "Add a single expense",
   },
 } as const;
 

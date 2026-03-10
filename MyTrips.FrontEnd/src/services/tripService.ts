@@ -6,6 +6,7 @@ import {
   getTripsFromCacheWithoutExpiration,
   createTripsJsonFile
 } from "./tripCache";
+import { logger } from "../utils/logger";
 
 // Get cached trips - returns instantly from localStorage
 export async function getTrips(): Promise<TripResponse[]> {
@@ -25,7 +26,18 @@ export async function getTrips(): Promise<TripResponse[]> {
     // API returned empty - check if we have cached data and session might have expired
     if (cachedTrips && cachedTrips.length > 0) {
       // Try to import cache to restore session
-      await importFromCache(cachedTrips);
+      try {
+        await importFromCache(cachedTrips);
+        // After import, fetch fresh data from API and update cache
+        const refreshedTrips = await apiClient.get<TripResponse[]>("/trips");
+        if (refreshedTrips && refreshedTrips.length > 0) {
+          setTripsToCache(refreshedTrips);
+          return refreshedTrips;
+        }
+      } catch (importError) {
+        logger.error("Failed to import cached trips", importError);
+      }
+      // Return cached trips if import failed
       return cachedTrips;
     }
     
@@ -34,7 +46,7 @@ export async function getTrips(): Promise<TripResponse[]> {
   } catch (error) {
     // API error - return cached data if available
     if (cachedTrips && cachedTrips.length > 0) {
-      console.log("API error, returning cached trips");
+      logger.warn("API error, returning cached trips");
       return cachedTrips;
     }
     throw error;
@@ -52,7 +64,7 @@ async function importFromCache(cachedTrips: TripResponse[]): Promise<void> {
     const file = createTripsJsonFile(cachedTrips);
     await importTrips(file);
   } catch (error) {
-    console.error("Failed to import cached trips:", error);
+    logger.error("Failed to import cached trips", error);
   }
 }
 
@@ -101,7 +113,7 @@ export async function deleteTrip(id: string): Promise<void> {
       setTripsToCache(updatedCache);
     }
   } catch (error) {
-    console.error("Delete trip failed:", error);
+    logger.error("Delete trip failed", error);
     throw error;
   }
 }
@@ -118,18 +130,22 @@ export async function importTrips(file: File): Promise<{ message: string }> {
     body: formData
   }).then(async (res) => {
     if (!res.ok) {
-      throw new Error(res.statusText);
+      // Try to get the actual error message from the response body
+      const errorText = await res.text().catch(() => null);
+      throw new Error(errorText || res.statusText);
     }
     const result = await res.json();
     
-    // After import, refresh cache from API
+    // After import, ALWAYS refresh cache from API to ensure consistency
+    // Even if the API call fails, we should try to sync
     try {
       const apiTrips = await apiClient.get<TripResponse[]>("/trips");
       if (apiTrips) {
         setTripsToCache(apiTrips);
       }
-    } catch {
-      // Ignore cache refresh errors
+    } catch (syncError) {
+      // If sync fails, log but don't throw - import was successful
+      logger.warn("Failed to sync cache after import, will retry on next load", syncError);
     }
     
     return result;

@@ -2,9 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using MyTrips.Api.Models;
 
 namespace MyTrips.Api.Repositories;
+
+/// <summary>
+/// Custom JSON converter for DateOnly to handle ISO 8601 format (yyyy-MM-dd)
+/// </summary>
+public class DateOnlyJsonConverter : JsonConverter<DateOnly>
+{
+    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            var stringValue = reader.GetString();
+            if (DateOnly.TryParse(stringValue, out var result))
+            {
+                return result;
+            }
+        }
+        throw new JsonException($"Unable to deserialize DateOnly from {reader.TokenType}");
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
+    }
+}
 
 /// <summary>
 /// Session-based implementation of ITripRepository.
@@ -13,6 +38,17 @@ namespace MyTrips.Api.Repositories;
 public class SessionTripRepository : ISessionRepository
 {
     private readonly SessionManager _sessionManager;
+
+    // Shared JsonSerializerOptions with converters for DateOnly and enums
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = 
+        { 
+            new JsonStringEnumConverter(),
+            new DateOnlyJsonConverter()
+        }
+    };
 
     public SessionTripRepository(SessionManager sessionManager)
     {
@@ -83,11 +119,7 @@ public class SessionTripRepository : ISessionRepository
 
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var importedTrips = JsonSerializer.Deserialize<List<Trip>>(json, options);
+            var importedTrips = JsonSerializer.Deserialize<List<Trip>>(json, JsonOptions);
 
             if (importedTrips == null)
                 throw new InvalidOperationException("Failed to deserialize trips from JSON");

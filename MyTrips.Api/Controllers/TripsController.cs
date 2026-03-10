@@ -127,8 +127,10 @@ namespace MyTrips.Api.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded");
 
-            if (file.ContentType != "application/json")
-                return BadRequest("Only JSON files are allowed");
+            // Check file extension instead of content type (more reliable)
+            var fileName = file.FileName ?? "";
+            if (!fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                return BadRequest("Only JSON files are allowed (.json extension required)");
 
             try
             {

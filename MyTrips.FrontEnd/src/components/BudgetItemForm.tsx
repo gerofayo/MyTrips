@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import type { BudgetItem, CreateBudgetItemRequest } from "../types/BudgetItem";
 import { getBudgetItemCategories } from "../services/budgetItemService";
 import { TEXTS } from "../config/texts";
@@ -9,7 +9,7 @@ import { logger } from "../utils/logger";
 import "../styles/components/BudgetItemForm.css";
 
 type Props = {
-  onSubmit: (item: Omit<CreateBudgetItemRequest, "id">) => Promise<void>;
+  onSubmit: (item: Omit<CreateBudgetItemRequest, "id"> | Omit<CreateBudgetItemRequest, "id">[]) => Promise<void>;
   isSubmitting: boolean;
   selectedDate: string | null;
   selectedTime?: string | null;
@@ -19,6 +19,7 @@ type Props = {
 };
 
 type DateMode = "specific" | "allday" | "none";
+type AmountMode = "single" | "perDay" | "repeat";
 
 export const BudgetItemForm = ({
   onSubmit,
@@ -32,9 +33,24 @@ export const BudgetItemForm = ({
   const [categories, setCategories] = useState<string[]>([]);
   const [time, setTime] = useState("");
   const [dateMode, setDateMode] = useState<DateMode>("specific");
+  const [amountMode, setAmountMode] = useState<AmountMode>("single");
   const [formDate, setFormDate] = useState<string>("");
   const [isPerDay, setIsPerDay] = useState(false);
   const [daysCountInput, setDaysCount, getDaysCount] = useNumericInput(1);
+  
+  // Repeat each day mode state
+  const [repeatStartDate, setRepeatStartDate] = useState<string>("");
+  const [repeatEndDate, setRepeatEndDate] = useState<string>("");
+
+  // Calculate repeat days
+  const repeatDays = useMemo(() => {
+    if (!repeatStartDate || !repeatEndDate) return 0;
+    const start = new Date(repeatStartDate);
+    const end = new Date(repeatEndDate);
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return diffDays > 0 ? diffDays : 0;
+  }, [repeatStartDate, repeatEndDate]);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -77,9 +93,17 @@ export const BudgetItemForm = ({
         setDateMode("none");
       }
       setIsPerDay(false);
+      setAmountMode("single");
       setDaysCount(1);
+      // Set default repeat dates from trip dates
+      if (tripStartDate) {
+        setRepeatStartDate(tripStartDate);
+      }
+      if (tripEndDate) {
+        setRepeatEndDate(tripEndDate);
+      }
     }
-  }, [initialData, selectedDate, selectedTime]);
+  }, [initialData, selectedDate, selectedTime, tripStartDate, tripEndDate]);
 
   useEffect(() => {
     getBudgetItemCategories()
@@ -122,14 +146,33 @@ export const BudgetItemForm = ({
     }
     // dateMode "none" means no date and no time (generic)
 
-    const finalAmount = isPerDay ? formData.amount * getDaysCount() : formData.amount;
+    // Repeat each day mode - create multiple items
+    if (amountMode === "repeat" && repeatDays > 0 && tripStartDate && tripEndDate) {
+      const items: Omit<CreateBudgetItemRequest, "id">[] = [];
+      const start = new Date(repeatStartDate);
+      const end = new Date(repeatEndDate);
+      
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split("T")[0];
+        items.push({
+          ...formData,
+          date: dateStr,
+          time: null, // Repeat items are all-day
+        });
+      }
+      
+      await onSubmit(items);
+    } else {
+      // Single or per-day mode
+      const finalAmount = isPerDay ? formData.amount * getDaysCount() : formData.amount;
 
-    await onSubmit({
-      ...formData,
-      amount: finalAmount,
-      date: finalDate,
-      time: finalTime,
-    });
+      await onSubmit({
+        ...formData,
+        amount: finalAmount,
+        date: finalDate,
+        time: finalTime,
+      });
+    }
 
     if (!initialData) {
       setFormData({ title: "", amount: 0, category: "", isEstimated: false, description: "" });
@@ -137,7 +180,10 @@ export const BudgetItemForm = ({
       setDateMode(selectedDate ? "specific" : "none");
       setFormDate(selectedDate || "");
       setIsPerDay(false);
+      setAmountMode("single");
       setDaysCount(1);
+      if (tripStartDate) setRepeatStartDate(tripStartDate);
+      if (tripEndDate) setRepeatEndDate(tripEndDate);
     }
   };
 
@@ -157,7 +203,9 @@ export const BudgetItemForm = ({
         </div>
         <div className="form-group">
           <label className="section-label">
-            {isPerDay ? TEXTS.budgetItemForm.amountPerDayLabel : TEXTS.budgetItemForm.amountLabel}
+            {amountMode === "perDay" || amountMode === "repeat" 
+              ? TEXTS.budgetItemForm.amountPerDayLabel 
+              : TEXTS.budgetItemForm.amountLabel}
           </label>
           <input
             name="amount"
@@ -237,26 +285,49 @@ export const BudgetItemForm = ({
         </div>
       </div>
 
+      {/* Amount mode selector - only show when no specific date is selected */}
       {dateMode === "none" && !initialData && (
-        <div className="checkbox-group">
-          <input 
-            type="checkbox" 
-            id="perDay" 
-            checked={isPerDay} 
-            onChange={(e) => setIsPerDay(e.target.checked)} 
-          />
-          <div className="budget-item-helper">
-            <label htmlFor="perDay">
-              {TEXTS.budgetItemForm.multiDayLabel}
-            </label>
-            <span className="budget-item-helper-text">
-              {TEXTS.budgetItemForm.multiDayHelper}
-            </span>
+        <div className="amount-mode-section">
+          <div className="amount-mode-selector">
+            <button
+              type="button"
+              className={`mode-btn ${amountMode === "single" ? "active" : ""}`}
+              onClick={() => { setAmountMode("single"); setIsPerDay(false); }}
+            >
+              <Icon icon="mdi:cash" />
+              Single
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${amountMode === "perDay" ? "active" : ""}`}
+              onClick={() => { setAmountMode("perDay"); setIsPerDay(true); }}
+            >
+              <Icon icon="mdi:calculator" />
+              Daily Rate
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${amountMode === "repeat" ? "active" : ""}`}
+              onClick={() => { setAmountMode("repeat"); setIsPerDay(false); }}
+            >
+              <Icon icon="mdi:calendar-repeat" />
+              Repeat Daily
+            </button>
           </div>
+          {amountMode === "single" && (
+            <p className="amount-mode-hint">Add a single expense</p>
+          )}
+          {amountMode === "perDay" && (
+            <p className="amount-mode-hint">{TEXTS.budgetItemForm.multiDayHelper}</p>
+          )}
+          {amountMode === "repeat" && (
+            <p className="amount-mode-hint">{TEXTS.budgetItemForm.repeatDailyHelper}</p>
+          )}
         </div>
       )}
 
-      {isPerDay && (
+      {/* Per Day mode options */}
+      {amountMode === "perDay" && (
         <div className="per-day-box">
           <label className="section-label">{TEXTS.budgetItemForm.durationLabel}</label>
           <div className="budget-item-per-day-row">
@@ -270,6 +341,44 @@ export const BudgetItemForm = ({
             <span className="total-preview">
               {TEXTS.budgetItemForm.durationTotalPrefix}
               {(formData.amount * getDaysCount()).toLocaleString()}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Repeat each day mode options */}
+      {amountMode === "repeat" && (
+        <div className="repeat-box">
+          <div className="repeat-dates-row">
+            <div className="form-group">
+              <label className="section-label">{TEXTS.budgetItemForm.repeatStartDateLabel}</label>
+              <input 
+                type="date" 
+                className="form-input" 
+                value={repeatStartDate} 
+                onChange={(e) => setRepeatStartDate(e.target.value)}
+                min={tripStartDate}
+                max={tripEndDate}
+              />
+            </div>
+            <div className="form-group">
+              <label className="section-label">{TEXTS.budgetItemForm.repeatEndDateLabel}</label>
+              <input 
+                type="date" 
+                className="form-input" 
+                value={repeatEndDate} 
+                onChange={(e) => setRepeatEndDate(e.target.value)}
+                min={repeatStartDate || tripStartDate}
+                max={tripEndDate}
+              />
+            </div>
+          </div>
+          <div className="repeat-preview">
+            <span className="repeat-days-count">
+              {repeatDays} {TEXTS.budgetItemForm.repeatDaysCount}
+            </span>
+            <span className="repeat-total">
+              {TEXTS.budgetItemForm.repeatTotalItems}: {repeatDays} × {formData.amount.toLocaleString()} = {(repeatDays * formData.amount).toLocaleString()}
             </span>
           </div>
         </div>
@@ -293,6 +402,8 @@ export const BudgetItemForm = ({
             ? TEXTS.budgetItemForm.submitSaving
             : initialData
             ? TEXTS.budgetItemForm.submitUpdate
+            : amountMode === "repeat" && repeatDays > 1
+            ? `Add ${repeatDays} Items`
             : TEXTS.budgetItemForm.submitCreate}
         </button>
       </div>
